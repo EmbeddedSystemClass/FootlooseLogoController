@@ -1,0 +1,11 @@
+﻿---
+BasedOnStyle: Google
+BreakBeforeBraces: Allman
+KeepEmptyLinesAtTheStartOfBlocks: 'true'
+MaxEmptyLinesToKeep: '1'
+TabWidth: '4'
+UseTab: Never
+IndentWidth: '4'
+AccessModifierOffset: '-4'
+
+...
