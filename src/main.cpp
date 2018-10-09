@@ -136,8 +136,8 @@ int main(void)
 
     /* Create the thread(s) */
     /* definition and creation of defaultTask */
-    osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
-    defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+    //    osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+    //    defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
     /* USER CODE BEGIN RTOS_THREADS */
     /* add threads, ... */
@@ -280,7 +280,7 @@ static void MX_GPIO_Init(void)
 void StartDefaultTask(void const* argument)
 {
     /* init code for USB_DEVICE */
-    MX_USB_DEVICE_Init();
+    //   MX_USB_DEVICE_Init();
 
     /* USER CODE BEGIN 5 */
     /* Infinite loop */
@@ -288,7 +288,7 @@ void StartDefaultTask(void const* argument)
     {
         char* text = "Hallo!";
         osDelay(100);
-        CDC_Transmit_FS((uint8_t*)text, 7);
+        //        CDC_Transmit_FS((uint8_t*)text, 7);
     }
     /* USER CODE END 5 */
 }

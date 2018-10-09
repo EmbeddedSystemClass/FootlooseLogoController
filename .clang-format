@@ -1,6 +1,8 @@
 ﻿---
 BasedOnStyle: Google
 BreakBeforeBraces: Allman
+BreakConstructorInitializersBeforeComma: 'true'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
 KeepEmptyLinesAtTheStartOfBlocks: 'true'
 MaxEmptyLinesToKeep: '1'
 TabWidth: '4'
