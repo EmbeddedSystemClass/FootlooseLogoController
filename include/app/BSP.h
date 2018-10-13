@@ -6,6 +6,7 @@
 
 #include "stdint.h"
 
+#include "OSError.h"
 #include "OSTask.h"
 
 /*
@@ -22,4 +23,6 @@ public:
 private:
     // Force empty constructor to not be used
     BSP();
+
+    static OSError* m_osError;
 };

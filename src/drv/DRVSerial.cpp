@@ -22,11 +22,11 @@ DRVSerial::DRVSerial(bool useSemaphore)
 
 DRVSerial::~DRVSerial() {}
 
-void DRVSerial::open()
+DRVSerial::Status DRVSerial::open(uint32_t ms)
 {
     if (m_useSemaphore)
     {
-        if (m_semaphore.wait(1) > 0)
+        if (m_semaphore.wait(ms) > 0)
         {
             m_status = Open;
         }
@@ -36,9 +36,10 @@ void DRVSerial::open()
     {
         m_status = Open;
     }
+    return m_status;
 }
 
-void DRVSerial::close()
+DRVSerial::Status DRVSerial::close()
 {
     if (m_useSemaphore)
     {
@@ -48,6 +49,7 @@ void DRVSerial::close()
     {
         m_status = Closed;
     }
+    return m_status;
 }
 
 void DRVSerial::send(const char* buf)

@@ -3,6 +3,7 @@
  * @brief Serial driver interface
  *
  *************************************************/
+#pragma once
 
 #include "stdint.h"
 
@@ -25,8 +26,8 @@ public:
     DRVSerial(bool useSemaphore);
     virtual ~DRVSerial();
 
-    virtual void open();
-    virtual void close();
+    virtual Status open(uint32_t ms);
+    virtual Status close();
 
     virtual void send(const char* buf);
     virtual void send(uint8_t* buf, uint32_t length);
@@ -40,8 +41,9 @@ public:
 protected:
     virtual void sendByte(uint8_t) = 0;
 
-private:
     Status m_status;
-    bool m_useSemaphore;
+
+private:
+    bool   m_useSemaphore;
     OSSema m_semaphore;
 };

@@ -3,6 +3,7 @@
  * @brief Serial CDC driver interface
  *
  *************************************************/
+#pragma once
 
 #include "stdint.h"
 

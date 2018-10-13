@@ -3,6 +3,7 @@
  * @brief c++ wrapper for FREERTOS
  *
  *************************************************/
+#pragma once
 
 #include "stdint.h"
 

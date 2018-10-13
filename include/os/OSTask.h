@@ -3,6 +3,7 @@
  * @brief c++ wrapper for FREERTOS
  *
  *************************************************/
+#pragma once
 
 #include "stdint.h"
 
@@ -26,7 +27,7 @@ private:
     struct OSTaskInfo
     {
         osThreadId taskHandle;
-        OSTask* This;
+        OSTask*    This;
     };
 
     // Force empty constructor to not be used
