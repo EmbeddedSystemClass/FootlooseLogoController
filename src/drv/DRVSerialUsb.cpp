@@ -7,14 +7,13 @@
 #include "stdint.h"
 
 #include "drv/DRVSerialUsb.h"
-extern "C"
-{
+extern "C" {
 #include "usb_device.h"
 #include "usbd_cdc_if.h"
 }
 
 DRVSerialUsb::DRVSerialUsb()
-    : DRVSerial(true)
+    : DRVSerial(false)
 {
     /* init code for USB_DEVICE */
     MX_USB_DEVICE_Init();

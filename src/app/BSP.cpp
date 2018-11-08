@@ -5,6 +5,8 @@
  *************************************************/
 #include "app/BSP.h"
 
+#include "thread.hpp"
+
 #include "drv/DRVSerialUsb.h"
 #include "os/OSError.h"
 
@@ -12,11 +14,11 @@
 // OSError* OSError::This  = BSP::m_osError;
 
 BSP::BSP(const char* name)
-    : OSTask(name, 200, osPriorityAboveNormal)
+    : Thread(name, 200, 1)
 {
 }
 
-void BSP::task()
+void BSP::Run()
 {
     // Task is created to initialize all software components
 
@@ -25,8 +27,8 @@ void BSP::task()
     // Driver
     DRVSerialUsb usbCDC;
 
-    //    OSError errorhandler(usbCDC);
-    //    m_osError->setup(usbCDC);
+    OSError errorhandler;
+    errorhandler.setup(usbCDC);
 
     OSError::report(OSError::SevLog, OSError::TypeNone, 0);
 
@@ -38,7 +40,8 @@ void BSP::task()
     while (1)
     {
         //        usbCDC.send((uint8_t*)"Hello world, this is a test!\r\n", 30);
-        delay(100);
+        OSError::report(OSError::SevLog, OSError::TypeNone, 1);
+        Delay(100);
     }
 }
 

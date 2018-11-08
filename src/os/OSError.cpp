@@ -20,13 +20,14 @@ OSError::OSError()
 
 void OSError::setup(DRVSerial& output)
 {
-    *m_serial = output;
+    m_serial = &output;
     if (m_serial->open(0) != DRVSerial::Open)
     {
         // do not allow the application to start as we have no error
         while (1)
             ;
     }
+    This = this;
 }
 
 void OSError::report(ErrorSeverity sev, ErrorType type, uint8_t user)
