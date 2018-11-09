@@ -8,6 +8,8 @@
 #include <string>
 #include "stdint.h"
 
+#include "semaphore.hpp"
+
 /*
  * Serial driver interface
  */
@@ -21,8 +23,8 @@ public:
         Error
     };
 
-    DRVSerial();
     DRVSerial(bool useSemaphore);
+
     virtual ~DRVSerial();
 
     virtual Status open(uint32_t ms);
@@ -44,6 +46,7 @@ protected:
     Status m_status;
 
 private:
-    bool m_useSemaphore;
-    //    OSSema m_semaphore;
+    DRVSerial();
+
+    cpp_freertos::Semaphore* m_semaphore;
 };

@@ -37,7 +37,9 @@ public:
         TypeNone,
     };
 
-    OSError(DRVSerial& output);
+    OSError();
+
+    void setup(DRVSerial& output);
 
     static void report(ErrorSeverity sev, ErrorType type, std::string prefix, std::string str);
 

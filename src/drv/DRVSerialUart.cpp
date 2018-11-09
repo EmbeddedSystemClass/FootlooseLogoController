@@ -8,7 +8,11 @@
 
 #include "drv/DRVSerialUart.h"
 
-DRVSerialUart::DRVSerialUart(HALUart& hal) : m_HAL(hal) {}
+DRVSerialUart::DRVSerialUart(HALUart& hal)
+    : m_HAL(hal)
+    , DRVSerial(true)
+{
+}
 
 DRVSerialUart::~DRVSerialUart() {}
 

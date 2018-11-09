@@ -8,49 +8,56 @@
 
 #include <string>
 
-DRVSerial::DRVSerial()
-    : m_status(Closed)
-    , m_useSemaphore(false)
-//    , m_semaphore(1)
-{
-}
-
 DRVSerial::DRVSerial(bool useSemaphore)
     : m_status(Closed)
-    , m_useSemaphore(useSemaphore)
-//    , m_semaphore(1)
+    , m_semaphore(NULL)
 {
+    if (useSemaphore)
+    {
+        m_semaphore = new cpp_freertos::BinarySemaphore(true);
+    }
 }
 
 DRVSerial::~DRVSerial() {}
 
 DRVSerial::Status DRVSerial::open(uint32_t ms)
 {
-    //    if (m_useSemaphore)
-    //    {
-    //        if (m_semaphore.wait(ms) > 0)
-    //        {
-    //            m_status = Open;
-    //        }
-    //        // check if we got is
-    //    }
-    //    else
-    //    {
-    m_status = Open;
-    //    }
+    if (m_semaphore != NULL)
+    {
+        if (ms == 0) ms = 1;
+        if (m_semaphore->Take(ms))
+        {
+            m_status = Open;
+        }
+        else
+        {
+            m_status = Error;
+        }
+    }
+    else
+    {
+        m_status = Open;
+    }
     return m_status;
 }
 
 DRVSerial::Status DRVSerial::close()
 {
-    //    if (m_useSemaphore)
-    //    {
-    //        m_semaphore.release();
-    //    }
-    //    else
-    //    {
-    m_status = Closed;
-    //    }
+    if (m_semaphore != NULL)
+    {
+        if (m_semaphore->Give())
+        {
+            m_status = Closed;
+        }
+        else
+        {
+            m_status = Error;
+        }
+    }
+    else
+    {
+        m_status = Closed;
+    }
     return m_status;
 }
 

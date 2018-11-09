@@ -13,9 +13,13 @@
 
 OSError* OSError::This = NULL;
 
-OSError::OSError(DRVSerial& output)
+OSError::OSError()
     : m_serial(NULL)
 
+{
+}
+
+void OSError::setup(DRVSerial& output)
 {
     m_serial = &output;
     if (m_serial->open(0) != DRVSerial::Open)
