@@ -19,6 +19,7 @@ public:
     ~DRVSerialUsb();
 
     //    void send(char* buf);
+    void send(std::string buf);
     void send(uint8_t* buf, uint32_t length);
 
     uint32_t getBytesPending();

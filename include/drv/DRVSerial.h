@@ -5,9 +5,8 @@
  *************************************************/
 #pragma once
 
+#include <string>
 #include "stdint.h"
-
-#include "OSSema.h"
 
 /*
  * Serial driver interface
@@ -29,6 +28,7 @@ public:
     virtual Status open(uint32_t ms);
     virtual Status close();
 
+    virtual void send(std::string buf);
     virtual void send(const char* buf);
     virtual void send(uint8_t* buf, uint32_t length);
     virtual void send(uint8_t);
@@ -44,6 +44,6 @@ protected:
     Status m_status;
 
 private:
-    bool   m_useSemaphore;
-    OSSema m_semaphore;
+    bool m_useSemaphore;
+    //    OSSema m_semaphore;
 };

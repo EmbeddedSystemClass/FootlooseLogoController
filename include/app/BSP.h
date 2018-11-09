@@ -6,13 +6,10 @@
 
 #include "stdint.h"
 
-//#include "OSError.h"
-//#include "OSTask.h"
-
 #include "thread.hpp"
 
 /*
- * OS task wrapper
+ * BSP
  */
 class BSP : public cpp_freertos::Thread
 {
@@ -25,6 +22,4 @@ public:
 private:
     // Force empty constructor to not be used
     BSP();
-
-    //    static OSError* m_osError;
 };

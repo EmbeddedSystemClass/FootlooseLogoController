@@ -4,21 +4,18 @@
  *
  *************************************************/
 
+#include <string>
 #include "stdint.h"
 
 #include "os/OSError.h"
 
 #include "drv/DRVSerial.h"
 
-OSError* OSError::This = new OSError();
+OSError* OSError::This = NULL;
 
-OSError::OSError()
+OSError::OSError(DRVSerial& output)
     : m_serial(NULL)
 
-{
-}
-
-void OSError::setup(DRVSerial& output)
 {
     m_serial = &output;
     if (m_serial->open(0) != DRVSerial::Open)
@@ -30,21 +27,71 @@ void OSError::setup(DRVSerial& output)
     This = this;
 }
 
-void OSError::report(ErrorSeverity sev, ErrorType type, uint8_t user)
+void OSError::report(ErrorSeverity sev, ErrorType type, std::string prefix, std::string str) { This->handleError(sev, type, prefix, str); }
+
+void OSError::handleError(ErrorSeverity sev, ErrorType type, std::string prefix, std::string str)
 {
-    This->handleError(sev, type, user);
+    std::string severityString = getStringFromSeverity(sev);
+    std::string typeString     = getStringType(type);
+    std::string output;
+
+    output = severityString + "_" + typeString + ": " + prefix + ":" + str + "\n\r";
+
+    m_serial->send(output);
+
+    if (sev == SevFatal)
+    {
+        while (1)
+            ;
+    }
 }
 
-void OSError::handleError(ErrorSeverity sev, ErrorType type, uint8_t user)
+std::string OSError::getStringFromSeverity(ErrorSeverity sev)
 {
-    uint8_t msg[10];
+    std::string retVal;
+    switch (sev)
+    {
+    case SevLog:
+        retVal = "LOG";
+        break;
+    case SevWarning:
+        retVal = "WAR";
+        break;
+    case SevError:
+        retVal = "ERR";
+        break;
+    case SevFatal:
+        retVal = "FAT";
+        break;
+    case SevNone:
+    default:
+        retVal = "---";
+        break;
+    }
+    return retVal;
+}
 
-    msg[0] = sev;
-    msg[1] = ':';
-    msg[2] = type;
-    msg[3] = ':';
-    msg[4] = user;
-    msg[5] = '\n';
-
-    m_serial->send(msg, 6);
+std::string OSError::getStringType(ErrorType type)
+{
+    std::string retVal;
+    switch (type)
+    {
+    case TypeParam:
+        retVal = "PAR";
+        break;
+    case TypeUnderflow:
+        retVal = "UFL";
+        break;
+    case TypeOverflow:
+        retVal = "OFL";
+        break;
+    case TypeNullPointer:
+        retVal = "NUL";
+        break;
+    case TypeNone:
+    default:
+        retVal = "---";
+        break;
+    }
+    return retVal;
 }

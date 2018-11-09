@@ -7,7 +7,8 @@
 #include "stdint.h"
 
 #include "drv/DRVSerialUsb.h"
-extern "C" {
+extern "C"
+{
 #include "usb_device.h"
 #include "usbd_cdc_if.h"
 }
@@ -22,6 +23,14 @@ DRVSerialUsb::DRVSerialUsb()
 DRVSerialUsb::~DRVSerialUsb() {}
 
 // void DRVSerialUsb::send(char* buf) {}
+
+void DRVSerialUsb::send(std::string buf)
+{
+    if (m_status == Open)
+    {
+        CDC_Transmit_FS((uint8_t*)buf.c_str(), buf.length());
+    }
+}
 
 void DRVSerialUsb::send(uint8_t* buf, uint32_t length)
 {

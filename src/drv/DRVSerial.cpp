@@ -6,17 +6,19 @@
 
 #include "drv/DRVSerial.h"
 
+#include <string>
+
 DRVSerial::DRVSerial()
     : m_status(Closed)
     , m_useSemaphore(false)
-    , m_semaphore(1)
+//    , m_semaphore(1)
 {
 }
 
 DRVSerial::DRVSerial(bool useSemaphore)
     : m_status(Closed)
     , m_useSemaphore(useSemaphore)
-    , m_semaphore(1)
+//    , m_semaphore(1)
 {
 }
 
@@ -24,31 +26,31 @@ DRVSerial::~DRVSerial() {}
 
 DRVSerial::Status DRVSerial::open(uint32_t ms)
 {
-    if (m_useSemaphore)
-    {
-        if (m_semaphore.wait(ms) > 0)
-        {
-            m_status = Open;
-        }
-        // check if we got is
-    }
-    else
-    {
-        m_status = Open;
-    }
+    //    if (m_useSemaphore)
+    //    {
+    //        if (m_semaphore.wait(ms) > 0)
+    //        {
+    //            m_status = Open;
+    //        }
+    //        // check if we got is
+    //    }
+    //    else
+    //    {
+    m_status = Open;
+    //    }
     return m_status;
 }
 
 DRVSerial::Status DRVSerial::close()
 {
-    if (m_useSemaphore)
-    {
-        m_semaphore.release();
-    }
-    else
-    {
-        m_status = Closed;
-    }
+    //    if (m_useSemaphore)
+    //    {
+    //        m_semaphore.release();
+    //    }
+    //    else
+    //    {
+    m_status = Closed;
+    //    }
     return m_status;
 }
 
@@ -60,6 +62,15 @@ void DRVSerial::send(const char* buf)
     {
 
         send(*p);
+    }
+}
+
+void DRVSerial::send(std::string buf)
+{
+
+    for (std::string::iterator it = buf.begin(); it != buf.end(); ++it)
+    {
+        send(*it);
     }
 }
 
