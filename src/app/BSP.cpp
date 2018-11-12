@@ -7,6 +7,7 @@
 
 #include <string>
 
+#include "drv/DRVGPIO.h"
 #include "drv/DRVSerialUsb.h"
 #include "os/OSError.h"
 #include "thread.hpp"
@@ -40,6 +41,14 @@ void BSP::Run()
     REPORT(OSError::SevLog, OSError::TypeNone, "Initialization of HAL complete");
 
     // Driver
+    // clang-format off
+    DRVGPIO gpioC = DRVGPIO(GPIOC,
+                              //5432109876453210
+                              0b0010000000000000,
+							  0b0010000000000000,
+							  0b1101111111111111);
+    // clang-format on
+    GPIOpin LED = gpioC.getPin(13);
 
     REPORT(OSError::SevLog, OSError::TypeNone, "Initialization of DRV complete");
 
@@ -47,7 +56,18 @@ void BSP::Run()
     while (1)
     {
         REPORT(OSError::SevLog, OSError::TypeNone, "BSP is alive!");
-        Delay(10000);
+        //        LED.toggle();
+
+        Delay(1000);
+
+        if (LED)
+        {
+            LED = false;
+        }
+        else
+        {
+            LED = true;
+        }
     }
 
     // Suspend this task as we do not want to free memory
