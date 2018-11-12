@@ -1,29 +1,32 @@
 /*************************************************
- * @file HALUart.h
+ * @file HALUartSTM32F1.h
  * @brief HAL uart
  *
  *************************************************/
-
 #pragma once
+
+#include "HALUart.h"
+#include "HALUartSTM32F1.h"
+
+#include "stm32f1xx.h"
 
 #include "stdint.h"
 
 /*
  * Serial driver interface
  */
-class HALUart
+class HALUartSTM32F1 : public HALUart
 {
 public:
-    HALUart();
-    virtual ~HALUart();
+    HALUartSTM32F1(UART_HandleTypeDef* uart);
 
     virtual void open(uint32_t baudRate, uint8_t dataBits, uint8_t stopBits);
 
     virtual void close();
 
-    virtual void sendByte(uint8_t) = 0;
+    virtual void sendByte(uint8_t);
 
-    virtual uint32_t readByte() = 0;
+    virtual uint32_t readByte();
 
 private:
 };
