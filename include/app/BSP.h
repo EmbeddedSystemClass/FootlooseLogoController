@@ -6,18 +6,18 @@
 
 #include "stdint.h"
 
-#include "OSTask.h"
+#include "thread.hpp"
 
 /*
- * OS task wrapper
+ * BSP
  */
-class BSP : public OSTask
+class BSP : public cpp_freertos::Thread
 {
 public:
     BSP(const char* name);
     ~BSP();
 
-    void task();
+    void Run();
 
 private:
     // Force empty constructor to not be used
