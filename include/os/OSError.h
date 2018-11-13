@@ -10,7 +10,7 @@
 
 #include "drv/DRVSerial.h"
 
-#define REPORT(sev, type, string) OSError::report(sev, type, __PRETTY_FUNCTION__, string);
+#define REPORTLOG(string) OSError::report(OSError::SevLog, OSError::TypeNone, __PRETTY_FUNCTION__, string);
 #define REPORTFATAL(string) OSError::report(OSError::SevFatal, OSError::TypeNone, __PRETTY_FUNCTION__, string);
 
 /*

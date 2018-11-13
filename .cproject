@@ -47,7 +47,7 @@
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.debugging.gprof.112021010" name="Generate gprof information (-pg)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.debugging.gprof" useByScannerDiscovery="true" value="false" valueType="boolean"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createlisting.779274174" name="Create extended listing" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createlisting" useByScannerDiscovery="false"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform.218818698" isAbstract="false" osList="all" superClass="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform"/>
-							<builder buildPath="${workspace_loc:/FootlooseLogoController}/Debug" id="ilg.gnuarmeclipse.managedbuild.cross.builder.12441502" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="ilg.gnuarmeclipse.managedbuild.cross.builder"/>
+							<builder buildPath="${workspace_loc:/FootlooseLogoController}/Debug" id="ilg.gnuarmeclipse.managedbuild.cross.builder.12441502" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="8" superClass="ilg.gnuarmeclipse.managedbuild.cross.builder"/>
 							<tool command="${cross_prefix}${cross_c}${cross_suffix}" commandLinePattern="${COMMAND} ${cross_toolchain_flags} ${FLAGS} -c ${OUTPUT_FLAG} ${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GCCErrorParser" id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.96099693" name="Cross ARM GNU Assembler" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler">
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.usepreprocessor.1456605007" name="Use preprocessor" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.usepreprocessor" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths.92645586" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths" useByScannerDiscovery="true" valueType="includePath">
@@ -190,7 +190,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cubemx/Middlewares/ST/STM32_USB_Device_Library/Core/Src"/>
 						<entry excluding="CMSIS_RTOS" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cubemx/Middlewares/Third_Party/FreeRTOS/Source"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cubemx/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cubemx/Src"/>
+						<entry excluding="main.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cubemx/Src"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cubemx/startup"/>
 						<entry excluding="assert.c|system.c|stm32f1xx_it.c|stm32f1xx_hal_msp.c|ethernet/src/util.c|ethernet/src/device.c|ethernet/src/stm32f10x_it.c|ethernet/src/dns.c|ethernet/src/system_stm32f10x.c|ethernet/src/mcu_init.c|ethernet/src/main.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
