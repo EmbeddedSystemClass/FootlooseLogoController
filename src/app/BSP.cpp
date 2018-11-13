@@ -12,6 +12,7 @@
 #include "app/TaskStateMonitor.h"
 #include "drv/DRVGPIO.h"
 #include "drv/DRVSerialUsb.h"
+#include "hal/HALUartSTM32F1.h"
 #include "os/OSError.h"
 #include "thread.hpp"
 
@@ -39,6 +40,8 @@ void BSP::Run()
     REPORTLOG(datetime);
 
     // HAL
+    HALUartSTM32F1 dmxRxUart(USART1, 250000, HALUartSTM32F1::UartModeRx);
+    HALUartSTM32F1 dmxTxUart(USART2, 250000, HALUartSTM32F1::UartModeTx);
 
     REPORTLOG("Initialization of HAL complete");
 

@@ -18,9 +18,16 @@
 class HALUartSTM32F1 : public HALUart
 {
 public:
-    HALUartSTM32F1(UART_HandleTypeDef* uart);
+    enum UartMode
+    {
+        UartModeRx   = UART_MODE_RX,
+        UartModeTx   = UART_MODE_TX,
+        UartModeRxTx = UART_MODE_TX_RX
+    };
 
-    virtual void open(uint32_t baudRate, uint8_t dataBits, uint8_t stopBits);
+    HALUartSTM32F1(USART_TypeDef* uart, uint32_t baudRate, UartMode mode);
+
+    virtual void open();
 
     virtual void close();
 
@@ -29,4 +36,5 @@ public:
     virtual uint32_t readByte();
 
 private:
+    UART_HandleTypeDef m_handle;
 };

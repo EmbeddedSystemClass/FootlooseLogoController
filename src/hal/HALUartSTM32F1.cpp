@@ -8,9 +8,22 @@
 
 #include "stm32f1xx.h"
 
-HALUartSTM32F1::HALUartSTM32F1(UART_HandleTypeDef* uart) { HAL_UART_Init(uart); }
+HALUartSTM32F1::HALUartSTM32F1(USART_TypeDef* uart, uint32_t baudRate, UartMode mode)
+{
+    m_handle.Instance = uart;
 
-void HALUartSTM32F1::open(uint32_t baudRate, uint8_t dataBits, uint8_t stopBits) {}
+    m_handle.Init.BaudRate     = baudRate;
+    m_handle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
+    m_handle.Init.Mode         = mode;
+    m_handle.Init.OverSampling = UART_OVERSAMPLING_16;
+    m_handle.Init.Parity       = UART_PARITY_NONE;
+    m_handle.Init.StopBits     = UART_STOPBITS_2;
+    m_handle.Init.WordLength   = UART_WORDLENGTH_8B;
+
+    HAL_UART_Init(m_handle);
+}
+
+void HALUartSTM32F1::open() {}
 
 void HALUartSTM32F1::close() {}
 
