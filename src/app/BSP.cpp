@@ -8,6 +8,7 @@
 #include <string>
 
 #include "app/BinDecIO.h"
+#include "app/GPIOBlinker.h"
 #include "drv/DRVGPIO.h"
 #include "drv/DRVSerialUsb.h"
 #include "os/OSError.h"
@@ -31,15 +32,15 @@ void BSP::Run()
 
     Delay(1000);
 
-    REPORT(OSError::SevLog, OSError::TypeNone, "System up!");
+    REPORTLOG("System up!");
     char datetime[50];
     sprintf(datetime, "Build date %s, %s\n\r", __DATE__, __TIME__);
-    REPORT(OSError::SevLog, OSError::TypeNone, datetime);
-    REPORT(OSError::SevLog, OSError::TypeNone, "System up!");
+    REPORTLOG(datetime);
+    REPORTLOG("System up!");
 
     // HAL
 
-    REPORT(OSError::SevLog, OSError::TypeNone, "Initialization of HAL complete");
+    REPORTLOG("Initialization of HAL complete");
 
     // Driver
 
@@ -78,7 +79,7 @@ void BSP::Run()
     // clang-format on
     GPIOpin LED = gpioC.getPin(13);
 
-    REPORT(OSError::SevLog, OSError::TypeNone, "Initialization of DRV complete");
+    REPORTLOG("Initialization of DRV complete");
 
     // APP
     BinDecIO DMXAdress;
@@ -92,28 +93,33 @@ void BSP::Run()
     DMXAdress.addBin(BinDecIO::PinValuePair(dip6, 6));
     DMXAdress.addBin(BinDecIO::PinValuePair(dip7, 7));
 
+    GPIOBlinker blinky(LED);
+
+    blinky.setFrequency(1);
+    blinky.setDutyCycle(10);
+
     while (1)
     {
 
-        REPORT(OSError::SevLog, OSError::TypeNone, "BSP is alive!");
+        REPORTLOG("BSP is alive!");
         //        LED.toggle();
 
         Delay(1000);
 
-        if (LED && val > 0)
-        {
-            LED = false;
-        }
-        else
-        {
-            LED = true;
-        }
+        //        if (LED)
+        //        {
+        //            LED = false;
+        //        }
+        //        else
+        //        {
+        //            LED = true;
+        //        }
     }
 
     // Suspend this task as we do not want to free memory
     Suspend();
 
-    REPORT(OSError::SevFatal, OSError::TypeNone, "BSP return from suspend, this is not allowed");
+    REPORTLOG("BSP return from suspend, this is not allowed");
 }
 
 BSP::~BSP() {}
