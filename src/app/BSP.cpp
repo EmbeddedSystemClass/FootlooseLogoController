@@ -9,6 +9,7 @@
 
 #include "app/BinDecIO.h"
 #include "app/GPIOBlinker.h"
+#include "app/TaskStateMonitor.h"
 #include "drv/DRVGPIO.h"
 #include "drv/DRVSerialUsb.h"
 #include "os/OSError.h"
@@ -36,7 +37,6 @@ void BSP::Run()
     char datetime[50];
     sprintf(datetime, "Build date %s, %s\n\r", __DATE__, __TIME__);
     REPORTLOG(datetime);
-    REPORTLOG("System up!");
 
     // HAL
 
@@ -82,38 +82,12 @@ void BSP::Run()
     REPORTLOG("Initialization of DRV complete");
 
     // APP
-    BinDecIO DMXAdress;
-
-    DMXAdress.addBin(BinDecIO::PinValuePair(dip0, 0));
-    DMXAdress.addBin(BinDecIO::PinValuePair(dip1, 1));
-    DMXAdress.addBin(BinDecIO::PinValuePair(dip2, 2));
-    DMXAdress.addBin(BinDecIO::PinValuePair(dip3, 3));
-    DMXAdress.addBin(BinDecIO::PinValuePair(dip4, 4));
-    DMXAdress.addBin(BinDecIO::PinValuePair(dip5, 5));
-    DMXAdress.addBin(BinDecIO::PinValuePair(dip6, 6));
-    DMXAdress.addBin(BinDecIO::PinValuePair(dip7, 7));
-
-    GPIOBlinker blinky(LED);
-
-    blinky.setFrequency(1);
-    blinky.setDutyCycle(10);
+    TaskStateMonitor taskMonitor("Monitor UI", LED);
+    taskMonitor.Start();
 
     while (1)
     {
-
-        REPORTLOG("BSP is alive!");
-        //        LED.toggle();
-
-        Delay(1000);
-
-        //        if (LED)
-        //        {
-        //            LED = false;
-        //        }
-        //        else
-        //        {
-        //            LED = true;
-        //        }
+        Delay(5000);
     }
 
     // Suspend this task as we do not want to free memory

@@ -18,6 +18,7 @@ GPIOBlinker::GPIOBlinker(GPIOpin& pin)
     , m_period(1000)
     , m_dutyCycle(50)
 {
+    m_pin = false;
 }
 
 GPIOBlinker& GPIOBlinker::operator=(const bool pinVal)
