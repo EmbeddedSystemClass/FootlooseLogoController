@@ -9,7 +9,9 @@
 
 #include "app/BinDecIO.h"
 #include "app/DMXReceiver.h"
+#include "app/Effects.h"
 #include "app/DMXTransmitter.h"
+#include "app/EffectsController.h"
 #include "app/GPIOBlinker.h"
 #include "app/TaskStateMonitor.h"
 #include "drv/DRVGPIO.h"
@@ -114,7 +116,7 @@ void BSP::Run()
     TaskStateMonitor taskMonitor("Monitor UI", LED);
     taskMonitor.Start();
 
-    // DMX dipswitch decoder
+    // DMX dip switch decoder
     BinDecIO dmxAddress;
     dmxAddress.addBin(BinDecIO::PinValuePair(dip0, 0));
     dmxAddress.addBin(BinDecIO::PinValuePair(dip1, 1));
@@ -127,6 +129,7 @@ void BSP::Run()
 
     // Queue for received DMX channels
     cpp_freertos::Queue receivingQueue(10, 4);
+    cpp_freertos::Queue sendingQueue(1, 4);
 
     // Queue for dmx sending
     cpp_freertos::Queue transmittingQueue(5, sizeof(DMXTransmitter::DMXQueueItem));
@@ -139,18 +142,31 @@ void BSP::Run()
     DMXTransmitter transmitter(taskMonitor.GetHandle(), 2, uart1Tx, dmxTxUartDRV, 100, &transmittingQueue);
     transmitter.Start();
 
-    DMXTransmitter::DMXQueueItem sendItem;
-    sendItem.channelCount   = 3;
-    sendItem.startAddress   = 1;
-    sendItem.channeldata[0] = 1;
-    sendItem.channeldata[1] = 2;
-    sendItem.channeldata[2] = 3;
+    // sender
+
+    // effects controller
+    EffectsController controller("Controller", taskMonitor.GetHandle(), 2, receivingQueue, sendingQueue, 20);
+
+    // adding fixtures
+    RGBFixture logoF(100, 0);
+
+    controller.addFixture(logoF);
+
+    // adding effects
+    StaticColorEffect effectStaticColor;
+
+    controller.addEffect(effectStaticColor, EffectsController::DmxRange(0, 120));
+    controller.addEffect(effectStaticColor, EffectsController::DmxRange(150, 255));
+    controller.addEffect(effectStaticColor, EffectsController::DmxRange(121, 149));
+
+    // starting controller
+    controller.Start();
+
     while (1)
     {
-        sendItem.channeldata[0]++;
-        //        dmxRxUart.send(data, 3);
+       
         Delay(200);
-        transmittingQueue.Enqueue(&sendItem);
+        
     }
 
     // Suspend this task as we do not want to free memory
