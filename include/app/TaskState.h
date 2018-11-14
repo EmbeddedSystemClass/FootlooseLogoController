@@ -26,7 +26,7 @@ public:
 
     State getTaskState();
 
-    // protected:
+protected:
     void setTaskState(State state);
 
 private:

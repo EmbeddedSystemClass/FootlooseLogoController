@@ -5,6 +5,7 @@
  *************************************************/
 
 #include "hal/HALUartSTM32F1.h"
+#include "hal/HALUart.h"
 
 #include "stm32f1xx.h"
 
@@ -20,12 +21,16 @@ HALUartSTM32F1::HALUartSTM32F1(USART_TypeDef* uart, uint32_t baudRate, UartMode 
     m_handle.Init.StopBits     = UART_STOPBITS_2;
     m_handle.Init.WordLength   = UART_WORDLENGTH_8B;
 
-    HAL_UART_Init(m_handle);
+    HAL_UART_Init(&m_handle);
 }
 
 void HALUartSTM32F1::open() {}
 
 void HALUartSTM32F1::close() {}
+
+void HALUartSTM32F1::send(uint8_t* data, uint8_t length, bool blocking) {}
+
+void HALUartSTM32F1::receive(uint8_t* data, uint8_t bufferLength, bool blocking) {}
 
 void HALUartSTM32F1::sendByte(uint8_t) {}
 

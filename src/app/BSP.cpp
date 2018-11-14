@@ -8,9 +8,11 @@
 #include <string>
 
 #include "app/BinDecIO.h"
+#include "app/DMXReceiver.h"
 #include "app/GPIOBlinker.h"
 #include "app/TaskStateMonitor.h"
 #include "drv/DRVGPIO.h"
+#include "drv/DRVSerialUart.h"
 #include "drv/DRVSerialUsb.h"
 #include "hal/HALUartSTM32F1.h"
 #include "os/OSError.h"
@@ -82,14 +84,37 @@ void BSP::Run()
     // clang-format on
     GPIOpin LED = gpioC.getPin(13);
 
+    // Uart drivers
+    DRVSerialUart dmxRxUartDRV(dmxRxUart);
+
     REPORTLOG("Initialization of DRV complete");
 
     // APP
+
+    // task monitor
     TaskStateMonitor taskMonitor("Monitor UI", LED);
     taskMonitor.Start();
 
+    // DMX dipswitch decoder
+    BinDecIO dmxAddress;
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip0, 0));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip1, 1));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip2, 2));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip3, 3));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip4, 4));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip5, 5));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip6, 6));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip7, 7));
+
+    // Queue for received DMX channels
+    cpp_freertos::Queue receivingQueue(10, 4);
+
+    // Receiver
+    DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, &dmxAddress, &receivingQueue, 4);
+
     while (1)
     {
+        receiver.insertTestDataInQueue();
         Delay(5000);
     }
 

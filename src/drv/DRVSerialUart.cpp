@@ -16,6 +16,10 @@ DRVSerialUart::DRVSerialUart(HALUart& hal)
 
 DRVSerialUart::~DRVSerialUart() {}
 
-void DRVSerialUart::sendByte(uint8_t data) { m_HAL.sendByte(data); }
+void DRVSerialUart::sendByte(uint8_t data)
+{  // m_HAL.sendByte(data);
+}
 
-uint32_t DRVSerialUart::readByte() { return m_HAL.readByte(); }
+uint32_t DRVSerialUart::readByte()
+{  // return m_HAL.readByte();
+}

@@ -23,8 +23,8 @@ public:
         StateError
     };
 
-    HALUart();
-    virtual ~HALUart();
+    //    HALUart();
+    //    virtual ~HALUart();
 
     virtual void send(uint8_t* data, uint8_t length, bool blocking = false) = 0;
 

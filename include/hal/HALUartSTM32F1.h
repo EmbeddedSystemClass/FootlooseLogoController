@@ -27,6 +27,10 @@ public:
 
     HALUartSTM32F1(USART_TypeDef* uart, uint32_t baudRate, UartMode mode);
 
+    virtual void send(uint8_t* data, uint8_t length, bool blocking = false);
+
+    virtual void receive(uint8_t* data, uint8_t bufferLength, bool blocking = false);
+
     virtual void open();
 
     virtual void close();

@@ -35,7 +35,7 @@ public:
     virtual void send(uint8_t* buf, uint32_t length);
     virtual void send(uint8_t);
 
-    virtual uint32_t getBytesPending() = 0;
+    //    virtual uint32_t getBytesPending() = 0;
     virtual uint32_t readLine(char* buf, uint32_t bufferSize);
     virtual uint32_t readBuffer(uint8_t* buf, uint32_t bufferSize);
     virtual uint32_t readByte() = 0;
