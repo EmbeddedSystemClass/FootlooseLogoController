@@ -9,6 +9,8 @@
 
 #include "app/BinDecIO.h"
 #include "app/DMXReceiver.h"
+#include "app/Effects.h"
+#include "app/EffectsController.h"
 #include "app/GPIOBlinker.h"
 #include "app/TaskStateMonitor.h"
 #include "drv/DRVGPIO.h"
@@ -19,7 +21,7 @@
 #include "thread.hpp"
 
 BSP::BSP(const char* name)
-    : Thread(name, 400, 1)
+    : Thread(name, 600, 1)
 {
 }
 
@@ -95,7 +97,7 @@ void BSP::Run()
     TaskStateMonitor taskMonitor("Monitor UI", LED);
     taskMonitor.Start();
 
-    // DMX dipswitch decoder
+    // DMX dip switch decoder
     BinDecIO dmxAddress;
     dmxAddress.addBin(BinDecIO::PinValuePair(dip0, 0));
     dmxAddress.addBin(BinDecIO::PinValuePair(dip1, 1));
@@ -108,9 +110,30 @@ void BSP::Run()
 
     // Queue for received DMX channels
     cpp_freertos::Queue receivingQueue(10, 4);
+    cpp_freertos::Queue sendingQueue(1, 4);
 
     // Receiver
     DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, &dmxAddress, &receivingQueue, 4);
+
+    // sender
+
+    // effects controller
+    EffectsController controller("Controller", taskMonitor.GetHandle(), 2, receivingQueue, sendingQueue, 20);
+
+    // adding fixtures
+    RGBFixture logoF(100, 0);
+
+    controller.addFixture(logoF);
+
+    // adding effects
+    StaticColorEffect effectStaticColor;
+
+    controller.addEffect(effectStaticColor, EffectsController::DmxRange(0, 120));
+    controller.addEffect(effectStaticColor, EffectsController::DmxRange(150, 255));
+    controller.addEffect(effectStaticColor, EffectsController::DmxRange(121, 149));
+
+    // starting controller
+    controller.Start();
 
     while (1)
     {
