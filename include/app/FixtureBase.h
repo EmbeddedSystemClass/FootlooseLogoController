@@ -18,11 +18,11 @@ public:
 
     virtual ~FixtureBase();
 
-    uint16_t getDmxStartAddress() const;
+    uint16_t getDmxStartAddress();
 
-    uint8_t getDmxChannelCount() const;
+    uint8_t getDmxChannelCount();
 
-    uint8_t getXLocation() const;
+    uint8_t getXLocation();
 
     virtual void getDmxData(uint8_t* data) = 0;
 
