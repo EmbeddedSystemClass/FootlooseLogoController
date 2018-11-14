@@ -11,6 +11,8 @@
 #include "drv/DRVSerial.h"
 
 #define REPORTLOG(string) OSError::report(OSError::SevLog, OSError::TypeNone, __PRETTY_FUNCTION__, string);
+#define REPORTWARNING(string) OSError::report(OSError::SevWarning, OSError::TypeNone, __PRETTY_FUNCTION__, string);
+#define REPORTERROR(string) OSError::report(OSError::SevError, OSError::TypeNone, __PRETTY_FUNCTION__, string);
 #define REPORTFATAL(string) OSError::report(OSError::SevFatal, OSError::TypeNone, __PRETTY_FUNCTION__, string);
 
 /*
