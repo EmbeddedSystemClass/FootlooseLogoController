@@ -14,13 +14,14 @@
 #include "app/RGBFixture.h"
 #include "app/TaskState.h"
 #include "queue.hpp"
+#include "task.h"
 #include "thread.hpp"
 
 EffectBase::~EffectBase() {}
 
 EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify, uint8_t ID, cpp_freertos::Queue& inputQueue,
                                      cpp_freertos::Queue& outputQueue, uint32_t interval)
-    : cpp_freertos::Thread(Name, 350, 2)
+    : cpp_freertos::Thread(Name, 512, 2)
     , TaskState(taskToNotify, ID)
     , m_lastEffect(NULL)
     , m_inputQueue(inputQueue)
@@ -39,6 +40,8 @@ void EffectsController::addEffect(EffectBase& effect, DmxRange range)
 
     m_effects.sort(listCompareDmxRange);
 
+    REPORTWARNING("Adding new effect with range: " + std::to_string(range.first) + " to " + std::to_string(range.first))
+
     if (isEffectOverlapping())
     {
         //        REPORTWARNING("Overlapping effects configuration")
@@ -50,7 +53,7 @@ void EffectsController::Run()
 
     while (1)
     {
-        uint32_t currentTick = 0;
+        uint32_t currentTick = xTaskGetTickCount();
 
         if (!m_inputQueue.IsEmpty())
         {

@@ -4,7 +4,7 @@
  *
  *************************************************/
 
-#include <string>
+#include <cstring>
 #include "stdint.h"
 
 #include "os/OSError.h"
@@ -35,13 +35,20 @@ void OSError::report(ErrorSeverity sev, ErrorType type, std::string prefix, std:
 
 void OSError::handleError(ErrorSeverity sev, ErrorType type, std::string prefix, std::string str)
 {
-    std::string severityString = getStringFromSeverity(sev);
-    std::string typeString     = getStringType(type);
-    std::string output;
+    //    std::string severityString = getStringFromSeverity(sev);
+    //    std::string typeString     = getStringType(type);
+    //    std::string output;
+    //
+    //    output = severityString + "_" + typeString + ": " + prefix + ":" + str + "\n\r";
 
-    output = severityString + "_" + typeString + ": " + prefix + ":" + str + "\n\r";
+    char buffer[100];
 
-    m_serial->send(output);
+    strcat(buffer, getStringFromSeverity(sev).c_str());
+    strcat(buffer, getStringType(type).c_str());
+    strcat(buffer, str.c_str());
+
+    //    m_serial->send(output);
+    m_serial->send(buffer);
 
     if (sev == SevFatal)
     {
