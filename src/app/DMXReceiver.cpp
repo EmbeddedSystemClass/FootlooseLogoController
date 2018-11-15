@@ -50,6 +50,8 @@ void DMXReceiver::insertTestDataInQueue()
 
         memset(data, 0xAA, m_channelCount);
 
+        data[m_channelCount - 1] = 0;
+
         m_queue->Enqueue(data);
     }
 }

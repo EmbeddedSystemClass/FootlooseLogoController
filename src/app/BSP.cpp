@@ -21,7 +21,7 @@
 #include "thread.hpp"
 
 BSP::BSP(const char* name)
-    : Thread(name, 600, 1)
+    : Thread(name, 1024, 1)
 {
 }
 
@@ -122,22 +122,38 @@ void BSP::Run()
 
     // adding fixtures
     RGBFixture logoF(100, 0);
+    RGBFixture logoO1(103, 1);
+    RGBFixture logoO2(106, 2);
+    RGBFixture logoT(109, 3);
+    RGBFixture logoL(112, 4);
+    RGBFixture logoO3(115, 5);
+    RGBFixture logoO4(118, 6);
+    RGBFixture logoS(121, 7);
+    RGBFixture logoE(124, 8);
 
     controller.addFixture(logoF);
+    controller.addFixture(logoO1);
+    controller.addFixture(logoO2);
+    controller.addFixture(logoT);
+    controller.addFixture(logoL);
+    controller.addFixture(logoO3);
+    controller.addFixture(logoO4);
+    controller.addFixture(logoS);
+    controller.addFixture(logoE);
 
     // adding effects
     StaticColorEffect effectStaticColor;
 
-    controller.addEffect(effectStaticColor, EffectsController::DmxRange(0, 120));
-    controller.addEffect(effectStaticColor, EffectsController::DmxRange(150, 255));
-    controller.addEffect(effectStaticColor, EffectsController::DmxRange(121, 149));
+    controller.addEffect(effectStaticColor, EffectsController::DmxRange(0, 10));
 
     // starting controller
     controller.Start();
 
+    receiver.insertTestDataInQueue();
+
     while (1)
     {
-        receiver.insertTestDataInQueue();
+
         Delay(5000);
     }
 
