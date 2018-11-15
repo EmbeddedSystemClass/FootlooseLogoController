@@ -184,9 +184,8 @@ void BSP::Run()
 
     while (1)
     {
-       
-        Delay(200);
-        
+
+        Delay(5000);
     }
 
     // Suspend this task as we do not want to free memory

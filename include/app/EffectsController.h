@@ -42,9 +42,9 @@ public:
 
     void addEffect(EffectBase& effect, DmxRange range);
 
-protected:
     void Run();
 
+protected:
 private:
     enum DMXChannelConfig
     {
