@@ -46,6 +46,8 @@ public:
 
     GPIOpin getPin(uint32_t pin);
 
+    void setAlternateFunction(uint32_t pin, bool output = 0);
+
 private:
     DRVGPIO();  // Not allowed
 

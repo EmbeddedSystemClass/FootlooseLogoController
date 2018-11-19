@@ -25,11 +25,24 @@ public:
         UartModeRxTx = UART_MODE_TX_RX
     };
 
+    enum CallBackType
+    {
+        HAL_UART_TxCpltCallback,
+        HAL_UART_TxHalfCpltCallback,
+        HAL_UART_RxCpltCallback,
+        HAL_UART_RxHalfCpltCallback,
+        HAL_UART_ErrorCallback,
+        HAL_UART_AbortCpltCallback,
+        HAL_UART_AbortTransmitCpltCallback,
+        HAL_UART_AbortReceiveCpltCallback,
+
+    };
+
     HALUartSTM32F1(USART_TypeDef* uart, uint32_t baudRate, UartMode mode);
 
-    virtual void send(uint8_t* data, uint8_t length, bool blocking = false);
+    virtual void send(uint8_t* data, uint8_t length, uint32_t timeout = 0);
 
-    virtual void receive(uint8_t* data, uint8_t bufferLength, bool blocking = false);
+    virtual void receive(uint8_t* data, uint8_t bufferLength, uint32_t timeout = 0);
 
     virtual void open();
 
@@ -39,6 +52,12 @@ public:
 
     virtual uint32_t readByte();
 
+    virtual void registerCallback(CallbackFunction f, CallBack type);
+
+    static void callBack(UART_HandleTypeDef* uart, CallBackType type);
+
 private:
     UART_HandleTypeDef m_handle;
+
+    HALUart::CallBack getCallback(CallBackType);
 };

@@ -44,9 +44,39 @@ DRVGPIO::DRVGPIO(GPIO_TypeDef* gpio, uint32_t owner, uint32_t dir, uint32_t pola
 
 GPIOpin DRVGPIO::getPin(uint32_t pin)
 {
-    bool    polarity    = (m_polarity & (1 << pin));
-    GPIOpin selectedPin = GPIOpin(m_gpio, pin, true, polarity);
-    return selectedPin;
+    uint32_t selectedPin = (1 << pin);
+    if ((m_owner & selectedPin) != selectedPin)
+    {
+        REPORTFATAL("non owned pin requested")
+    }
+
+    bool    polarity  = (m_polarity & (1 << pin));
+    GPIOpin returnPin = GPIOpin(m_gpio, pin, true, polarity);
+    return returnPin;
+}
+
+void DRVGPIO::setAlternateFunction(uint32_t pin, bool output)
+{
+    uint32_t selectedPin = (1 << pin);
+    if ((m_owner & selectedPin) == selectedPin)
+    {
+        REPORTFATAL(" owned pin requested for alternate function")
+    }
+
+    GPIO_InitTypeDef pinSettings;
+    pinSettings.Pin   = selectedPin;
+    pinSettings.Pull  = GPIO_NOPULL;
+    pinSettings.Speed = GPIO_SPEED_FREQ_HIGH;
+
+    if (output)
+    {
+        pinSettings.Mode = GPIO_MODE_AF_PP;
+    }
+    else
+    {
+        pinSettings.Mode = GPIO_MODE_AF_INPUT;
+    }
+    HAL_GPIO_Init(m_gpio, &pinSettings);
 }
 
 GPIOpin::GPIOpin(GPIO_TypeDef* port, uint8_t pin, bool output, bool polarity)

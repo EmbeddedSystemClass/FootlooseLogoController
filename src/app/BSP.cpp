@@ -42,8 +42,8 @@ void BSP::Run()
     REPORTLOG(datetime);
 
     // HAL
-    HALUartSTM32F1 dmxRxUart(USART1, 250000, HALUartSTM32F1::UartModeRx);
-    HALUartSTM32F1 dmxTxUart(USART2, 250000, HALUartSTM32F1::UartModeTx);
+    HALUartSTM32F1 dmxRxUart(USART1, 9600, HALUartSTM32F1::UartModeRx);
+    HALUartSTM32F1 dmxTxUart(USART2, 9600, HALUartSTM32F1::UartModeTx);
 
     REPORTLOG("Initialization of HAL complete");
 
@@ -52,18 +52,21 @@ void BSP::Run()
     // clang-format off
 	DRVGPIO gpioA = DRVGPIO(GPIOA,
 							  //5432109876453210
-							  0b0000000011111111, //Owner
+							  0b0000001111110011, //Owner
 							  0b0000000000000000, //Direction 1=out
 							  0b1111111111111111);//Polarity 1=active high
     // clang-format on
     GPIOpin dip0 = gpioA.getPin(0);
     GPIOpin dip1 = gpioA.getPin(1);
-    GPIOpin dip2 = gpioA.getPin(2);
-    GPIOpin dip3 = gpioA.getPin(3);
-    GPIOpin dip4 = gpioA.getPin(4);
-    GPIOpin dip5 = gpioA.getPin(5);
-    GPIOpin dip6 = gpioA.getPin(6);
-    GPIOpin dip7 = gpioA.getPin(7);
+    GPIOpin dip2 = gpioA.getPin(4);
+    GPIOpin dip3 = gpioA.getPin(5);
+    GPIOpin dip4 = gpioA.getPin(6);
+    GPIOpin dip5 = gpioA.getPin(7);
+    GPIOpin dip6 = gpioA.getPin(8);
+    GPIOpin dip7 = gpioA.getPin(9);
+
+    // UART2 pins
+    gpioA.setAlternateFunction(2, 1);
 
     // clang-format off
 	DRVGPIO gpioB = DRVGPIO(GPIOB,
@@ -114,7 +117,9 @@ void BSP::Run()
 
     while (1)
     {
-        receiver.insertTestDataInQueue();
+        //        receiver.insertTestDataInQueue();
+        uint8_t data[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
+        dmxTxUart.send(data, 10);
         Delay(5000);
     }
 
