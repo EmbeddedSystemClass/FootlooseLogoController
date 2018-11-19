@@ -28,10 +28,32 @@ EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify
     , m_outputQueue(outputQueue)
     , m_interval(interval)
     , m_dmxSelector(0)
+    , m_testModePin1(NULL)
+    , m_testModePin2(NULL)
+    , m_testEffectCounter(0)
 {
 }
 
-void EffectsController::addFixture(RGBFixture fixture) { m_fixtures.push_front(fixture); }
+EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify, uint8_t ID, cpp_freertos::Queue& inputQueue,
+                                     cpp_freertos::Queue& outputQueue, uint32_t interval, GPIOpin* testMode1, GPIOpin* testMode2)
+    : cpp_freertos::Thread(Name, 512, 2)
+    , TaskState(taskToNotify, ID)
+    , m_lastEffect(NULL)
+    , m_inputQueue(inputQueue)
+    , m_outputQueue(outputQueue)
+    , m_interval(interval)
+    , m_dmxSelector(0)
+    , m_testModePin1(testMode1)
+    , m_testModePin2(testMode2)
+    , m_testEffectCounter(0)
+{
+}
+
+void EffectsController::addFixture(RGBFixture fixture)
+{
+    m_fixtures.push_front(fixture);
+    m_fixtures.sort(listCompareFixtureLocation);
+}
 
 void EffectsController::addEffect(EffectBase& effect, DmxRange range)
 {
@@ -44,7 +66,7 @@ void EffectsController::addEffect(EffectBase& effect, DmxRange range)
 
     if (isEffectOverlapping())
     {
-        //        REPORTWARNING("Overlapping effects configuration")
+        REPORTWARNING("Overlapping effects configuration")
     }
 }
 
@@ -53,6 +75,7 @@ void EffectsController::Run()
 
     while (1)
     {
+        bool     inTestMode  = false;
         uint32_t currentTick = xTaskGetTickCount();
 
         if (!m_inputQueue.IsEmpty())
@@ -63,17 +86,30 @@ void EffectsController::Run()
             m_dmxSelector    = dmxInput[DMX_CHN_MODE];
         }
 
-        DmxEffect* currentEffect = getApplicableEffect(m_dmxSelector);
-
-        if (currentEffect != NULL)
+        if (m_testModePin1 != NULL && m_testModePin2 != NULL)
         {
-            if (currentEffect != m_lastEffect)
+            if (m_testModePin1)
             {
-                m_lastEffect = currentEffect;
-                currentEffect->first.reset(currentTick);
+                inTestMode = true;
+                applyTestEffect(m_testModePin2);
             }
+        }
 
-            currentEffect->first.apply(m_fixtures, currentTick, m_suggestedColor, (m_dmxSelector - currentEffect->second.first));
+        if (!inTestMode)
+        {
+
+            DmxEffect* currentEffect = getApplicableEffect(m_dmxSelector);
+
+            if (currentEffect != NULL)
+            {
+                if (currentEffect != m_lastEffect)
+                {
+                    m_lastEffect = currentEffect;
+                    currentEffect->first.reset(currentTick);
+                }
+
+                currentEffect->first.apply(m_fixtures, currentTick, m_suggestedColor, (m_dmxSelector - currentEffect->second.first));
+            }
         }
         Delay(m_interval);
     }
@@ -108,4 +144,80 @@ bool EffectsController::listCompareDmxRange(const DmxEffect a, const DmxEffect b
     }
 
     return retVal;
+}
+
+bool EffectsController::listCompareFixtureLocation(const RGBFixture a, const RGBFixture b)
+{
+    bool retVal = false;
+
+    if (a.getXLocation() < b.getXLocation())
+    {
+        retVal = true;
+    }
+    return retVal;
+}
+
+void EffectsController::applyTestEffect(bool selectEffect)
+{
+    m_testEffectCounter++;
+    if (selectEffect)
+    {
+        // test pattern 1
+        // cycle R-G-B-W
+
+        uint8_t colorID = (m_testEffectCounter >> 3) % 4;
+
+        Color color;
+
+        switch (colorID)
+        {
+        case 0:
+            color.setRed(255);
+            color.setGreen(0);
+            color.setBlue(0);
+            break;
+        case 1:
+            color.setRed(0);
+            color.setGreen(255);
+            color.setBlue(0);
+            break;
+        case 2:
+            color.setRed(0);
+            color.setGreen(0);
+            color.setBlue(255);
+            break;
+        case 3:
+        default:
+            color.setRed(255);
+            color.setGreen(255);
+            color.setBlue(255);
+            break;
+        }
+
+        for (auto& fixture : m_fixtures)
+        {
+            fixture.setBrightness(255);
+            fixture.setColor(color);
+        }
+    }
+    else
+    {
+        // test pattern 2
+        uint8_t fixtureID = (m_testEffectCounter >> 3) % m_fixtures.size();
+
+        Color color(255, 255, 255);
+
+        // turn all fixtures off
+        for (auto& fixture : m_fixtures)
+        {
+            fixture.setBrightness(0);
+        }
+
+        // turn selected fixture on
+        std::list<RGBFixture>::iterator it = m_fixtures.begin();
+        std::advance(it, fixtureID);
+
+        it->setBrightness(255);
+        it->setColor(color);
+    }
 }
