@@ -7,24 +7,42 @@
 #include "hal/HALUartSTM32F1.h"
 #include "hal/HALUart.h"
 
+#include "OSError.h"
+
 #include "stm32f1xx.h"
+
+extern UART_HandleTypeDef huart1;
+extern UART_HandleTypeDef huart2;
 
 HALUartSTM32F1::HALUartSTM32F1(USART_TypeDef *uart, uint32_t baudRate, UartMode mode)
 {
-    m_handle.Instance = uart;
+    if (uart == USART1)
+    {
+        m_handle = &huart1;
+    }
+    else if (uart == USART2)
+    {
+        m_handle = &huart2;
+    }
+    else
+    {
+        REPORTFATAL("uart unkonwn")
+    }
 
-    m_handle.Init.BaudRate     = baudRate;
-    m_handle.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
-    m_handle.Init.Mode         = mode;
-    m_handle.Init.OverSampling = UART_OVERSAMPLING_16;
-    m_handle.Init.Parity       = UART_PARITY_NONE;
+    m_handle->Instance = uart;
+
+    m_handle->Init.BaudRate     = baudRate;
+    m_handle->Init.HwFlowCtl    = UART_HWCONTROL_NONE;
+    m_handle->Init.Mode         = mode;
+    m_handle->Init.OverSampling = UART_OVERSAMPLING_16;
+    m_handle->Init.Parity       = UART_PARITY_NONE;
     //    m_handle.Init.StopBits     = UART_STOPBITS_2;
-    m_handle.Init.StopBits   = UART_STOPBITS_1;
-    m_handle.Init.WordLength = UART_WORDLENGTH_8B;
+    m_handle->Init.StopBits   = UART_STOPBITS_1;
+    m_handle->Init.WordLength = UART_WORDLENGTH_8B;
 
-    HAL_UART_Init(&m_handle);
+    HAL_UART_Init(m_handle);
 
-    __HAL_UART_ENABLE(&m_handle);
+    __HAL_UART_ENABLE(m_handle);
 }
 
 void HALUartSTM32F1::open() {}
@@ -35,11 +53,11 @@ void HALUartSTM32F1::send(uint8_t *data, uint8_t length, uint32_t timeout)
 {
     if (timeout > 0)
     {
-        HAL_UART_Transmit(&m_handle, data, length, timeout);
+        HAL_UART_Transmit(m_handle, data, length, timeout);
     }
     else
     {
-        HAL_UART_Transmit_IT(&m_handle, data, length);
+        HAL_UART_Transmit_IT(m_handle, data, length);
     }
 }
 
@@ -47,11 +65,11 @@ void HALUartSTM32F1::receive(uint8_t *data, uint8_t bufferLength, uint32_t timeo
 {
     if (timeout > 0)
     {
-        HAL_UART_Receive(&m_handle, data, bufferLength, timeout);
+        HAL_UART_Receive(m_handle, data, bufferLength, timeout);
     }
     else
     {
-        HAL_UART_Receive_IT(&m_handle, data, bufferLength);
+        HAL_UART_Receive_IT(m_handle, data, bufferLength);
     }
 }
 

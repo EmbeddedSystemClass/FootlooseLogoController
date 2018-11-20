@@ -42,8 +42,8 @@ void BSP::Run()
     REPORTLOG(datetime);
 
     // HAL
-    HALUartSTM32F1 dmxRxUart(USART1, 9600, HALUartSTM32F1::UartModeRx);
-    HALUartSTM32F1 dmxTxUart(USART2, 9600, HALUartSTM32F1::UartModeTx);
+    HALUartSTM32F1 dmxRxUart(USART1, 250000, HALUartSTM32F1::UartModeRx);
+    HALUartSTM32F1 dmxTxUart(USART2, 250000, HALUartSTM32F1::UartModeTx);
 
     REPORTLOG("Initialization of HAL complete");
 
@@ -117,9 +117,7 @@ void BSP::Run()
 
     while (1)
     {
-        //        receiver.insertTestDataInQueue();
-        uint8_t data[10] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'};
-        dmxTxUart.send(data, 10);
+
         Delay(5000);
     }
 

@@ -57,7 +57,7 @@ public:
     static void callBack(UART_HandleTypeDef* uart, CallBackType type);
 
 private:
-    UART_HandleTypeDef m_handle;
+    UART_HandleTypeDef* m_handle;
 
     HALUart::CallBack getCallback(CallBackType);
 };
