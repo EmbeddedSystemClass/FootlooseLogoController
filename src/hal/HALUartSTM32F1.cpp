@@ -13,6 +13,7 @@
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
+extern UART_HandleTypeDef huart3;
 
 HALUartSTM32F1::HALUartSTM32F1(USART_TypeDef *uart, uint32_t baudRate, UartMode mode)
 {
@@ -23,6 +24,10 @@ HALUartSTM32F1::HALUartSTM32F1(USART_TypeDef *uart, uint32_t baudRate, UartMode 
     else if (uart == USART2)
     {
         m_handle = &huart2;
+    }
+    else if (uart == USART3)
+    {
+        m_handle = &huart3;
     }
     else
     {

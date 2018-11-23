@@ -14,6 +14,7 @@
 #include "drv/DRVGPIO.h"
 #include "drv/DRVSerialUart.h"
 #include "drv/DRVSerialUsb.h"
+#include "hal/HALTimerSTM32F1.h"
 #include "hal/HALUartSTM32F1.h"
 #include "os/OSError.h"
 #include "thread.hpp"
@@ -42,8 +43,9 @@ void BSP::Run()
     REPORTLOG(datetime);
 
     // HAL
-    HALUartSTM32F1 dmxRxUart(USART1, 250000, HALUartSTM32F1::UartModeRx);
-    HALUartSTM32F1 dmxTxUart(USART2, 250000, HALUartSTM32F1::UartModeTx);
+    HALUartSTM32F1  dmxRxUart(USART1, 250000, HALUartSTM32F1::UartModeRx);
+    HALUartSTM32F1  dmxTxUart(USART2, 250000, HALUartSTM32F1::UartModeTx);
+    HALTimerSTM32F1 dmxBreakCaptureTimer(TIM2, HALTimer::TimerInputCapture, 0);
 
     REPORTLOG("Initialization of HAL complete");
 
@@ -67,6 +69,7 @@ void BSP::Run()
 
     // UART2 pins
     gpioA.setAlternateFunction(2, 1);
+    gpioA.setAlternateFunction(3, 0);
 
     // clang-format off
 	DRVGPIO gpioB = DRVGPIO(GPIOB,
@@ -115,9 +118,11 @@ void BSP::Run()
     // Receiver
     DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, &dmxAddress, &receivingQueue, 4);
 
+    dmxBreakCaptureTimer.start();
     while (1)
     {
-
+        uint8_t data[3] = {1, 2, 3};
+        dmxRxUart.send(data, 3);
         Delay(5000);
     }
 
