@@ -74,12 +74,13 @@ void BSP::Run()
     // clang-format off
 	DRVGPIO gpioB = DRVGPIO(GPIOB,
 							  //5432109876453210
-							  0b0000000000000011, //Owner
-							  0b0000000000000000, //Direction 1=out
+							  0b0000000100000011, //Owner
+							  0b0000000100000000, //Direction 1=out
 							  0b1111111111111111);//Polarity 1=active high
     // clang-format on
     GPIOpin dip8 = gpioB.getPin(0);
     GPIOpin dip9 = gpioB.getPin(1);
+    GPIOpin ISR  = gpioB.getPin(8);
 
     // clang-format off
     DRVGPIO gpioC = DRVGPIO(GPIOC,
@@ -121,9 +122,9 @@ void BSP::Run()
     dmxBreakCaptureTimer.start();
     while (1)
     {
-        uint8_t data[3] = {1, 2, 3};
-        dmxRxUart.send(data, 3);
-        Delay(5000);
+        //        uint8_t data[3] = {1, 2, 3};
+        //        dmxRxUart.send(data, 3);
+        Delay(50);
     }
 
     // Suspend this task as we do not want to free memory

@@ -10,6 +10,7 @@
 
 #include "app/BinDecIO.h"
 #include "drv/DRVSerial.h"
+#include "hal/HALTimer.h"
 #include "queue.hpp"
 
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, uint8_t channelCount)
@@ -22,6 +23,7 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
     , m_startTime(0)
     , m_stopTime(0)
 {
+    m_timer.setCallback(timerCallback, static_cast<void*>(this));
 }
 
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, BinDecIO* dmxAddress, uint8_t channelCount)
@@ -34,6 +36,7 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
     , m_startTime(0)
     , m_stopTime(0)
 {
+    m_timer.setCallback(timerCallback, static_cast<void*>(this));
 }
 
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, BinDecIO* dmxAddress, cpp_freertos::Queue* queue,
@@ -47,6 +50,7 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
     , m_startTime(0)
     , m_stopTime(0)
 {
+    m_timer.setCallback(timerCallback, static_cast<void*>(this));
 }
 
 void DMXReceiver::getChannels(uint8_t* data) {}
@@ -65,7 +69,7 @@ void DMXReceiver::insertTestDataInQueue()
     }
 }
 
-HALTimer::CallbackFunction DMXReceiver::timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerChannel channel, uint32_t value, void* This)
+void DMXReceiver::timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerChannel channel, uint32_t value, void* This)
 {
     // do something
     uint32_t timeDiff = 0;
@@ -78,7 +82,7 @@ HALTimer::CallbackFunction DMXReceiver::timerCallback(HALTimer::CallbackEvent ev
 
             static_cast<DMXReceiver*>(This)->m_stopTime = value;
 
-            timeDiff = m_stopTime - m_startTime;
+            timeDiff = static_cast<DMXReceiver*>(This)->m_stopTime - static_cast<DMXReceiver*>(This)->m_startTime;
             if (timeDiff > 100)
             {
             }

@@ -24,16 +24,19 @@ HALTimerSTM32F1::HALTimerSTM32F1(TIM_TypeDef* timer, HALTimer::TimerMode mode, u
     {
         m_handle  = &htim2;
         m_this[0] = this;
+        __HAL_RCC_TIM2_CLK_ENABLE();
     }
-    else if (timer == TIM2)
+    else if (timer == TIM3)
     {
         //        m_handle  = &htim3;
         //        m_this[1] = this;
+        __HAL_RCC_TIM3_CLK_ENABLE();
     }
-    else if (timer == TIM2)
+    else if (timer == TIM4)
     {
         //        m_handle  = &htim4;
         //        m_this[2] = this;
+        __HAL_RCC_TIM4_CLK_ENABLE();
     }
     else
     {
@@ -44,21 +47,20 @@ HALTimerSTM32F1::HALTimerSTM32F1(TIM_TypeDef* timer, HALTimer::TimerMode mode, u
     TIM_MasterConfigTypeDef sMasterConfig;
     TIM_IC_InitTypeDef      sConfigIC;
 
-    m_handle->Instance               = timer;
-    m_handle->Init.Prescaler         = 0;
-    m_handle->Init.CounterMode       = TIM_COUNTERMODE_UP;
-    m_handle->Init.Period            = 0;
-    m_handle->Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
-    m_handle->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-    if (HAL_TIM_Base_Init(m_handle) != HAL_OK)
-    {
-        REPORTFATAL("HAL init failed")
-    }
+    m_handle->Instance           = timer;
+    m_handle->Init.Prescaler     = 140;  // 0 not allowed
+    m_handle->Init.CounterMode   = TIM_COUNTERMODE_UP;
+    m_handle->Init.Period        = 0xFFFF;  // default value, must be explicit as otherwise 0 is forced
+    m_handle->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+    //    m_handle->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+    m_handle->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+    //    if (HAL_TIM_Base_Init(m_handle) != HAL_OK)
+    //    {
+    //        REPORTFATAL("HAL init failed")
+    //    }
 
     sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-    sClockSourceConfig.ClockFilter
-	sClockSourceConfig.ClockPolarity
-	sClockSourceConfig.ClockPrescaler
+
     if (HAL_TIM_ConfigClockSource(m_handle, &sClockSourceConfig) != HAL_OK)
     {
         REPORTFATAL("HAL init failed")
@@ -77,14 +79,6 @@ HALTimerSTM32F1::HALTimerSTM32F1(TIM_TypeDef* timer, HALTimer::TimerMode mode, u
     }
 
     sConfigIC.ICPolarity  = TIM_INPUTCHANNELPOLARITY_FALLING;
-    sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
-    sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
-    sConfigIC.ICFilter    = 0;
-    if (HAL_TIM_IC_ConfigChannel(m_handle, &sConfigIC, TIM_CHANNEL_4) != HAL_OK)
-    {
-        REPORTFATAL("HAL init failed")
-    }
-    sConfigIC.ICPolarity  = TIM_INPUTCHANNELPOLARITY_FALLING;
     sConfigIC.ICSelection = TIM_ICSELECTION_INDIRECTTI;
     sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
     sConfigIC.ICFilter    = 0;
@@ -92,10 +86,25 @@ HALTimerSTM32F1::HALTimerSTM32F1(TIM_TypeDef* timer, HALTimer::TimerMode mode, u
     {
         REPORTFATAL("HAL init failed")
     }
+
+    //    sConfigIC.ICPolarity  = TIM_INPUTCHANNELPOLARITY_FALLING;
+    sConfigIC.ICPolarity  = TIM_INPUTCHANNELPOLARITY_RISING;
+    sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+    sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+    sConfigIC.ICFilter    = 0xF;
+    if (HAL_TIM_IC_ConfigChannel(m_handle, &sConfigIC, TIM_CHANNEL_4) != HAL_OK)
+    {
+        REPORTFATAL("HAL init failed")
+    }
+
     __HAL_TIM_ENABLE_IT(m_handle, TIM_IT_TRIGGER);
+    __HAL_TIM_ENABLE_IT(m_handle, TIM_IT_CC3);
+    __HAL_TIM_ENABLE_IT(m_handle, TIM_IT_CC4);
 
     //    HAL_NVIC_SetPriority(TIM2_IRQn, 4, 0);
     HAL_NVIC_EnableIRQ(TIM2_IRQn);
+
+    __HAL_TIM_ENABLE(m_handle);
 }
 
 void HALTimerSTM32F1::start()
@@ -141,6 +150,8 @@ void HALTimerSTM32F1::callback(uint32_t timer)
 {
     HALTimerSTM32F1* This = m_this[timer];
 
+    RCC->APB1ENR = RCC->APB1ENR;
+
     if (__HAL_TIM_GET_FLAG(This->m_handle, TIM_FLAG_CC1) != RESET)
     {
         if (__HAL_TIM_GET_IT_SOURCE(This->m_handle, TIM_IT_CC1) != RESET)
@@ -162,7 +173,7 @@ void HALTimerSTM32F1::callback(uint32_t timer)
     {
         if (__HAL_TIM_GET_IT_SOURCE(This->m_handle, TIM_IT_CC3) != RESET)
         {
-
+            HAL_GPIO_WritePin(GPIOB, (1 << 8), GPIO_PIN_SET);
             This->callCallback(HALTimer::CallbackTrigger, HALTimer::TimerChannel3, This->m_handle->Instance->CCR3);
             __HAL_TIM_CLEAR_IT(This->m_handle, TIM_FLAG_CC3);
         }
@@ -171,7 +182,7 @@ void HALTimerSTM32F1::callback(uint32_t timer)
     {
         if (__HAL_TIM_GET_IT_SOURCE(This->m_handle, TIM_IT_CC4) != RESET)
         {
-
+            HAL_GPIO_WritePin(GPIOB, (1 << 8), GPIO_PIN_RESET);
             This->callCallback(HALTimer::CallbackTrigger, HALTimer::TimerChannel4, This->m_handle->Instance->CCR4);
             __HAL_TIM_CLEAR_IT(This->m_handle, TIM_FLAG_CC4);
         }
@@ -200,6 +211,10 @@ void HALTimerSTM32F1::callback(uint32_t timer)
     }
 }
 
-void TIM2_IRQHandler(void) { HALTimerSTM32F1::callback(0); }
+void TIM2_IRQHandler(void)
+{
+    //    HAL_GPIO_TogglePin(GPIOB, (1 << 8));
+    HALTimerSTM32F1::callback(0);
+}
 void TIM3_IRQHandler(void) { HALTimerSTM32F1::callback(1); }
 void TIM4_IRQHandler(void) { HALTimerSTM32F1::callback(2); }

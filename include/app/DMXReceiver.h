@@ -40,7 +40,7 @@ private:
     uint32_t             m_startTime;
     uint32_t             m_stopTime;
 
-    HALTimer::CallbackFunction timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerChannel channel, uint32_t value, void* This);
+    static void timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerChannel channel, uint32_t value, void* This);
 
     DMXReceiver();  // not allowed
 };
