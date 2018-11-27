@@ -45,7 +45,7 @@ void BSP::Run()
     // HAL
     HALUartSTM32F1  dmxRxUart(USART1, 250000, HALUartSTM32F1::UartModeRx);
     HALUartSTM32F1  dmxTxUart(USART2, 250000, HALUartSTM32F1::UartModeTx);
-    HALTimerSTM32F1 dmxBreakCaptureTimer(TIM2, HALTimer::TimerInputCapture, 0);
+    HALTimerSTM32F1 dmxBreakCaptureTimer(TIM2, HALTimer::TimerInputCapture, (HALTimer::TimerChannel3 || HALTimer::TimerChannel4));
 
     REPORTLOG("Initialization of HAL complete");
 
@@ -116,7 +116,7 @@ void BSP::Run()
     cpp_freertos::Queue receivingQueue(10, 4);
 
     // Receiver
-    DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, &dmxAddress, &receivingQueue, 4);
+    DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, dmxBreakCaptureTimer, &dmxAddress, &receivingQueue, 4);
 
     dmxBreakCaptureTimer.start();
     while (1)
