@@ -48,7 +48,7 @@ HALTimerSTM32F1::HALTimerSTM32F1(TIM_TypeDef* timer, HALTimer::TimerMode mode, u
     TIM_IC_InitTypeDef      sConfigIC;
 
     m_handle->Instance           = timer;
-    m_handle->Init.Prescaler     = 140;  // 0 not allowed
+    m_handle->Init.Prescaler     = 72;  // 0 not allowed
     m_handle->Init.CounterMode   = TIM_COUNTERMODE_UP;
     m_handle->Init.Period        = 0xFFFF;  // default value, must be explicit as otherwise 0 is forced
     m_handle->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
@@ -150,8 +150,6 @@ void HALTimerSTM32F1::callback(uint32_t timer)
 {
     HALTimerSTM32F1* This = m_this[timer];
 
-    RCC->APB1ENR = RCC->APB1ENR;
-
     if (__HAL_TIM_GET_FLAG(This->m_handle, TIM_FLAG_CC1) != RESET)
     {
         if (__HAL_TIM_GET_IT_SOURCE(This->m_handle, TIM_IT_CC1) != RESET)
@@ -211,10 +209,6 @@ void HALTimerSTM32F1::callback(uint32_t timer)
     }
 }
 
-void TIM2_IRQHandler(void)
-{
-    //    HAL_GPIO_TogglePin(GPIOB, (1 << 8));
-    HALTimerSTM32F1::callback(0);
-}
+void TIM2_IRQHandler(void) { HALTimerSTM32F1::callback(0); }
 void TIM3_IRQHandler(void) { HALTimerSTM32F1::callback(1); }
 void TIM4_IRQHandler(void) { HALTimerSTM32F1::callback(2); }

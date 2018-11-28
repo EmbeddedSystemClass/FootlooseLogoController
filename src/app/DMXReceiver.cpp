@@ -83,6 +83,7 @@ void DMXReceiver::timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerCh
             static_cast<DMXReceiver*>(This)->m_stopTime = value;
 
             timeDiff = static_cast<DMXReceiver*>(This)->m_stopTime - static_cast<DMXReceiver*>(This)->m_startTime;
+
             if (timeDiff > 100)
             {
             }
