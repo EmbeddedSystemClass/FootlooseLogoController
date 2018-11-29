@@ -13,11 +13,11 @@ class TaskState
 public:
     enum State
     {
-        StateNone = 0,
-        StateInit,
-        StateWaiting,
-        StateRunning,
-        StateError
+        TaskStateNone = 0,
+        TaskStateInit,
+        TaskStateWaiting,
+        TaskStateRunning,
+        TaskStateError
     };
 
     TaskState(TaskHandle_t taskToNotify, uint8_t ID);
@@ -28,6 +28,7 @@ public:
 
 protected:
     void setTaskState(State state);
+    void setTaskStateFromISR(State state);
 
 private:
     State        m_state;

@@ -15,6 +15,7 @@
 
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, uint8_t channelCount)
     : TaskState(taskToNotify, ID)
+    , cpp_freertos::Thread(":DMX rec", 700, 5)
     , m_uart(uart)
     , m_timer(timer)
     , m_address(NULL)
@@ -22,12 +23,15 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
     , m_channelCount(channelCount)
     , m_startTime(0)
     , m_stopTime(0)
+    , m_state(StateInit)
+    , m_selectedChannels(channelCount)
+    , m_newData(false)
 {
-    m_timer.setCallback(timerCallback, static_cast<void*>(this));
 }
 
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, BinDecIO* dmxAddress, uint8_t channelCount)
     : TaskState(taskToNotify, ID)
+    , cpp_freertos::Thread(":DMX rec", 700, 5)
     , m_uart(uart)
     , m_timer(timer)
     , m_address(dmxAddress)
@@ -35,13 +39,16 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
     , m_channelCount(channelCount)
     , m_startTime(0)
     , m_stopTime(0)
+    , m_state(StateInit)
+    , m_selectedChannels(channelCount)
+    , m_newData(false)
 {
-    m_timer.setCallback(timerCallback, static_cast<void*>(this));
 }
 
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, BinDecIO* dmxAddress, cpp_freertos::Queue* queue,
                          uint8_t channelCount)
     : TaskState(taskToNotify, ID)
+    , cpp_freertos::Thread(":DMX rec", 700, 5)
     , m_uart(uart)
     , m_timer(timer)
     , m_address(dmxAddress)
@@ -49,13 +56,55 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
     , m_channelCount(channelCount)
     , m_startTime(0)
     , m_stopTime(0)
+    , m_state(StateInit)
+    , m_selectedChannels(channelCount)
+    , m_newData(false)
 {
-    m_timer.setCallback(timerCallback, static_cast<void*>(this));
 }
 
-void DMXReceiver::getChannels(uint8_t* data) {}
+void DMXReceiver::Run()
+{
 
-bool DMXReceiver::isNewDataReceived() { return false; }
+    m_timer.setCallback(timerCallback, static_cast<void*>(this));
+
+    m_uart.registerCallback(uartCallback, HALUart::Received, static_cast<void*>(this));
+
+    m_timer.start();
+
+    setTaskState(TaskStateWaiting);
+
+    m_state = StateWaitingBreak;
+
+    while (1)
+    {
+        while (m_state != StateReceived) Delay(10);
+        // timer and uart are off now
+
+        if (m_dmxBuffer[0] == 0)
+        {
+            // first one should be 0
+            memcpy(m_selectedChannels.data(), &m_dmxBuffer[*m_address + 1], m_channelCount);
+            if (m_queue != NULL)
+            {
+                if (!m_queue->IsFull())
+                {
+                    m_queue->Enqueue(m_selectedChannels.data());
+                }
+            }
+            m_newData = true;
+        }
+
+        m_state = StateWaitingBreak;
+    }
+}
+
+void DMXReceiver::getChannels(uint8_t* data)
+{
+    memcpy(data, m_selectedChannels.data(), m_channelCount);
+    m_newData = false;
+}
+
+bool DMXReceiver::isNewDataReceived() { return m_newData; }
 
 void DMXReceiver::insertTestDataInQueue()
 {
@@ -69,23 +118,41 @@ void DMXReceiver::insertTestDataInQueue()
     }
 }
 
-void DMXReceiver::timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerChannel channel, uint32_t value, void* This)
+void DMXReceiver::uartCallback(HALUart::CallBack type, void* parameter)
 {
-    // do something
+    DMXReceiver* This = static_cast<DMXReceiver*>(parameter);
+    if (type == HALUart::Received)
+    {
+        // now we should have 512 bytes
+        This->setTaskStateFromISR(TaskStateWaiting);
+        This->m_state = StateReceived;
+    }
+}
+
+void DMXReceiver::timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerChannel channel, uint32_t value, void* parameter)
+{
+    DMXReceiver* This = static_cast<DMXReceiver*>(parameter);
+
     uint32_t timeDiff = 0;
 
-    if (event == HALTimer::CallbackTrigger)
+    if (event == HALTimer::CallbackTrigger && This->m_state == StateWaitingBreak)
     {
         switch (channel)
         {
         case HALTimer::TimerChannel3:
 
-            static_cast<DMXReceiver*>(This)->m_stopTime = value;
+            This->m_stopTime = value;
 
-            timeDiff = static_cast<DMXReceiver*>(This)->m_stopTime - static_cast<DMXReceiver*>(This)->m_startTime;
+            timeDiff = This->m_stopTime - This->m_startTime;
 
-            if (timeDiff > 100)
+            if (timeDiff > 8)
             {
+                // break detected
+                // start dmx receiver
+                This->setTaskStateFromISR(TaskStateRunning);
+                This->m_state = StateReceiving;
+                This->m_uart.readBuffer(This->m_dmxBuffer, 513);
+                This->m_timer.stop();
             }
 
             break;

@@ -30,16 +30,16 @@ public:
         Error
     };
 
-    typedef void (*CallbackFunction)(CallBack);
+    typedef void (*CallbackFunction)(CallBack, void* parameter);
 
     //    HALUart();
     //    virtual ~HALUart();
 
     virtual void send(uint8_t* data, uint8_t length, uint32_t timeout = 0) = 0;
 
-    virtual void receive(uint8_t* data, uint8_t bufferLength, uint32_t timeout = 0) = 0;
+    virtual void receive(uint8_t* data, uint16_t bufferLength, uint32_t timeout = 0) = 0;
 
-    virtual void registerCallback(CallbackFunction f, CallBack type) = 0;
+    virtual void registerCallback(CallbackFunction f, CallBack type, void* parameter) = 0;
 
     /**
      * get generic status
@@ -51,5 +51,6 @@ public:
      */
     uint32_t getErrorCode();
 
+protected:
 private:
 };

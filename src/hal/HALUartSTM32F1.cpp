@@ -14,20 +14,26 @@
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;
 extern UART_HandleTypeDef huart3;
+HALUartSTM32F1 *          HALUartSTM32F1::m_this[3] = {0};
 
 HALUartSTM32F1::HALUartSTM32F1(USART_TypeDef *uart, uint32_t baudRate, UartMode mode)
+    : m_callbackFunction(NULL)
+    , m_callbackParameters(NULL)
 {
     if (uart == USART1)
     {
-        m_handle = &huart1;
+        m_handle  = &huart1;
+        m_this[0] = this;
     }
     else if (uart == USART2)
     {
-        m_handle = &huart2;
+        m_handle  = &huart2;
+        m_this[1] = this;
     }
     else if (uart == USART3)
     {
-        m_handle = &huart3;
+        m_handle  = &huart3;
+        m_this[2] = this;
     }
     else
     {
@@ -66,7 +72,7 @@ void HALUartSTM32F1::send(uint8_t *data, uint8_t length, uint32_t timeout)
     }
 }
 
-void HALUartSTM32F1::receive(uint8_t *data, uint8_t bufferLength, uint32_t timeout)
+void HALUartSTM32F1::receive(uint8_t *data, uint16_t bufferLength, uint32_t timeout)
 {
     if (timeout > 0)
     {
@@ -82,7 +88,27 @@ void HALUartSTM32F1::sendByte(uint8_t) {}
 
 uint32_t HALUartSTM32F1::readByte() {}
 
-void HALUartSTM32F1::callBack(UART_HandleTypeDef *uart, CallBackType type) {}
+void HALUartSTM32F1::callBack(UART_HandleTypeDef *uart, CallBackType type)
+{
+    HALUartSTM32F1 *This = NULL;
+    // finding instance
+    if (uart == &huart1)
+    {
+        This = m_this[0];
+    }
+    else if (uart == &huart2)
+    {
+        This = m_this[1];
+    }
+    else if (uart == &huart3)
+    {
+        This = m_this[2];
+    }
+    if (This->m_callbackFunction != NULL)
+    {
+        This->m_callbackFunction(getCallback(type), This->m_callbackParameters);
+    }
+}
 
 HALUart::CallBack HALUartSTM32F1::getCallback(CallBackType callback)
 {
@@ -109,7 +135,11 @@ HALUart::CallBack HALUartSTM32F1::getCallback(CallBackType callback)
     return retVal;
 }
 
-void HALUartSTM32F1::registerCallback(CallbackFunction f, CallBack type) {}
+void HALUartSTM32F1::registerCallback(CallbackFunction f, CallBack type, void *parameter)
+{
+    m_callbackFunction   = f;
+    m_callbackParameters = parameter;
+}
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) { HALUartSTM32F1::callBack(huart, HALUartSTM32F1::HAL_UART_TxCpltCallback); }
 

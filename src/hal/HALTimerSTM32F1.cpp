@@ -48,16 +48,12 @@ HALTimerSTM32F1::HALTimerSTM32F1(TIM_TypeDef* timer, HALTimer::TimerMode mode, u
     TIM_IC_InitTypeDef      sConfigIC;
 
     m_handle->Instance           = timer;
-    m_handle->Init.Prescaler     = 72;  // 0 not allowed
+    m_handle->Init.Prescaler     = 720;  // 0 not allowed // 72 results in 1us LSB value
     m_handle->Init.CounterMode   = TIM_COUNTERMODE_UP;
     m_handle->Init.Period        = 0xFFFF;  // default value, must be explicit as otherwise 0 is forced
     m_handle->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-    //    m_handle->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
     m_handle->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-    //    if (HAL_TIM_Base_Init(m_handle) != HAL_OK)
-    //    {
-    //        REPORTFATAL("HAL init failed")
-    //    }
 
     sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
 
@@ -101,7 +97,7 @@ HALTimerSTM32F1::HALTimerSTM32F1(TIM_TypeDef* timer, HALTimer::TimerMode mode, u
     __HAL_TIM_ENABLE_IT(m_handle, TIM_IT_CC3);
     __HAL_TIM_ENABLE_IT(m_handle, TIM_IT_CC4);
 
-    //    HAL_NVIC_SetPriority(TIM2_IRQn, 4, 0);
+    HAL_NVIC_SetPriority(TIM2_IRQn, 15, 15);
     HAL_NVIC_EnableIRQ(TIM2_IRQn);
 
     __HAL_TIM_ENABLE(m_handle);
@@ -122,7 +118,6 @@ void HALTimerSTM32F1::start()
         REPORTFATAL("Timer mode not implemented")
         break;
     }
-    //    HAL_TIM_Base_Start(m_handle);
 }
 
 void HALTimerSTM32F1::stop()
@@ -141,7 +136,6 @@ void HALTimerSTM32F1::stop()
         REPORTFATAL("Timer mode not implemented")
         break;
     }
-    //    HAL_TIM_Base_Stop(m_handle);
 }
 
 void HALTimerSTM32F1::setInterval(uint32_t us) {}

@@ -42,7 +42,7 @@ public:
 
     virtual void send(uint8_t* data, uint8_t length, uint32_t timeout = 0);
 
-    virtual void receive(uint8_t* data, uint8_t bufferLength, uint32_t timeout = 0);
+    virtual void receive(uint8_t* data, uint16_t bufferLength, uint32_t timeout = 0);
 
     virtual void open();
 
@@ -52,12 +52,15 @@ public:
 
     virtual uint32_t readByte();
 
-    virtual void registerCallback(CallbackFunction f, CallBack type);
+    virtual void registerCallback(CallbackFunction f, CallBack type, void* parameter);
 
     static void callBack(UART_HandleTypeDef* uart, CallBackType type);
 
 private:
-    UART_HandleTypeDef* m_handle;
+    UART_HandleTypeDef*    m_handle;
+    static HALUartSTM32F1* m_this[3];
+    void*                  m_callbackParameters;
+    CallbackFunction       m_callbackFunction;
 
-    HALUart::CallBack getCallback(CallBackType);
+    static HALUart::CallBack getCallback(CallBackType);
 };

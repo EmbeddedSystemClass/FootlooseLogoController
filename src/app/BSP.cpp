@@ -20,7 +20,7 @@
 #include "thread.hpp"
 
 BSP::BSP(const char* name)
-    : Thread(name, 400, 1)
+    : Thread(name, 1000, 1)
 {
 }
 
@@ -118,8 +118,8 @@ void BSP::Run()
 
     // Receiver
     DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, dmxBreakCaptureTimer, &dmxAddress, &receivingQueue, 4);
+    receiver.Run();
 
-    dmxBreakCaptureTimer.start();
     while (1)
     {
         //        uint8_t data[3] = {1, 2, 3};
