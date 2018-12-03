@@ -24,6 +24,7 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
     , m_startTime(0)
     , m_stopTime(0)
     , m_state(StateInit)
+    , m_timeout(0)
     , m_selectedChannels(channelCount)
     , m_newData(false)
 {
@@ -40,6 +41,7 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
     , m_startTime(0)
     , m_stopTime(0)
     , m_state(StateInit)
+    , m_timeout(0)
     , m_selectedChannels(channelCount)
     , m_newData(false)
 {
@@ -57,6 +59,7 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
     , m_startTime(0)
     , m_stopTime(0)
     , m_state(StateInit)
+    , m_timeout(0)
     , m_selectedChannels(channelCount)
     , m_newData(false)
 {
@@ -77,7 +80,27 @@ void DMXReceiver::Run()
 
     while (1)
     {
-        while (m_state != StateReceived) Delay(10);
+        while (m_state != StateReceived)
+        {
+            Delay(10);
+            if (m_state == StateReceiving)
+            {
+                // A break was received, data should be being received now
+                m_timeout++;
+                if (m_timeout > 100)
+                {
+                    // No data received after break, try and capture break again
+                    m_timeout = 0;
+
+                    m_timer.start();
+                    setTaskState(TaskStateWaiting);
+                    m_state = StateWaitingBreak;
+                }
+            }
+        }
+        // reset counter
+        m_timeout = 0;
+
         // timer and uart are off now
 
         if (m_dmxBuffer[0] == 0)
@@ -121,11 +144,17 @@ void DMXReceiver::insertTestDataInQueue()
 void DMXReceiver::uartCallback(HALUart::CallBack type, void* parameter)
 {
     DMXReceiver* This = static_cast<DMXReceiver*>(parameter);
-    if (type == HALUart::Received)
+    switch (type)
     {
+    case HALUart::Received:
+
         // now we should have 512 bytes
         This->setTaskStateFromISR(TaskStateWaiting);
         This->m_state = StateReceived;
+        break;
+    default:
+        // anything we dont want we treat as an error.
+        break;
     }
 }
 

@@ -111,7 +111,10 @@ void HALTimerSTM32F1::start()
 
         for (uint8_t channel = TimerChannel1; channel <= TimerChannel4; channel = (channel << 1))
         {
-            HAL_TIM_IC_Start_IT(m_handle, static_cast<TimerChannel>(channel));
+            if ((m_channel & channel) == channel)
+            {
+                HAL_TIM_IC_Start_IT(m_handle, static_cast<TimerChannel>(channel));
+            }
         }
         break;
     default:
@@ -127,7 +130,10 @@ void HALTimerSTM32F1::stop()
     case TimerInputCapture:
         for (uint8_t channel = TimerChannel1; channel <= TimerChannel4; channel = (channel << 1))
         {
-            HAL_TIM_IC_Stop_IT(m_handle, static_cast<TimerChannel>(channel));
+            if ((m_channel & channel) == channel)
+            {
+                HAL_TIM_IC_Stop_IT(m_handle, static_cast<TimerChannel>(channel));
+            }
         }
 
         break;

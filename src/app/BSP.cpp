@@ -43,8 +43,8 @@ void BSP::Run()
     REPORTLOG(datetime);
 
     // HAL
-    HALUartSTM32F1  dmxRxUart(USART1, 250000, HALUartSTM32F1::UartModeRx);
-    HALUartSTM32F1  dmxTxUart(USART2, 250000, HALUartSTM32F1::UartModeTx);
+    HALUartSTM32F1  dmxRxUart(USART2, 250000, HALUartSTM32F1::UartModeRx);
+    HALUartSTM32F1  dmxTxUart(USART1, 250000, HALUartSTM32F1::UartModeTx);
     HALTimerSTM32F1 dmxBreakCaptureTimer(TIM2, HALTimer::TimerInputCapture, (HALTimer::TimerChannel3 || HALTimer::TimerChannel4));
 
     REPORTLOG("Initialization of HAL complete");

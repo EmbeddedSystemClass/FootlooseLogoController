@@ -20,15 +20,22 @@ HALUartSTM32F1::HALUartSTM32F1(USART_TypeDef *uart, uint32_t baudRate, UartMode 
     : m_callbackFunction(NULL)
     , m_callbackParameters(NULL)
 {
+
     if (uart == USART1)
     {
         m_handle  = &huart1;
         m_this[0] = this;
+        __HAL_RCC_USART1_CLK_ENABLE();
+        HAL_NVIC_SetPriority(USART1_IRQn, 15, 14);
+        HAL_NVIC_EnableIRQ(USART1_IRQn);
     }
     else if (uart == USART2)
     {
         m_handle  = &huart2;
         m_this[1] = this;
+        __HAL_RCC_USART2_CLK_ENABLE();
+        HAL_NVIC_SetPriority(USART2_IRQn, 15, 14);
+        HAL_NVIC_EnableIRQ(USART2_IRQn);
     }
     else if (uart == USART3)
     {
@@ -47,13 +54,13 @@ HALUartSTM32F1::HALUartSTM32F1(USART_TypeDef *uart, uint32_t baudRate, UartMode 
     m_handle->Init.Mode         = mode;
     m_handle->Init.OverSampling = UART_OVERSAMPLING_16;
     m_handle->Init.Parity       = UART_PARITY_NONE;
-    //    m_handle.Init.StopBits     = UART_STOPBITS_2;
-    m_handle->Init.StopBits   = UART_STOPBITS_1;
+    m_handle->Init.StopBits     = UART_STOPBITS_2;
+    //    m_handle->Init.StopBits   = UART_STOPBITS_1;
     m_handle->Init.WordLength = UART_WORDLENGTH_8B;
 
     HAL_UART_Init(m_handle);
 
-    __HAL_UART_ENABLE(m_handle);
+    //    __HAL_UART_ENABLE(m_handle);
 }
 
 void HALUartSTM32F1::open() {}

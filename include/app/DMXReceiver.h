@@ -51,6 +51,7 @@ private:
     uint32_t             m_stopTime;
     ReceiverState        m_state;
     uint8_t              m_dmxBuffer[513];
+    uint8_t              m_timeout;
     std::vector<uint8_t> m_selectedChannels;
     bool                 m_newData;
 
