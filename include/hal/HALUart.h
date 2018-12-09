@@ -14,16 +14,43 @@
 class HALUart
 {
 public:
-    HALUart();
-    virtual ~HALUart();
+    enum UartState
+    {
+        StateReset,
+        StateReady,
+        StateBusy,
+        StateTimeout,
+        StateError
+    };
 
-    virtual void open(uint32_t baudRate, uint8_t dataBits, uint8_t stopBits);
+    enum CallBack
+    {
+        Send,
+        Received,
+        Error
+    };
 
-    virtual void close();
+    typedef void (*CallbackFunction)(CallBack, void* parameter);
 
-    virtual void sendByte(uint8_t) = 0;
+    //    HALUart();
+    //    virtual ~HALUart();
 
-    virtual uint32_t readByte() = 0;
+    virtual void send(uint8_t* data, uint8_t length, uint32_t timeout = 0) = 0;
 
+    virtual void receive(uint8_t* data, uint16_t bufferLength, uint32_t timeout = 0) = 0;
+
+    virtual void registerCallback(CallbackFunction f, CallBack type, void* parameter) = 0;
+
+    /**
+     * get generic status
+     */
+    UartState getState();
+
+    /**
+     * Get specific error code
+     */
+    uint32_t getErrorCode();
+
+protected:
 private:
 };

@@ -8,15 +8,19 @@
 #include <string>
 
 #include "app/BinDecIO.h"
+#include "app/DMXReceiver.h"
 #include "app/GPIOBlinker.h"
 #include "app/TaskStateMonitor.h"
 #include "drv/DRVGPIO.h"
+#include "drv/DRVSerialUart.h"
 #include "drv/DRVSerialUsb.h"
+#include "hal/HALTimerSTM32F1.h"
+#include "hal/HALUartSTM32F1.h"
 #include "os/OSError.h"
 #include "thread.hpp"
 
 BSP::BSP(const char* name)
-    : Thread(name, 400, 1)
+    : Thread(name, 1000, 1)
 {
 }
 
@@ -39,6 +43,9 @@ void BSP::Run()
     REPORTLOG(datetime);
 
     // HAL
+    HALUartSTM32F1  dmxRxUart(USART2, 250000, HALUartSTM32F1::UartModeRx);
+    HALUartSTM32F1  dmxTxUart(USART1, 250000, HALUartSTM32F1::UartModeTx);
+    HALTimerSTM32F1 dmxBreakCaptureTimer(TIM2, HALTimer::TimerInputCapture, (HALTimer::TimerChannel3 || HALTimer::TimerChannel4));
 
     REPORTLOG("Initialization of HAL complete");
 
@@ -47,28 +54,34 @@ void BSP::Run()
     // clang-format off
 	DRVGPIO gpioA = DRVGPIO(GPIOA,
 							  //5432109876453210
-							  0b0000000011111111, //Owner
+							  0b0000001111110011, //Owner
 							  0b0000000000000000, //Direction 1=out
 							  0b1111111111111111);//Polarity 1=active high
     // clang-format on
     GPIOpin dip0 = gpioA.getPin(0);
     GPIOpin dip1 = gpioA.getPin(1);
-    GPIOpin dip2 = gpioA.getPin(2);
-    GPIOpin dip3 = gpioA.getPin(3);
-    GPIOpin dip4 = gpioA.getPin(4);
-    GPIOpin dip5 = gpioA.getPin(5);
-    GPIOpin dip6 = gpioA.getPin(6);
-    GPIOpin dip7 = gpioA.getPin(7);
+    GPIOpin dip2 = gpioA.getPin(4);
+    GPIOpin dip3 = gpioA.getPin(5);
+    GPIOpin dip4 = gpioA.getPin(6);
+    GPIOpin dip5 = gpioA.getPin(7);
+    GPIOpin dip6 = gpioA.getPin(8);
+    GPIOpin dip7 = gpioA.getPin(9);
+
+    // UART2 pins
+    gpioA.setAlternateFunction(2, 1);
+    gpioA.setAlternateFunction(3, 0);
 
     // clang-format off
 	DRVGPIO gpioB = DRVGPIO(GPIOB,
 							  //5432109876453210
-							  0b0000000000000011, //Owner
-							  0b0000000000000000, //Direction 1=out
+							  0b0000001100000011, //Owner
+							  0b0000001100000000, //Direction 1=out
 							  0b1111111111111111);//Polarity 1=active high
     // clang-format on
     GPIOpin dip8 = gpioB.getPin(0);
     GPIOpin dip9 = gpioB.getPin(1);
+    GPIOpin ISR  = gpioB.getPin(8);
+    GPIOpin ISR2 = gpioB.getPin(9);
 
     // clang-format off
     DRVGPIO gpioC = DRVGPIO(GPIOC,
@@ -79,15 +92,40 @@ void BSP::Run()
     // clang-format on
     GPIOpin LED = gpioC.getPin(13);
 
+    // Uart drivers
+    DRVSerialUart dmxRxUartDRV(dmxRxUart);
+
     REPORTLOG("Initialization of DRV complete");
 
     // APP
+
+    // task monitor
     TaskStateMonitor taskMonitor("Monitor UI", LED);
     taskMonitor.Start();
 
+    // DMX dipswitch decoder
+    BinDecIO dmxAddress;
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip0, 0));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip1, 1));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip2, 2));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip3, 3));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip4, 4));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip5, 5));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip6, 6));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip7, 7));
+
+    // Queue for received DMX channels
+    cpp_freertos::Queue receivingQueue(10, 4);
+
+    // Receiver
+    DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, dmxBreakCaptureTimer, &dmxAddress, &receivingQueue, 4);
+    receiver.Run();
+
     while (1)
     {
-        Delay(5000);
+        //        uint8_t data[3] = {1, 2, 3};
+        //        dmxRxUart.send(data, 3);
+        Delay(50);
     }
 
     // Suspend this task as we do not want to free memory

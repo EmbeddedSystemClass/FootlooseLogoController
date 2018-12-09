@@ -5231,6 +5231,7 @@ static void TIM_TI3_SetConfig(TIM_TypeDef *TIMx, uint32_t TIM_ICPolarity, uint32
   /* Select the Polarity and set the CC3E Bit */
   tmpccer &= ~(TIM_CCER_CC3P | TIM_CCER_CC3NP);
   tmpccer |= ((TIM_ICPolarity << 8U) & (TIM_CCER_CC3P | TIM_CCER_CC3NP));
+  tmpccer |= TIM_CCER_CC3E;
 
   /* Write to TIMx CCMR2 and CCER registers */
   TIMx->CCMR2 = tmpccmr2;
@@ -5278,6 +5279,7 @@ static void TIM_TI4_SetConfig(TIM_TypeDef *TIMx, uint32_t TIM_ICPolarity, uint32
   /* Select the Polarity and set the CC4E Bit */
   tmpccer &= ~TIM_CCER_CC4P;
   tmpccer |= ((TIM_ICPolarity << 12U) & TIM_CCER_CC4P);
+  tmpccer |= TIM_CCER_CC4E;
 
   /* Write to TIMx CCMR2 and CCER registers */
   TIMx->CCMR2 = tmpccmr2;

@@ -11,7 +11,7 @@
 #include "task.h"
 
 TaskState::TaskState(TaskHandle_t taskToNotify, uint8_t ID)
-    : m_state(StateInit)
+    : m_state(TaskStateInit)
     , m_taskToNotify(taskToNotify)
     , m_ID(ID)
 {
@@ -30,4 +30,15 @@ void TaskState::setTaskState(State state)
     notifyValue |= ((m_ID << 16) & 0xFFFF0000);
 
     xTaskNotify(m_taskToNotify, notifyValue, eSetValueWithOverwrite);
+}
+
+void TaskState::setTaskStateFromISR(State state)
+{
+    BaseType_t pxHigherPriorityTaskWoken = 0;
+    m_state                              = state;
+
+    uint32_t notifyValue = static_cast<uint32_t>(m_state);
+    notifyValue |= ((m_ID << 16) & 0xFFFF0000);
+
+    xTaskNotifyFromISR(m_taskToNotify, notifyValue, eSetValueWithOverwrite, &pxHigherPriorityTaskWoken);
 }

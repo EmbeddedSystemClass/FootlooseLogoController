@@ -15,7 +15,7 @@ TaskStateMonitor::TaskStateMonitor(const char* name, GPIOpin led)
     : cpp_freertos::Thread(name, 256, 2)
     , m_led(led)
 {
-    for (uint8_t ii = 0; ii < 16; ii++) m_taskStates[ii] = TaskState::StateNone;
+    for (uint8_t ii = 0; ii < 16; ii++) m_taskStates[ii] = TaskState::TaskStateNone;
 }
 
 TaskStateMonitor::~TaskStateMonitor() {}
@@ -26,7 +26,7 @@ void TaskStateMonitor::Run()
     while (1)
     {
         uint32_t         notificationValue = 0;
-        TaskState::State highestState      = TaskState::StateNone;
+        TaskState::State highestState      = TaskState::TaskStateNone;
         // wait for notification
         WaitForNotification(&notificationValue);
 
@@ -46,21 +46,21 @@ void TaskStateMonitor::Run()
 
             switch (highestState)
             {
-            case TaskState::StateError:
+            case TaskState::TaskStateError:
                 m_led.setDutyCycle(20);
                 m_led.setFrequency(10);
                 break;
-            case TaskState::StateRunning:
+            case TaskState::TaskStateRunning:
                 m_led.setDutyCycle(50);
                 m_led.setFrequency(2);
                 break;
-            case TaskState::StateWaiting:
+            case TaskState::TaskStateWaiting:
                 m_led = true;
                 break;
-            case TaskState::StateInit:
+            case TaskState::TaskStateInit:
                 m_led = false;
                 break;
-            case TaskState::StateNone:
+            case TaskState::TaskStateNone:
             default:
                 m_led = false;
                 break;
@@ -71,7 +71,7 @@ void TaskStateMonitor::Run()
 
 TaskState::State TaskStateMonitor::getHighestState()
 {
-    TaskState::State retVal = TaskState::StateNone;
+    TaskState::State retVal = TaskState::TaskStateNone;
 
     for (uint8_t ii = 0; ii < 16; ii++)
     {
