@@ -3,3 +3,21 @@
 /Release/
 *.xml
 
+/PCB/*.s#3
+/PCB/*.s#4
+/PCB/*.s#5
+/PCB/*.s#6
+/PCB/*.s#7
+/PCB/*.s#8
+/PCB/*.s#9
+/PCB/*.b#1
+/PCB/*.b#2
+/PCB/*.b#3
+/PCB/*.b#4
+/PCB/*.b#5
+/PCB/*.b#6
+/PCB/*.b#7
+/PCB/*.b#8
+/PCB/*.b#9
+/PCB/*.s#1
+/PCB/*.s#2
