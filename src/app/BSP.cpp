@@ -74,13 +74,14 @@ void BSP::Run()
     // clang-format off
 	DRVGPIO gpioB = DRVGPIO(GPIOB,
 							  //5432109876453210
-							  0b0000000100000011, //Owner
-							  0b0000000100000000, //Direction 1=out
+							  0b0000001100000011, //Owner
+							  0b0000001100000000, //Direction 1=out
 							  0b1111111111111111);//Polarity 1=active high
     // clang-format on
     GPIOpin dip8 = gpioB.getPin(0);
     GPIOpin dip9 = gpioB.getPin(1);
     GPIOpin ISR  = gpioB.getPin(8);
+    GPIOpin ISR2 = gpioB.getPin(9);
 
     // clang-format off
     DRVGPIO gpioC = DRVGPIO(GPIOC,

@@ -171,7 +171,7 @@ void HALTimerSTM32F1::callback(uint32_t timer)
     {
         if (__HAL_TIM_GET_IT_SOURCE(This->m_handle, TIM_IT_CC3) != RESET)
         {
-            HAL_GPIO_WritePin(GPIOB, (1 << 8), GPIO_PIN_SET);
+            //            HAL_GPIO_WritePin(GPIOB, (1 << 8), GPIO_PIN_SET);
             This->callCallback(HALTimer::CallbackTrigger, HALTimer::TimerChannel3, This->m_handle->Instance->CCR3);
             __HAL_TIM_CLEAR_IT(This->m_handle, TIM_FLAG_CC3);
         }
@@ -180,7 +180,7 @@ void HALTimerSTM32F1::callback(uint32_t timer)
     {
         if (__HAL_TIM_GET_IT_SOURCE(This->m_handle, TIM_IT_CC4) != RESET)
         {
-            HAL_GPIO_WritePin(GPIOB, (1 << 8), GPIO_PIN_RESET);
+            //            HAL_GPIO_WritePin(GPIOB, (1 << 8), GPIO_PIN_RESET);
             This->callCallback(HALTimer::CallbackTrigger, HALTimer::TimerChannel4, This->m_handle->Instance->CCR4);
             __HAL_TIM_CLEAR_IT(This->m_handle, TIM_FLAG_CC4);
         }
