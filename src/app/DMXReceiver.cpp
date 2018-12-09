@@ -13,9 +13,6 @@
 #include "hal/HALTimer.h"
 #include "queue.hpp"
 
-// debugging
-#include "stm32f1xx.h"
-
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, uint8_t channelCount)
     : TaskState(taskToNotify, ID)
     , cpp_freertos::Thread(":DMX rec", 700, 5)
@@ -155,7 +152,7 @@ void DMXReceiver::uartCallback(HALUart::CallBack type, void* parameter)
         This->setTaskStateFromISR(TaskStateWaiting);
         This->m_state = StateReceived;
         HAL_GPIO_WritePin(GPIOB, (1 << 8), GPIO_PIN_RESET);
-        //        HAL_GPIO_WritePin(GPIOB, (1 << 9), GPIO_PIN_RESET);
+
         break;
     default:
         // anything we dont want we treat as an error.
@@ -178,9 +175,8 @@ void DMXReceiver::timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerCh
             This->m_stopTime = value;
 
             timeDiff = This->m_stopTime - This->m_startTime;
-            HAL_GPIO_WritePin(GPIOB, (1 << 9), GPIO_PIN_RESET);
 
-            if (timeDiff > 8 && timeDiff < 1000)  // No larger than 1s
+            if (timeDiff > 8 && timeDiff < 1000)  // No larger than 10ms
             {
                 // break detected
                 // start dmx receiver
@@ -188,14 +184,12 @@ void DMXReceiver::timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerCh
                 This->m_state = StateReceiving;
                 This->m_uart.readBuffer(This->m_dmxBuffer, 513);
                 This->m_timer.stop();
-                HAL_GPIO_WritePin(GPIOB, (1 << 8), GPIO_PIN_SET);
             }
 
             break;
 
         case HALTimer::TimerChannel3:
             static_cast<DMXReceiver*>(This)->m_startTime = value;
-            HAL_GPIO_WritePin(GPIOB, (1 << 9), GPIO_PIN_SET);
             break;
         default:
             break;
