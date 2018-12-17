@@ -25,6 +25,7 @@ uint32_t DRVSerialUart::readByte()
 }
 
 uint32_t DRVSerialUart::readBuffer(uint8_t* buf, uint32_t bufferSize) { m_HAL.receive(buf, bufferSize); }
+uint32_t DRVSerialUart::writeBuffer(uint8_t* buf, uint32_t bufferSize) { m_HAL.send(buf, bufferSize); }
 
 void DRVSerialUart::registerCallback(HALUart::CallbackFunction f, HALUart::CallBack type, void* parameter)
 {

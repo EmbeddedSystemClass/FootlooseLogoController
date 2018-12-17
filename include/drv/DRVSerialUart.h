@@ -23,6 +23,7 @@ public:
     uint32_t readByte();
 
     uint32_t readBuffer(uint8_t* buf, uint32_t bufferSize);
+    uint32_t writeBuffer(uint8_t* buf, uint32_t bufferSize);
 
     void registerCallback(HALUart::CallbackFunction f, HALUart::CallBack type, void* parameter);
 
