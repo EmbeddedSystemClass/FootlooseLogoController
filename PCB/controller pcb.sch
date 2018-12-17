@@ -8,20 +8,20 @@
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="no"/>
-<layer number="20" name="Dimension" color="15" fill="1" visible="no" active="no"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="no"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="no"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="no"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="no"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="no"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="no"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="no" active="no"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="no"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="no"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="no"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="no"/>
+<layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="no"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="no"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="no"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="no"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="no"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="no"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="no"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="no"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="no"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="no"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="no"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="no"/>
@@ -30,8 +30,8 @@
 <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="no"/>
 <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="no"/>
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="no"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="no" active="no"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="no" active="no"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="no"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="no"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="no"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="no"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="no"/>
@@ -39,12 +39,12 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="no"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="no"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="no"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="no" active="no"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="no" active="no"/>
-<layer number="48" name="Document" color="7" fill="1" visible="no" active="no"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="no"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="no"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="no"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="no"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="no"/>
+<layer number="49" name="Reference" color="7" fill="0" visible="yes" active="no"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="no"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="no"/>
 <layer number="88" name="SimResults" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="89" name="SimProbes" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
@@ -20187,7 +20187,7 @@ Source: www.kingbright.com</description>
 </classes>
 <parts>
 <part name="D1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="MBRA340T3" device="" package3d_urn="urn:adsk.eagle:package:43460/3"/>
-<part name="X4" library="con-neutrik_ag" library_urn="urn:adsk.eagle:library:166" deviceset="NC3" device="FAH2" package3d_urn="urn:adsk.eagle:package:8821/1"/>
+<part name="X4" library="con-neutrik_ag" library_urn="urn:adsk.eagle:library:166" deviceset="NC3" device="MBH" package3d_urn="urn:adsk.eagle:package:8841/1" value="NC3MBH"/>
 <part name="X5" library="con-neutrik_ag" library_urn="urn:adsk.eagle:library:166" deviceset="NC3" device="FAH2-0" package3d_urn="urn:adsk.eagle:package:8826/1"/>
 <part name="S1" library="switch-dil" library_urn="urn:adsk.eagle:library:375" deviceset="DIP10SB" device="" package3d_urn="urn:adsk.eagle:package:27252/2"/>
 <part name="GND1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -20201,30 +20201,30 @@ Source: www.kingbright.com</description>
 <part name="P+2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
 <part name="IC1" library="maxim" library_urn="urn:adsk.eagle:library:269" deviceset="MAX481CSA" device="" package3d_urn="urn:adsk.eagle:package:17511/1"/>
 <part name="IC2" library="maxim" library_urn="urn:adsk.eagle:library:269" deviceset="MAX481CSA" device="" package3d_urn="urn:adsk.eagle:package:17511/1"/>
-<part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
-<part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
-<part name="R3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
-<part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
-<part name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
-<part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
+<part name="R1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
+<part name="R2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
+<part name="R3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
+<part name="R4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
+<part name="R5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
+<part name="R6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
 <part name="X2" library="con-3m" library_urn="urn:adsk.eagle:library:119" deviceset="2510-" device="" package3d_urn="urn:adsk.eagle:package:5571/1"/>
 <part name="GND5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="IC3" library="micro-stm" deviceset="STM32F103C*T" device="" technology="8"/>
 <part name="Q1" library="crystal" library_urn="urn:adsk.eagle:library:204" deviceset="CRYSTAL" device="CTS406" package3d_urn="urn:adsk.eagle:package:12089/1"/>
-<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2"/>
-<part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2"/>
+<part name="C1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603K" package3d_urn="urn:adsk.eagle:package:23680/2"/>
+<part name="C2" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603K" package3d_urn="urn:adsk.eagle:package:23680/2"/>
 <part name="GND6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND7" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V3" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2"/>
-<part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2"/>
-<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2"/>
-<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2"/>
-<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2"/>
+<part name="C3" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603K" package3d_urn="urn:adsk.eagle:package:23680/2"/>
+<part name="C4" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603K" package3d_urn="urn:adsk.eagle:package:23680/2"/>
+<part name="C5" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603K" package3d_urn="urn:adsk.eagle:package:23680/2"/>
+<part name="C6" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603K" package3d_urn="urn:adsk.eagle:package:23680/2"/>
+<part name="C7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603K" package3d_urn="urn:adsk.eagle:package:23680/2"/>
 <part name="+3V4" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND8" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805K" package3d_urn="urn:adsk.eagle:package:23681/2"/>
+<part name="C8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603K" package3d_urn="urn:adsk.eagle:package:23680/2"/>
 <part name="GND9" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V5" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="+3V6" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
@@ -20240,8 +20240,8 @@ Source: www.kingbright.com</description>
 <part name="SV2" library="con-lstb" library_urn="urn:adsk.eagle:library:162" deviceset="MA04-1" device="" package3d_urn="urn:adsk.eagle:package:8337/1"/>
 <part name="GND14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V9" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
-<part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
-<part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
+<part name="R7" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
+<part name="R8" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
 <part name="GND15" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="+3V10" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
@@ -20249,7 +20249,7 @@ Source: www.kingbright.com</description>
 <part name="GND17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND18" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="L1" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="L-US" device="WE-TPC" package3d_urn="urn:adsk.eagle:package:23507/1"/>
-<part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
+<part name="R9" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
 <part name="+3V11" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="+3V12" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="P+1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="VCC" device=""/>
@@ -20259,12 +20259,13 @@ Source: www.kingbright.com</description>
 <part name="C10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C1206" package3d_urn="urn:adsk.eagle:package:23618/2"/>
 <part name="LED1" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="CHIPLED_1206" package3d_urn="urn:adsk.eagle:package:15823/2"/>
 <part name="LED2" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="CHIPLED_1206" package3d_urn="urn:adsk.eagle:package:15823/2"/>
-<part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
-<part name="R11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:23553/2"/>
+<part name="R10" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
+<part name="R11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="R-EU_" device="R0603" package3d_urn="urn:adsk.eagle:package:23555/2"/>
 <part name="GND20" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 <part name="GND21" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="C11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:23617/2"/>
+<part name="C11" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="C-EU" device="C0603K" package3d_urn="urn:adsk.eagle:package:23680/2"/>
 <part name="SJ1" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="SJ" device="" package3d_urn="urn:adsk.eagle:package:15471/1"/>
+<part name="+3V14" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -20522,9 +20523,9 @@ Source: www.kingbright.com</description>
 <instance part="GND8" gate="1" x="210.82" y="-55.88" smashed="yes">
 <attribute name="VALUE" x="208.28" y="-58.42" size="1.778" layer="96"/>
 </instance>
-<instance part="C8" gate="G$1" x="101.6" y="2.54" smashed="yes">
-<attribute name="NAME" x="103.124" y="2.921" size="1.778" layer="95"/>
-<attribute name="VALUE" x="103.124" y="-2.159" size="1.778" layer="96"/>
+<instance part="C8" gate="G$1" x="236.22" y="-43.18" smashed="yes">
+<attribute name="NAME" x="237.744" y="-42.799" size="1.778" layer="95"/>
+<attribute name="VALUE" x="237.744" y="-47.879" size="1.778" layer="96"/>
 </instance>
 <instance part="GND9" gate="1" x="83.82" y="2.54" smashed="yes">
 <attribute name="VALUE" x="81.28" y="0" size="1.778" layer="96"/>
@@ -20666,6 +20667,9 @@ Source: www.kingbright.com</description>
 <attribute name="NAME" x="76.2" y="20.32" size="1.778" layer="95"/>
 <attribute name="VALUE" x="76.2" y="13.97" size="1.778" layer="96"/>
 </instance>
+<instance part="+3V14" gate="G$1" x="119.38" y="33.02" smashed="yes">
+<attribute name="VALUE" x="116.84" y="27.94" size="1.778" layer="96" rot="R90"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -20730,6 +20734,10 @@ Source: www.kingbright.com</description>
 <pinref part="C6" gate="G$1" pin="1"/>
 <wire x1="226.06" y1="-48.26" x2="226.06" y2="-50.8" width="0.1524" layer="91"/>
 <junction x="226.06" y="-50.8"/>
+<pinref part="C8" gate="G$1" pin="2"/>
+<wire x1="231.14" y1="-50.8" x2="236.22" y2="-50.8" width="0.1524" layer="91"/>
+<wire x1="236.22" y1="-50.8" x2="236.22" y2="-48.26" width="0.1524" layer="91"/>
+<junction x="231.14" y="-50.8"/>
 </segment>
 <segment>
 <pinref part="C1" gate="G$1" pin="1"/>
@@ -20846,6 +20854,10 @@ Source: www.kingbright.com</description>
 <wire x1="121.92" y1="15.24" x2="119.38" y2="15.24" width="0.1524" layer="91"/>
 <pinref part="GND16" gate="1" pin="GND"/>
 <wire x1="119.38" y1="15.24" x2="119.38" y2="12.7" width="0.1524" layer="91"/>
+<pinref part="IC3" gate="MCU" pin="VSSA"/>
+<wire x1="121.92" y1="22.86" x2="119.38" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="119.38" y1="22.86" x2="119.38" y2="15.24" width="0.1524" layer="91"/>
+<junction x="119.38" y="15.24"/>
 </segment>
 <segment>
 <pinref part="U1" gate="G$1" pin="PGND"/>
@@ -21142,6 +21154,10 @@ Source: www.kingbright.com</description>
 <pinref part="C6" gate="G$1" pin="2"/>
 <wire x1="226.06" y1="-38.1" x2="226.06" y2="-40.64" width="0.1524" layer="91"/>
 <junction x="226.06" y="-38.1"/>
+<pinref part="C8" gate="G$1" pin="1"/>
+<wire x1="236.22" y1="-40.64" x2="236.22" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="236.22" y1="-38.1" x2="231.14" y2="-38.1" width="0.1524" layer="91"/>
+<junction x="231.14" y="-38.1"/>
 </segment>
 <segment>
 <pinref part="+3V7" gate="G$1" pin="+3V3"/>
@@ -21205,6 +21221,12 @@ Source: www.kingbright.com</description>
 <pinref part="RN3" gate="C" pin="2"/>
 <pinref part="+3V5" gate="G$1" pin="+3V3"/>
 <wire x1="83.82" y1="30.48" x2="83.82" y2="33.02" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="IC3" gate="MCU" pin="VDDA"/>
+<pinref part="+3V14" gate="G$1" pin="+3V3"/>
+<wire x1="121.92" y1="25.4" x2="119.38" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="119.38" y1="25.4" x2="119.38" y2="30.48" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$1" class="0">
@@ -21322,78 +21344,6 @@ Source: www.kingbright.com</description>
 <pinref part="IC3" gate="MCU" pin="PB3"/>
 <wire x1="167.64" y1="66.04" x2="180.34" y2="66.04" width="0.1524" layer="91"/>
 <label x="177.8" y="66.04" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="FP_SCK" class="0">
-<segment>
-<pinref part="IC3" gate="MCU" pin="PA5"/>
-<wire x1="167.64" y1="27.94" x2="180.34" y2="27.94" width="0.1524" layer="91"/>
-<label x="177.8" y="27.94" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="X2" gate="-5" pin="KL"/>
-<wire x1="121.92" y1="-38.1" x2="132.08" y2="-38.1" width="0.1524" layer="91"/>
-<label x="129.54" y="-38.1" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="FP_MISO" class="0">
-<segment>
-<pinref part="IC3" gate="MCU" pin="PA6"/>
-<wire x1="167.64" y1="30.48" x2="180.34" y2="30.48" width="0.1524" layer="91"/>
-<label x="177.8" y="30.48" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="X2" gate="-3" pin="KL"/>
-<wire x1="121.92" y1="-33.02" x2="132.08" y2="-33.02" width="0.1524" layer="91"/>
-<label x="129.54" y="-33.02" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="FP_MOSI" class="0">
-<segment>
-<pinref part="IC3" gate="MCU" pin="PA7"/>
-<wire x1="167.64" y1="33.02" x2="180.34" y2="33.02" width="0.1524" layer="91"/>
-<label x="177.8" y="33.02" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="X2" gate="-4" pin="KL"/>
-<wire x1="121.92" y1="-35.56" x2="132.08" y2="-35.56" width="0.1524" layer="91"/>
-<label x="129.54" y="-35.56" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="FP_CS1" class="0">
-<segment>
-<pinref part="X2" gate="-6" pin="KL"/>
-<wire x1="121.92" y1="-40.64" x2="132.08" y2="-40.64" width="0.1524" layer="91"/>
-<label x="129.54" y="-40.64" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="IC3" gate="MCU" pin="PB0"/>
-<wire x1="167.64" y1="58.42" x2="180.34" y2="58.42" width="0.1524" layer="91"/>
-<label x="177.8" y="58.42" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="FP_CS2" class="0">
-<segment>
-<pinref part="X2" gate="-7" pin="KL"/>
-<wire x1="121.92" y1="-43.18" x2="132.08" y2="-43.18" width="0.1524" layer="91"/>
-<label x="129.54" y="-43.18" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="IC3" gate="MCU" pin="PB1"/>
-<wire x1="167.64" y1="60.96" x2="180.34" y2="60.96" width="0.1524" layer="91"/>
-<label x="177.8" y="60.96" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="FP_CS3" class="0">
-<segment>
-<pinref part="X2" gate="-8" pin="KL"/>
-<wire x1="121.92" y1="-45.72" x2="132.08" y2="-45.72" width="0.1524" layer="91"/>
-<label x="129.54" y="-45.72" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="IC3" gate="MCU" pin="PB2"/>
-<wire x1="167.64" y1="63.5" x2="180.34" y2="63.5" width="0.1524" layer="91"/>
-<label x="177.8" y="63.5" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$3" class="0">
@@ -21549,6 +21499,48 @@ Source: www.kingbright.com</description>
 <pinref part="SJ1" gate="1" pin="1"/>
 <pinref part="RN3" gate="D" pin="1"/>
 <wire x1="73.66" y1="17.78" x2="71.12" y2="17.78" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="FP_SDA" class="0">
+<segment>
+<pinref part="X2" gate="-3" pin="KL"/>
+<wire x1="121.92" y1="-33.02" x2="132.08" y2="-33.02" width="0.1524" layer="91"/>
+<label x="124.46" y="-33.02" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="FP_SCL" class="0">
+<segment>
+<pinref part="X2" gate="-4" pin="KL"/>
+<wire x1="121.92" y1="-35.56" x2="132.08" y2="-35.56" width="0.1524" layer="91"/>
+<label x="124.46" y="-35.56" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="FP_!RESET" class="0">
+<segment>
+<pinref part="X2" gate="-5" pin="KL"/>
+<wire x1="121.92" y1="-38.1" x2="132.08" y2="-38.1" width="0.1524" layer="91"/>
+<label x="124.46" y="-38.1" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="FP_SYNC" class="0">
+<segment>
+<pinref part="X2" gate="-6" pin="KL"/>
+<wire x1="121.92" y1="-40.64" x2="132.08" y2="-40.64" width="0.1524" layer="91"/>
+<label x="124.46" y="-40.64" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="FP_TOUCH1" class="0">
+<segment>
+<pinref part="X2" gate="-7" pin="KL"/>
+<wire x1="121.92" y1="-43.18" x2="132.08" y2="-43.18" width="0.1524" layer="91"/>
+<label x="124.46" y="-43.18" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="FP_TOUCH2" class="0">
+<segment>
+<pinref part="X2" gate="-8" pin="KL"/>
+<wire x1="121.92" y1="-45.72" x2="132.08" y2="-45.72" width="0.1524" layer="91"/>
+<label x="124.46" y="-45.72" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
