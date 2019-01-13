@@ -64,7 +64,8 @@ void DMXTransmitter::Run()
         // check for data update
         if (m_queue != NULL)
         {
-            if (!m_queue->IsEmpty())
+            // process all waiting updates
+            while (!m_queue->IsEmpty())
             {
                 // update data
                 DMXQueueItem item;
