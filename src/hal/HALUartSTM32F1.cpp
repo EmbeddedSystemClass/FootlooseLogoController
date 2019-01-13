@@ -125,6 +125,7 @@ HALUart::CallBack HALUartSTM32F1::getCallback(CallBackType callback)
     {
     case HAL_UART_AbortCpltCallback:
     case HAL_UART_TxHalfCpltCallback:
+    case HAL_UART_TxCpltCallback:
         retVal = HALUart::Send;
         break;
     case HAL_UART_RxCpltCallback:

@@ -50,25 +50,72 @@ GPIOpin DRVGPIO::getPin(uint32_t pin)
         REPORTFATAL("non owned pin requested")
     }
 
-    bool    polarity  = (m_polarity & (1 << pin));
-    GPIOpin returnPin = GPIOpin(m_gpio, pin, true, polarity);
-    return returnPin;
-}
-
-void DRVGPIO::setAlternateFunction(uint32_t pin, bool output)
-{
-    uint32_t selectedPin = (1 << pin);
-    if ((m_owner & selectedPin) == selectedPin)
-    {
-        REPORTFATAL(" owned pin requested for alternate function")
-    }
-
     GPIO_InitTypeDef pinSettings;
     pinSettings.Pin   = selectedPin;
     pinSettings.Pull  = GPIO_NOPULL;
     pinSettings.Speed = GPIO_SPEED_FREQ_HIGH;
 
-    if (output)
+    if ((m_dir & selectedPin) == selectedPin)
+    {
+        pinSettings.Mode = GPIO_MODE_OUTPUT_PP;
+    }
+    else
+    {
+        pinSettings.Mode = GPIO_MODE_INPUT;
+    }
+
+    bool    polarity  = (m_polarity & (1 << pin));
+    GPIOpin returnPin = GPIOpin(m_gpio, pinSettings, polarity);
+    return returnPin;
+}
+
+// void DRVGPIO::setAlternateFunction(uint32_t pin, bool output)
+//{
+//    uint32_t selectedPin = (1 << pin);
+//    if ((m_owner & selectedPin) == selectedPin)
+//    {
+//        REPORTFATAL(" owned pin requested for alternate function")
+//    }
+//
+//    GPIO_InitTypeDef pinSettings;
+//    pinSettings.Pin   = selectedPin;
+//    pinSettings.Pull  = GPIO_NOPULL;
+//    pinSettings.Speed = GPIO_SPEED_FREQ_HIGH;
+//
+//    if (output)
+//    {
+//        pinSettings.Mode = GPIO_MODE_AF_PP;
+//    }
+//    else
+//    {
+//        pinSettings.Mode = GPIO_MODE_AF_INPUT;
+//    }
+//    HAL_GPIO_Init(m_gpio, &pinSettings);
+//}
+
+// GPIOpin::GPIOpin(GPIO_TypeDef* port, uint8_t pin, bool output, bool polarity)
+//    : m_port(port)
+//    , m_polarity(polarity)
+//    , m_output(output)
+//    , m_state(GPIO_PIN_RESET)
+//{
+//    m_pin = (1 << pin) & GPIO_PIN_MASK;
+//    if (!m_pin) REPORTFATAL("PIN assigment failed")
+//}
+
+GPIOpin::GPIOpin(GPIO_TypeDef* port, GPIO_InitTypeDef initSettings, bool polarity)
+    : m_initialSettings(initSettings)
+    , m_port(port)
+    , m_polarity(polarity)
+    , m_state(GPIO_PIN_RESET)
+{
+}
+
+void GPIOpin::setAlternateFunction()
+{
+    GPIO_InitTypeDef pinSettings = m_initialSettings;
+
+    if (isOutput())
     {
         pinSettings.Mode = GPIO_MODE_AF_PP;
     }
@@ -76,44 +123,51 @@ void DRVGPIO::setAlternateFunction(uint32_t pin, bool output)
     {
         pinSettings.Mode = GPIO_MODE_AF_INPUT;
     }
-    HAL_GPIO_Init(m_gpio, &pinSettings);
+
+    HAL_GPIO_Init(m_port, &pinSettings);
 }
 
-GPIOpin::GPIOpin(GPIO_TypeDef* port, uint8_t pin, bool output, bool polarity)
-    : m_port(port)
-    , m_polarity(polarity)
-    , m_output(output)
-    , m_state(GPIO_PIN_RESET)
+void GPIOpin::setNormalFunction()
 {
-    m_pin = (1 << pin) & GPIO_PIN_MASK;
-    if (!m_pin) REPORTFATAL("PIN assigment failed")
+    GPIO_InitTypeDef pinSettings = m_initialSettings;
+
+    if (isOutput())
+    {
+        pinSettings.Mode = GPIO_MODE_OUTPUT_PP;
+    }
+    else
+    {
+        pinSettings.Mode = GPIO_MODE_INPUT;
+    }
+
+    HAL_GPIO_Init(m_port, &pinSettings);
 }
 
 GPIOpin& GPIOpin::operator=(const bool state)
 {
-    if (m_output)
+    if (isOutput())
     {
         m_state = static_cast<GPIO_PinState>(applyPolarity(state));
-        HAL_GPIO_WritePin(m_port, m_pin, m_state);
+        HAL_GPIO_WritePin(m_port, m_initialSettings.Pin, m_state);
     }
     else
     {
-        m_state = HAL_GPIO_ReadPin(m_port, m_pin);
+        m_state = HAL_GPIO_ReadPin(m_port, m_initialSettings.Pin);
     }
     return *this;
 }
 
 GPIOpin::operator bool()
 {
-    m_state = HAL_GPIO_ReadPin(m_port, m_pin);
+    m_state = HAL_GPIO_ReadPin(m_port, m_initialSettings.Pin);
     return applyPolarity(m_state == GPIO_PIN_SET);
 }
 
 void GPIOpin::toggle()
 {
-    if (m_output)
+    if (isOutput())
     {
-        HAL_GPIO_TogglePin(m_port, m_pin);
+        HAL_GPIO_TogglePin(m_port, m_initialSettings.Pin);
     }
 }
 
@@ -121,6 +175,19 @@ bool GPIOpin::applyPolarity(bool state)
 {
     bool retVal = state;
     if (!m_polarity) retVal = !retVal;
+
+    return retVal;
+}
+
+bool GPIOpin::isOutput()
+{
+    bool retVal = false;
+
+    if (m_initialSettings.Mode == GPIO_MODE_OUTPUT_PP || m_initialSettings.Mode == GPIO_MODE_OUTPUT_OD || m_initialSettings.Mode == GPIO_MODE_AF_PP ||
+        m_initialSettings.Mode == GPIO_MODE_AF_OD)
+    {
+        retVal = true;
+    }
 
     return retVal;
 }

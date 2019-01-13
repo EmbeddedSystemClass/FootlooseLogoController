@@ -9,6 +9,7 @@
 
 #include "app/BinDecIO.h"
 #include "app/DMXReceiver.h"
+#include "app/DMXTransmitter.h"
 #include "app/GPIOBlinker.h"
 #include "app/TaskStateMonitor.h"
 #include "drv/DRVGPIO.h"
@@ -54,22 +55,31 @@ void BSP::Run()
     // clang-format off
 	DRVGPIO gpioA = DRVGPIO(GPIOA,
 							  //5432109876453210
-							  0b0000001111110011, //Owner
-							  0b0000000000000000, //Direction 1=out
+							  0b0000111111111111, //Owner
+							  0b0000001000000100, //Direction 1=out
 							  0b1111111111111111);//Polarity 1=active high
     // clang-format on
-    GPIOpin dip0 = gpioA.getPin(0);
-    GPIOpin dip1 = gpioA.getPin(1);
-    GPIOpin dip2 = gpioA.getPin(4);
-    GPIOpin dip3 = gpioA.getPin(5);
-    GPIOpin dip4 = gpioA.getPin(6);
-    GPIOpin dip5 = gpioA.getPin(7);
-    GPIOpin dip6 = gpioA.getPin(8);
-    GPIOpin dip7 = gpioA.getPin(9);
+    GPIOpin uart2Tx = gpioA.getPin(2);
+    GPIOpin uart2Rx = gpioA.getPin(3);
+    GPIOpin dip0    = gpioA.getPin(0);
+    GPIOpin dip1    = gpioA.getPin(1);
+    GPIOpin dip2    = gpioA.getPin(4);
+    GPIOpin dip3    = gpioA.getPin(5);
+    GPIOpin dip4    = gpioA.getPin(6);
+    GPIOpin dip5    = gpioA.getPin(7);
+    GPIOpin dip6    = gpioA.getPin(8);
+    GPIOpin uart1Tx = gpioA.getPin(9);
+    GPIOpin uart1Rx = gpioA.getPin(10);
+
+    GPIOpin dip7 = gpioA.getPin(11);
 
     // UART2 pins
-    gpioA.setAlternateFunction(2, 1);
-    gpioA.setAlternateFunction(3, 0);
+    //    gpioA.setAlternateFunction(2, 1);
+    //    gpioA.setAlternateFunction(3, 0);
+    uart1Tx.setAlternateFunction();
+    uart1Rx.setAlternateFunction();
+    uart2Tx.setAlternateFunction();
+    uart2Rx.setAlternateFunction();
 
     // clang-format off
 	DRVGPIO gpioB = DRVGPIO(GPIOB,
@@ -94,6 +104,7 @@ void BSP::Run()
 
     // Uart drivers
     DRVSerialUart dmxRxUartDRV(dmxRxUart);
+    DRVSerialUart dmxTxUartDRV(dmxTxUart);
 
     REPORTLOG("Initialization of DRV complete");
 
@@ -117,15 +128,29 @@ void BSP::Run()
     // Queue for received DMX channels
     cpp_freertos::Queue receivingQueue(10, 4);
 
+    // Queue for dmx sending
+    cpp_freertos::Queue transmittingQueue(5, sizeof(DMXTransmitter::DMXQueueItem));
+
     // Receiver
     DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, dmxBreakCaptureTimer, &dmxAddress, &receivingQueue, 4);
-    receiver.Run();
+    receiver.Start();
 
+    // Transmitter
+    DMXTransmitter transmitter(taskMonitor.GetHandle(), 2, uart1Tx, dmxTxUartDRV, 100, &transmittingQueue);
+    transmitter.Start();
+
+    DMXTransmitter::DMXQueueItem sendItem;
+    sendItem.channelCount   = 3;
+    sendItem.startAddress   = 1;
+    sendItem.channeldata[0] = 1;
+    sendItem.channeldata[1] = 2;
+    sendItem.channeldata[2] = 3;
     while (1)
     {
-        //        uint8_t data[3] = {1, 2, 3};
+        sendItem.channeldata[0]++;
         //        dmxRxUart.send(data, 3);
-        Delay(50);
+        Delay(200);
+        transmittingQueue.Enqueue(&sendItem);
     }
 
     // Suspend this task as we do not want to free memory
