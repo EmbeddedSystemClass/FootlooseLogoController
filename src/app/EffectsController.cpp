@@ -11,6 +11,7 @@
 #include "stdint.h"
 
 #include "OSError.h"
+#include "app/DMXTransmitter.h"
 #include "app/RGBFixture.h"
 #include "app/TaskState.h"
 #include "queue.hpp"
@@ -110,6 +111,46 @@ void EffectsController::Run()
 
                 currentEffect->first.apply(m_fixtures, currentTick, m_suggestedColor, (m_dmxSelector - currentEffect->second.first));
             }
+        }
+
+        DMXTransmitter::DMXQueueItem output;
+
+        // insert all updates in the queue
+        for (auto& fixture : m_fixtures)
+        {
+            bool createNewMessage = false;
+            // check if we can use existing message
+            if ((fixture.getDmxChannelCount() + output.channelCount) <= DMXTransmitter::DMXQueueItem::channelDataLength)
+            {
+                if ((output.channelCount + output.startAddress) == fixture.getDmxStartAddress())
+                {
+                    fixture.getDmxData(&output.channeldata[output.channelCount]);
+                    output.channelCount += fixture.getDmxChannelCount();
+                }
+                else
+                {
+                    // message not aligned
+                    createNewMessage = true;
+                }
+            }
+            else
+            {
+                // message full send it
+                createNewMessage = true;
+            }
+
+            if (createNewMessage)
+            {
+                // send old message
+                m_outputQueue.Enqueue(&output);
+
+                output.channelCount = fixture.getDmxChannelCount();
+                output.startAddress = fixture.getDmxStartAddress();
+                fixture.getDmxData(output.channeldata);
+            }
+
+            // send last message
+            m_outputQueue.Enqueue(&output);
         }
         Delay(m_interval);
     }

@@ -9,8 +9,8 @@
 
 #include "app/BinDecIO.h"
 #include "app/DMXReceiver.h"
-#include "app/Effects.h"
 #include "app/DMXTransmitter.h"
+#include "app/Effects.h"
 #include "app/EffectsController.h"
 #include "app/GPIOBlinker.h"
 #include "app/TaskStateMonitor.h"
@@ -129,10 +129,9 @@ void BSP::Run()
 
     // Queue for received DMX channels
     cpp_freertos::Queue receivingQueue(10, 4);
-    cpp_freertos::Queue sendingQueue(1, 4);
 
     // Queue for dmx sending
-    cpp_freertos::Queue transmittingQueue(5, sizeof(DMXTransmitter::DMXQueueItem));
+    cpp_freertos::Queue transmittingQueue(10, sizeof(DMXTransmitter::DMXQueueItem));
 
     // Receiver
     DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, dmxBreakCaptureTimer, &dmxAddress, &receivingQueue, 4);
@@ -145,18 +144,28 @@ void BSP::Run()
     // sender
 
     // effects controller
-    EffectsController controller("Controller", taskMonitor.GetHandle(), 2, receivingQueue, sendingQueue, 20);
+    EffectsController controller("Controller", taskMonitor.GetHandle(), 2, receivingQueue, transmittingQueue, 20);
 
     // adding fixtures
-    RGBFixture logoF(100, 0);
-    RGBFixture logoO1(103, 1);
-    RGBFixture logoO2(106, 2);
-    RGBFixture logoT(109, 3);
-    RGBFixture logoL(112, 4);
-    RGBFixture logoO3(115, 5);
-    RGBFixture logoO4(118, 6);
-    RGBFixture logoS(121, 7);
-    RGBFixture logoE(124, 8);
+    //    RGBFixture logoF(100, 0);
+    //    RGBFixture logoO1(103, 1);
+    //    RGBFixture logoO2(106, 2);
+    //    RGBFixture logoT(109, 3);
+    //    RGBFixture logoL(112, 4);
+    //    RGBFixture logoO3(115, 5);
+    //    RGBFixture logoO4(118, 6);
+    //    RGBFixture logoS(121, 7);
+    //    RGBFixture logoE(124, 8);
+
+    RGBFixture logoF(1, 0);
+    RGBFixture logoO1(4, 1);
+    RGBFixture logoO2(7, 2);
+    RGBFixture logoT(10, 3);
+    RGBFixture logoL(13, 4);
+    RGBFixture logoO3(16, 5);
+    RGBFixture logoO4(19, 6);
+    RGBFixture logoS(22, 7);
+    RGBFixture logoE(27, 8);
 
     controller.addFixture(logoF);
     controller.addFixture(logoO1);
@@ -180,9 +189,8 @@ void BSP::Run()
 
     while (1)
     {
-       
+
         Delay(200);
-        
     }
 
     // Suspend this task as we do not want to free memory
