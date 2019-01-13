@@ -18,7 +18,7 @@ using namespace cpp_freertos;
 
 DMXTransmitter::DMXTransmitter(TaskHandle_t taskToNotify, uint8_t ID, GPIOpin& uartPin, DRVSerial& uart, uint8_t lastChannel)
     : TaskState(taskToNotify, ID)
-    , cpp_freertos::Thread(":DMX trx", 200 + lastChannel, 5)
+    , cpp_freertos::Thread(":DMX trx", 200 + (lastChannel / 4), 5)
     , m_uart(uart)
     , m_uartPin(uartPin)
     , m_queue(NULL)
@@ -30,13 +30,31 @@ DMXTransmitter::DMXTransmitter(TaskHandle_t taskToNotify, uint8_t ID, GPIOpin& u
 
     m_dmxBuffer = static_cast<uint8_t*>(malloc(lastChannel + 1));
 
-    //    memset(m_dmxBuffer, 0, lastChannel + 1);
+    memset(m_dmxBuffer, 0, lastChannel + 1);
+}
+
+DMXTransmitter::DMXTransmitter(TaskHandle_t taskToNotify, uint8_t ID, GPIOpin& uartPin, DRVSerial& uart, uint8_t lastChannel,
+                               cpp_freertos::Queue* queue)
+    : TaskState(taskToNotify, ID)
+    , cpp_freertos::Thread(":DMX trx", 200 + (lastChannel / 4), 5)
+    , m_uart(uart)
+    , m_uartPin(uartPin)
+    , m_queue(queue)
+    , m_channelCount(lastChannel)
+    , m_state(StateInit)
+    , m_lastSendTime(0)
+    , m_dataWasUpdated(false)
+{
+    m_dmxBuffer = static_cast<uint8_t*>(malloc(lastChannel + 1));
+
+    memset(m_dmxBuffer, 0, lastChannel + 1);
 }
 
 void DMXTransmitter::Run()
 {
 
     // setup
+    m_uart.registerCallback(uartCallback, HALUart::Send, static_cast<void*>(this));
 
     while (1)
     {
@@ -90,7 +108,7 @@ void DMXTransmitter::writeChannels(uint8_t* data, uint16_t startAddress, uint8_t
 {
     if ((startAddress + channelCount) < m_channelCount)
     {
-        memcpy(m_dmxBuffer, data, channelCount);
+        memcpy(&m_dmxBuffer[startAddress], data, channelCount);
         m_dataWasUpdated = true;
     }
 }

@@ -15,7 +15,7 @@
 
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, uint8_t channelCount)
     : TaskState(taskToNotify, ID)
-    , cpp_freertos::Thread(":DMX rec", 700, 5)
+    , cpp_freertos::Thread(":DMX rec", 300, 5)
     , m_uart(uart)
     , m_timer(timer)
     , m_address(NULL)
@@ -32,7 +32,7 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
 
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, BinDecIO* dmxAddress, uint8_t channelCount)
     : TaskState(taskToNotify, ID)
-    , cpp_freertos::Thread(":DMX rec", 700, 5)
+    , cpp_freertos::Thread(":DMX rec", 300, 5)
     , m_uart(uart)
     , m_timer(timer)
     , m_address(dmxAddress)
@@ -50,7 +50,7 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, BinDecIO* dmxAddress, cpp_freertos::Queue* queue,
                          uint8_t channelCount)
     : TaskState(taskToNotify, ID)
-    , cpp_freertos::Thread(":DMX rec", 700, 5)
+    , cpp_freertos::Thread(":DMX rec", 300, 5)
     , m_uart(uart)
     , m_timer(timer)
     , m_address(dmxAddress)

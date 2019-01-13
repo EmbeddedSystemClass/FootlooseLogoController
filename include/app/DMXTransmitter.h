@@ -36,6 +36,7 @@ public:
     };
 
     DMXTransmitter(TaskHandle_t taskToNotify, uint8_t ID, GPIOpin& uartPin, DRVSerial& uart, uint8_t lastChannel);
+    DMXTransmitter(TaskHandle_t taskToNotify, uint8_t ID, GPIOpin& uartPin, DRVSerial& uart, uint8_t lastChannel, cpp_freertos::Queue* queue);
 
     virtual void Run();
 
