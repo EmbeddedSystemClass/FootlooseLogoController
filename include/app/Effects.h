@@ -23,3 +23,15 @@ public:
 
 private:
 };
+
+class CycleColorEffect : public EffectBase
+{
+public:
+    void reset(uint32_t tick);
+
+    void apply(std::list<RGBFixture>& m_fixtures, uint32_t tick, Color suggestedColor, uint8_t dmxOffset);
+
+private:
+    uint8_t cnt;
+    Color   m_color;
+};

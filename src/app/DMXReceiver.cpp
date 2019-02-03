@@ -32,7 +32,7 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
 
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, BinDecIO* dmxAddress, uint8_t channelCount)
     : TaskState(taskToNotify, ID)
-    , cpp_freertos::Thread(":DMX rec", 300, 5)
+    , cpp_freertos::Thread(":DMX rec", 200, 5)
     , m_uart(uart)
     , m_timer(timer)
     , m_address(dmxAddress)
@@ -50,7 +50,7 @@ DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart,
 DMXReceiver::DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, BinDecIO* dmxAddress, cpp_freertos::Queue* queue,
                          uint8_t channelCount)
     : TaskState(taskToNotify, ID)
-    , cpp_freertos::Thread(":DMX rec", 300, 5)
+    , cpp_freertos::Thread(":DMX rec", 200, 5)
     , m_uart(uart)
     , m_timer(timer)
     , m_address(dmxAddress)
@@ -137,7 +137,7 @@ void DMXReceiver::insertTestDataInQueue()
 
         memset(data, 0xAA, m_channelCount);
 
-        data[m_channelCount - 1] = 0;
+        data[m_channelCount - 1] = 11;
 
         m_queue->Enqueue(data);
     }

@@ -22,7 +22,7 @@ EffectBase::~EffectBase() {}
 
 EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify, uint8_t ID, cpp_freertos::Queue& inputQueue,
                                      cpp_freertos::Queue& outputQueue, uint32_t interval)
-    : cpp_freertos::Thread(Name, 512, 2)
+    : cpp_freertos::Thread(Name, 200, 2)
     , TaskState(taskToNotify, ID)
     , m_lastEffect(NULL)
     , m_inputQueue(inputQueue)
@@ -37,7 +37,7 @@ EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify
 
 EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify, uint8_t ID, cpp_freertos::Queue& inputQueue,
                                      cpp_freertos::Queue& outputQueue, uint32_t interval, GPIOpin* testMode1, GPIOpin* testMode2)
-    : cpp_freertos::Thread(Name, 512, 2)
+    : cpp_freertos::Thread(Name, 200, 2)
     , TaskState(taskToNotify, ID)
     , m_lastEffect(NULL)
     , m_inputQueue(inputQueue)

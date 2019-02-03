@@ -18,7 +18,7 @@ using namespace cpp_freertos;
 
 DMXTransmitter::DMXTransmitter(TaskHandle_t taskToNotify, uint8_t ID, GPIOpin& uartPin, DRVSerial& uart, uint8_t lastChannel)
     : TaskState(taskToNotify, ID)
-    , cpp_freertos::Thread(":DMX trx", 200 + (lastChannel / 4), 5)
+    , cpp_freertos::Thread(":DMX trx", 100 + (lastChannel / 4), 5)
     , m_uart(uart)
     , m_uartPin(uartPin)
     , m_queue(NULL)
@@ -36,7 +36,7 @@ DMXTransmitter::DMXTransmitter(TaskHandle_t taskToNotify, uint8_t ID, GPIOpin& u
 DMXTransmitter::DMXTransmitter(TaskHandle_t taskToNotify, uint8_t ID, GPIOpin& uartPin, DRVSerial& uart, uint8_t lastChannel,
                                cpp_freertos::Queue* queue)
     : TaskState(taskToNotify, ID)
-    , cpp_freertos::Thread(":DMX trx", 200 + (lastChannel / 4), 5)
+    , cpp_freertos::Thread(":DMX trx", 100 + (lastChannel / 4), 5)
     , m_uart(uart)
     , m_uartPin(uartPin)
     , m_queue(queue)

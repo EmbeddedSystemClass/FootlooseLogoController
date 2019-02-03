@@ -36,6 +36,15 @@ public:
 
     uint8_t getBlue();
 
+    //    Color operator++(int)
+    //    {
+    //        Color result(*this);  // make a copy for result
+    //        result.m_red++;
+    //        result.m_green++;
+    //        result.m_blue++;
+    //        return result;  // return the copy (the old) value.
+    //    }
+
 private:
     uint8_t m_red;
     uint8_t m_green;
