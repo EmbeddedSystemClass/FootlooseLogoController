@@ -55,11 +55,11 @@ void BSP::Run()
     // Driver
 
     // clang-format off
-	DRVGPIO gpioA = DRVGPIO(GPIOA,
-							  //5432109876453210
-							  0b0000111111111111, //Owner
-							  0b0000001000000100, //Direction 1=out
-							  0b1111111111111111);//Polarity 1=active high
+    DRVGPIO gpioA = DRVGPIO(GPIOA,
+                            //5432109876453210
+                            0b0000111111111111,   // Owner
+                            0b0000001000000100,   // Direction 1=out
+                            0b1111111111111111);  // Polarity 1=active high
     // clang-format on
     GPIOpin uart2Tx = gpioA.getPin(2);
     GPIOpin uart2Rx = gpioA.getPin(3);
@@ -84,11 +84,11 @@ void BSP::Run()
     uart2Rx.setAlternateFunction();
 
     // clang-format off
-	DRVGPIO gpioB = DRVGPIO(GPIOB,
-							  //5432109876453210
-							  0b0000001100000011, //Owner
-							  0b0000001100000000, //Direction 1=out
-							  0b1111111111111111);//Polarity 1=active high
+    	DRVGPIO gpioB = DRVGPIO(GPIOB,
+    							  //5432109876453210
+    							  0b0000001100000011, //Owner
+    							  0b0000001100000000, //Direction 1=out
+    							  0b1111111111111111);//Polarity 1=active high
     // clang-format on
     GPIOpin dip8 = gpioB.getPin(0);
     GPIOpin dip9 = gpioB.getPin(1);
@@ -96,11 +96,11 @@ void BSP::Run()
     GPIOpin ISR2 = gpioB.getPin(9);
 
     // clang-format off
-    DRVGPIO gpioC = DRVGPIO(GPIOC,
-                              //5432109876453210
-                              0b0010000000000000,//Owner
-							  0b0010000000000000,//Direction 1=out
-							  0b1101111111111111);//Polarity 1=active high
+        DRVGPIO gpioC = DRVGPIO(GPIOC,
+                                  //5432109876453210
+                                  0b0010000000000000,//Owner
+    							  0b0010000000000000,//Direction 1=out
+    							  0b1101111111111111);//Polarity 1=active high
     // clang-format on
     GPIOpin LED = gpioC.getPin(13);
 
@@ -110,9 +110,9 @@ void BSP::Run()
 
     REPORTLOG("Initialization of DRV complete");
 
-    // APP
+    //    APP
 
-    // task monitor
+    //        task monitor
     TaskStateMonitor taskMonitor("Monitor UI", LED);
     taskMonitor.Start();
 
@@ -179,8 +179,10 @@ void BSP::Run()
 
     // adding effects
     StaticColorEffect effectStaticColor;
+    CycleColorEffect  effectCycleColor;
 
     controller.addEffect(effectStaticColor, EffectsController::DmxRange(0, 10));
+    controller.addEffect(effectCycleColor, EffectsController::DmxRange(11, 20));
 
     // starting controller
     controller.Start();

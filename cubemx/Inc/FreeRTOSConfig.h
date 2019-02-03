@@ -108,6 +108,7 @@ extern uint32_t SystemCoreClock;
 #define configQUEUE_REGISTRY_SIZE 8
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
 #define configUSE_TRACE_FACILITY 1
+#define configCHECK_FOR_STACK_OVERFLOW 1
 //#define configGENERATE_RUN_TIME_STATS 1
 
 /* Co-routine definitions. */
