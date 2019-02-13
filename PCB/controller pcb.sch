@@ -19807,6 +19807,7 @@ www.fma.fujitsu.com/pdf/e713717.pdf</description>
 <part name="U$1" library="comp" deviceset="STM32F303CC" device="LQFP48" package3d_urn="urn:adsk.eagle:package:19290/2"/>
 <part name="+3V17" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="+3V3" device=""/>
 <part name="GND24" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
+<part name="GND16" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -20246,6 +20247,9 @@ www.fma.fujitsu.com/pdf/e713717.pdf</description>
 <instance part="GND24" gate="1" x="177.8" y="-12.7" smashed="yes">
 <attribute name="VALUE" x="175.26" y="-15.24" size="1.778" layer="96"/>
 </instance>
+<instance part="GND16" gate="1" x="114.3" y="20.32" smashed="yes">
+<attribute name="VALUE" x="111.76" y="17.78" size="1.778" layer="96"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -20410,9 +20414,13 @@ www.fma.fujitsu.com/pdf/e713717.pdf</description>
 <wire x1="48.26" y1="81.28" x2="53.34" y2="81.28" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="81.28" x2="53.34" y2="76.2" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="DE"/>
-<wire x1="53.34" y1="76.2" x2="53.34" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="76.2" x2="53.34" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="71.12" x2="53.34" y2="68.58" width="0.1524" layer="91"/>
 <wire x1="48.26" y1="76.2" x2="53.34" y2="76.2" width="0.1524" layer="91"/>
 <junction x="53.34" y="76.2"/>
+<pinref part="IC1" gate="G$1" pin="DI"/>
+<wire x1="48.26" y1="71.12" x2="53.34" y2="71.12" width="0.1524" layer="91"/>
+<junction x="53.34" y="71.12"/>
 </segment>
 <segment>
 <pinref part="SV1" gate="G$1" pin="1"/>
@@ -20502,6 +20510,11 @@ www.fma.fujitsu.com/pdf/e713717.pdf</description>
 <wire x1="172.72" y1="2.54" x2="177.8" y2="2.54" width="0.1524" layer="91"/>
 <wire x1="177.8" y1="2.54" x2="177.8" y2="-2.54" width="0.1524" layer="91"/>
 <junction x="177.8" y="-2.54"/>
+</segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="BOOT0"/>
+<pinref part="GND16" gate="1" pin="GND"/>
+<wire x1="121.92" y1="22.86" x2="114.3" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="DIPSW10" class="0">
