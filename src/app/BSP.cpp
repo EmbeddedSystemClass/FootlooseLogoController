@@ -83,11 +83,10 @@ void BSP::Run()
     // clang-format on
     GPIOpin dip8      = gpioB.getPin(0);
     GPIOpin dip9      = gpioB.getPin(1);
-    GPIOpin ledPower  = gpioB.getPin(5);
+    GPIOpin ledPower  = gpioB.getPin(4);
     GPIOpin ledStatus = gpioB.getPin(5);
 
-    ledPower  = true;
-    ledStatus = true;
+    ledPower = true;
 
     // clang-format off
     DRVGPIO gpioC = DRVGPIO(GPIOC,
