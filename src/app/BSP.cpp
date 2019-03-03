@@ -76,15 +76,18 @@ void BSP::Run()
 
     // clang-format off
 	DRVGPIO gpioB = DRVGPIO(GPIOB,
-							  //5432109876453210
-							  0b0000001100000011, //Owner
-							  0b0000001100000000, //Direction 1=out
+							  //5432109876543210
+							  0b0000000000110011, //Owner
+							  0b0000000000110000, //Direction 1=out
 							  0b1111111111111111);//Polarity 1=active high
     // clang-format on
-    GPIOpin dip8 = gpioB.getPin(0);
-    GPIOpin dip9 = gpioB.getPin(1);
-    GPIOpin ISR  = gpioB.getPin(8);
-    GPIOpin ISR2 = gpioB.getPin(9);
+    GPIOpin dip8      = gpioB.getPin(0);
+    GPIOpin dip9      = gpioB.getPin(1);
+    GPIOpin ledPower  = gpioB.getPin(5);
+    GPIOpin ledStatus = gpioB.getPin(5);
+
+    ledPower  = true;
+    ledStatus = true;
 
     // clang-format off
     DRVGPIO gpioC = DRVGPIO(GPIOC,
@@ -93,7 +96,6 @@ void BSP::Run()
 							  0b0010000000000000,//Direction 1=out
 							  0b1101111111111111);//Polarity 1=active high
     // clang-format on
-    GPIOpin LED = gpioC.getPin(13);
 
     // Uart drivers
     DRVSerialUart dmxRxUartDRV(dmxRxUart);
@@ -103,7 +105,7 @@ void BSP::Run()
     // APP
 
     // task monitor
-    TaskStateMonitor taskMonitor("Monitor UI", LED);
+    TaskStateMonitor taskMonitor("Monitor UI", ledStatus);
     taskMonitor.Start();
 
     // DMX dipswitch decoder
