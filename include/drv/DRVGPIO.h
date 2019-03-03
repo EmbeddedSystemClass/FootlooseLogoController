@@ -16,7 +16,8 @@
 class GPIOpin
 {
 public:
-    GPIOpin(GPIO_TypeDef*, uint8_t pin, bool output, bool polarity);
+    //    GPIOpin(GPIO_TypeDef*, uint8_t pin, bool output, bool polarity);
+    GPIOpin(GPIO_TypeDef* port, GPIO_InitTypeDef initSettings, bool polarity);
 
     GPIOpin& operator=(const bool);
 
@@ -24,16 +25,20 @@ public:
 
     void toggle();
 
+    void setAlternateFunction();
+    void setNormalFunction();
+
 private:
     GPIOpin();  // not allowed
 
     bool applyPolarity(bool state);
 
-    GPIO_TypeDef* m_port;
-    uint16_t      m_pin;
-    bool          m_output;
-    GPIO_PinState m_state;
-    bool          m_polarity;  //!< 1 means normal
+    bool isOutput();
+
+    const GPIO_InitTypeDef m_initialSettings;
+    GPIO_TypeDef*          m_port;
+    GPIO_PinState          m_state;
+    bool                   m_polarity;  //!< 1 means normal
 };
 
 /*

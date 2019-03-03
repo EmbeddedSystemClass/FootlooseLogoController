@@ -12,7 +12,7 @@
 #include "thread.hpp"
 
 TaskStateMonitor::TaskStateMonitor(const char* name, GPIOpin led)
-    : cpp_freertos::Thread(name, 256, 2)
+    : cpp_freertos::Thread(name, 100, 2)
     , m_led(led)
 {
     for (uint8_t ii = 0; ii < 16; ii++) m_taskStates[ii] = TaskState::TaskStateNone;

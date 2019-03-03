@@ -103,4 +103,6 @@ uint32_t DRVSerial::readLine(char* buf, uint32_t bufferSize) {}
 
 uint32_t DRVSerial::readBuffer(uint8_t* buf, uint32_t bufferSize) {}
 
+uint32_t DRVSerial::writeBuffer(uint8_t* buf, uint32_t bufferSize) {}
+
 void DRVSerial::registerCallback(HALUart::CallbackFunction f, HALUart::CallBack type, void* parameter) {}
