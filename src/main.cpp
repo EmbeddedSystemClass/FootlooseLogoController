@@ -50,12 +50,13 @@
 #include "main.h"
 
 #include "app/BSP.h"
-extern "C" {
+extern "C"
+{
 #include "cmsis_os.h"
-#include "stm32f1xx_hal.h"
+#include "stm32f3xx_hal.h"
 #include "task.h"
-#include "usb_device.h"
-#include "usbd_cdc_if.h"
+    //#include "usb_device.h"
+    //#include "usbd_cdc_if.h"
 }
 
 /* USER CODE BEGIN Includes */
@@ -81,7 +82,7 @@ void        SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART1_UART_Init(void);
-void StartDefaultTask(void const* argument);
+void        StartDefaultTask(void const* argument);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -207,8 +208,10 @@ void SystemClock_Config(void)
         _Error_Handler(__FILE__, __LINE__);
     }
 
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
-    PeriphClkInit.UsbClockSelection    = RCC_USBCLKSOURCE_PLL_DIV1_5;
+    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1 | RCC_PERIPHCLK_USART2 | RCC_PERIPHCLK_USART3;
+    PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
+    PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_SYSCLK;
+    PeriphClkInit.Usart3ClockSelection = RCC_USART3CLKSOURCE_SYSCLK;
     if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
     {
         _Error_Handler(__FILE__, __LINE__);

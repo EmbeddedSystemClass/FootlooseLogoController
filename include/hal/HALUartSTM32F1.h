@@ -8,7 +8,7 @@
 #include "HALUart.h"
 #include "HALUartSTM32F1.h"
 
-#include "stm32f1xx.h"
+#include "stm32f3xx.h"
 
 #include "stdint.h"
 

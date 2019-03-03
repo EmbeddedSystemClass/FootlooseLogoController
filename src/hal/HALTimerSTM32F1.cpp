@@ -7,7 +7,7 @@
 #include "hal/HALTimerSTM32F1.h"
 
 #include "OSError.h"
-#include "stm32f1xx_hal.h"
+#include "stm32f3xx_hal_tim.h"
 
 #include "stdint.h"
 

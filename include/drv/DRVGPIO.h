@@ -8,7 +8,7 @@
 #include <string>
 #include "stdint.h"
 
-#include "stm32f1xx.h"
+#include "stm32f3xx.h"
 
 /**
  * PIN

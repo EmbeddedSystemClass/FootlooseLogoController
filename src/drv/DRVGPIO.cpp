@@ -10,7 +10,7 @@
 
 #include "OSError.h"
 
-#include "stm32f1xx.h"
+#include "stm32f3xx.h"
 
 DRVGPIO::DRVGPIO(GPIO_TypeDef* gpio, uint32_t owner, uint32_t dir, uint32_t polarity)
     : m_gpio(gpio)
@@ -74,7 +74,8 @@ void DRVGPIO::setAlternateFunction(uint32_t pin, bool output)
     }
     else
     {
-        pinSettings.Mode = GPIO_MODE_AF_INPUT;
+        //        pinSettings.Mode = GPIO_MODE_AF_INPUT;
+        pinSettings.Mode = GPIO_MODE_INPUT;
     }
     HAL_GPIO_Init(m_gpio, &pinSettings);
 }

@@ -9,7 +9,7 @@
 
 #include "OSError.h"
 
-#include "stm32f1xx.h"
+#include "stm32f3xx.h"
 
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart2;

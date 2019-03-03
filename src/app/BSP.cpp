@@ -13,7 +13,7 @@
 #include "app/TaskStateMonitor.h"
 #include "drv/DRVGPIO.h"
 #include "drv/DRVSerialUart.h"
-#include "drv/DRVSerialUsb.h"
+//#include "drv/DRVSerialUsb.h"
 #include "hal/HALTimerSTM32F1.h"
 #include "hal/HALUartSTM32F1.h"
 #include "os/OSError.h"
@@ -30,10 +30,10 @@ void BSP::Run()
     // Make sure our error handler is up before anything else
 
     // output for error, ideal would be uart as this can also capture startup issues
-    DRVSerialUsb usbCDC;
+    //    DRVSerialUsb usbCDC;
 
     OSError errorHandler;
-    errorHandler.setup(usbCDC);
+    //    errorHandler.setup(usbCDC);
 
     Delay(1000);
 
