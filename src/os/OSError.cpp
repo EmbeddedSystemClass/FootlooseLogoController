@@ -41,7 +41,7 @@ void OSError::handleError(ErrorSeverity sev, ErrorType type, std::string prefix,
 
     output = severityString + "_" + typeString + ": " + prefix + ":" + str + "\n\r";
 
-    m_serial->send(output);
+    if (m_serial != NULL) m_serial->send(output);
 
     if (sev == SevFatal)
     {

@@ -38,6 +38,9 @@ _estack = 0x2000A000;    /* end of RAM */
 _Min_Heap_Size = 0x400;      /* required amount of heap  */
 _Min_Stack_Size = 0x800; /* required amount of stack */
 
+PROVIDE ( _Heap_Begin = _heap_start ) ;
+PROVIDE ( _Heap_Limit = _Heap_Begin + _Min_Heap_Size ) ;
+
 /* Specify the memory areas */
 MEMORY
 {
@@ -168,6 +171,7 @@ SECTIONS
     . = ALIGN(8);
     PROVIDE ( end = . );
     PROVIDE ( _end = . );
+    PROVIDE ( _heap_start = . );
     . = . + _Min_Heap_Size;
     . = . + _Min_Stack_Size;
     . = ALIGN(8);

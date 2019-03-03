@@ -32,8 +32,11 @@ void BSP::Run()
     // output for error, ideal would be uart as this can also capture startup issues
     //    DRVSerialUsb usbCDC;
 
+    HALUartSTM32F1 serialDebug(USART3, 115200, HALUartSTM32F1::UartModeRxTx);
+    DRVSerialUart  serialDebugDrv(serialDebug);
+
     OSError errorHandler;
-    //    errorHandler.setup(usbCDC);
+    errorHandler.setup(serialDebugDrv);
 
     Delay(1000);
 
@@ -119,7 +122,7 @@ void BSP::Run()
 
     // Receiver
     DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, dmxBreakCaptureTimer, &dmxAddress, &receivingQueue, 4);
-    receiver.Run();
+    receiver.Start();
 
     while (1)
     {
