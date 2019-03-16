@@ -15,7 +15,7 @@
 class TaskStateMonitor : public cpp_freertos::Thread
 {
 public:
-    TaskStateMonitor(const char* name, GPIOpin led);
+    TaskStateMonitor(const char* name, GPIOBlinker& led);
 
     ~TaskStateMonitor();
 
@@ -23,8 +23,8 @@ public:
 
 private:
     TaskState::State m_taskStates[16];
-
-    GPIOBlinker m_led;
+    GPIOBlinker&     m_led;
+    TaskState::State m_lastHighestState;
 
     // Force empty constructor to not be used
     TaskStateMonitor();

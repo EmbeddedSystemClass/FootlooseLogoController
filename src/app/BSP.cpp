@@ -93,19 +93,24 @@ void BSP::Run()
 							  0b0000000000110000, //Direction 1=out
 							  0b1111111111111111);//Polarity 1=active high
     // clang-format on
-    GPIOpin dip8      = gpioB.getPin(0);
-    GPIOpin dip9      = gpioB.getPin(1);
-    GPIOpin ledPower  = gpioB.getPin(4);
-    GPIOpin ledStatus = gpioB.getPin(5);
+    GPIOpin dip8         = gpioB.getPin(0);
+    GPIOpin dip9         = gpioB.getPin(1);
+    GPIOpin ledPower     = gpioB.getPin(4);
+    GPIOpin ledStatusPin = gpioB.getPin(5);
+
+    GPIOBlinker ledStatus(ledStatusPin);
+
+    //    ledStatus.setFrequency(2);
+    //    ledStatus.setDutyCycle(10)
 
     ledPower = true;
 
     // clang-format off
-        DRVGPIO gpioC = DRVGPIO(GPIOC,
-                                  //5432109876453210
-                                  0b0010000000000000,//Owner
-    							  0b0010000000000000,//Direction 1=out
-    							  0b1101111111111111);//Polarity 1=active high
+	DRVGPIO gpioC = DRVGPIO(GPIOC,
+						  //5432109876453210
+						  0b0010000000000000,//Owner
+						  0b0010000000000000,//Direction 1=out
+						  0b1101111111111111);//Polarity 1=active high
     // clang-format on
 
     // Uart drivers
@@ -191,7 +196,7 @@ void BSP::Run()
     // starting controller
     controller.Start();
 
-    receiver.insertTestDataInQueue();
+    //    receiver.insertTestDataInQueue();
 
     while (1)
     {

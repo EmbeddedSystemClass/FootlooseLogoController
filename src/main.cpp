@@ -350,7 +350,7 @@ void _Error_Handler(char* file, int line)
  * @param line: assert_param error line source number
  * @retval None
  */
-void assert_failed(uint8_t* file, uint32_t line)
+void assert_failed(char* file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
     /* User can add his own implementation to report the file name and line
@@ -366,6 +366,12 @@ void assert_failed(uint8_t* file, uint32_t line)
  * @}
  */
 
+void HardFault_Handler()
+{
+    for (;;)
+    {
+    }
+}
 /**
  * @}
  */

@@ -22,7 +22,7 @@ EffectBase::~EffectBase() {}
 
 EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify, uint8_t ID, cpp_freertos::Queue& inputQueue,
                                      cpp_freertos::Queue& outputQueue, uint32_t interval)
-    : cpp_freertos::Thread(Name, 200, 2)
+    : cpp_freertos::Thread(Name, 800, 2)
     , TaskState(taskToNotify, ID)
     , m_lastEffect(NULL)
     , m_inputQueue(inputQueue)
@@ -37,7 +37,7 @@ EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify
 
 EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify, uint8_t ID, cpp_freertos::Queue& inputQueue,
                                      cpp_freertos::Queue& outputQueue, uint32_t interval, GPIOpin* testMode1, GPIOpin* testMode2)
-    : cpp_freertos::Thread(Name, 200, 2)
+    : cpp_freertos::Thread(Name, 800, 2)
     , TaskState(taskToNotify, ID)
     , m_lastEffect(NULL)
     , m_inputQueue(inputQueue)
@@ -63,7 +63,7 @@ void EffectsController::addEffect(EffectBase& effect, DmxRange range)
 
     m_effects.sort(listCompareDmxRange);
 
-    REPORTWARNING("Adding new effect with range: " + std::to_string(range.first) + " to " + std::to_string(range.first))
+    // REPORTWARNING("Adding new effect with range: " + std::to_string(range.first) + " to " + std::to_string(range.first))
 
     if (isEffectOverlapping())
     {
@@ -150,8 +150,9 @@ void EffectsController::Run()
             }
 
             // send last message
-            m_outputQueue.Enqueue(&output);
+            //   m_outputQueue.Enqueue(&output);
         }
+        m_outputQueue.Enqueue(&output);
         Delay(m_interval);
     }
 }

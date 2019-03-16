@@ -38,15 +38,15 @@ void OSError::handleError(ErrorSeverity sev, ErrorType type, std::string prefix,
     //    std::string severityString = getStringFromSeverity(sev);
     //    std::string typeString     = getStringType(type);
     //    std::string output;
-    //
+
     //    output = severityString + "_" + typeString + ": " + prefix + ":" + str + "\n\r";
 
-    char buffer[100];
+    //    char buffer[100];
 
-    if (m_serial != NULL) m_serial->send(output);
+    //    if (m_serial != NULL) m_serial->send(output);
 
     //    m_serial->send(output);
-    m_serial->send(buffer);
+    //    m_serial->send(buffer);
 
     if (sev == SevFatal)
     {

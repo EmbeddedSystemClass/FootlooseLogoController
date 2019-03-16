@@ -28,7 +28,7 @@ public:
     void setDutyCycle(uint8_t ms);
 
 private:
-    GPIOpin  m_pin;
+    GPIOpin& m_pin;
     uint16_t m_period;
     uint16_t m_dutyCycle;
 

@@ -11,9 +11,10 @@
 #include "drv/DRVGPIO.h"
 #include "thread.hpp"
 
-TaskStateMonitor::TaskStateMonitor(const char* name, GPIOpin led)
-    : cpp_freertos::Thread(name, 100, 2)
+TaskStateMonitor::TaskStateMonitor(const char* name, GPIOBlinker& led)
+    : cpp_freertos::Thread(name, 250, 2)
     , m_led(led)
+    , m_lastHighestState(TaskState::TaskStateNone)
 {
     for (uint8_t ii = 0; ii < 16; ii++) m_taskStates[ii] = TaskState::TaskStateNone;
 }
@@ -43,27 +44,31 @@ void TaskStateMonitor::Run()
             }
 
             highestState = getHighestState();
-
-            switch (highestState)
+            if (highestState != m_lastHighestState)
             {
-            case TaskState::TaskStateError:
-                m_led.setDutyCycle(20);
-                m_led.setFrequency(10);
-                break;
-            case TaskState::TaskStateRunning:
-                m_led.setDutyCycle(50);
-                m_led.setFrequency(2);
-                break;
-            case TaskState::TaskStateWaiting:
-                m_led = true;
-                break;
-            case TaskState::TaskStateInit:
-                m_led = false;
-                break;
-            case TaskState::TaskStateNone:
-            default:
-                m_led = false;
-                break;
+                switch (highestState)
+                {
+                case TaskState::TaskStateError:
+                    m_led.setDutyCycle(20);
+                    m_led.setFrequency(10);
+                    break;
+                case TaskState::TaskStateRunning:
+                    m_led.setDutyCycle(80);
+                    m_led.setFrequency(2);
+                    break;
+                case TaskState::TaskStateWaiting:
+                    m_led.setDutyCycle(10);
+                    m_led.setFrequency(2);
+                    break;
+                case TaskState::TaskStateInit:
+                    m_led = true;
+                    break;
+                case TaskState::TaskStateNone:
+                default:
+                    m_led = false;
+                    break;
+                }
+                m_lastHighestState = highestState;
             }
         }
     }

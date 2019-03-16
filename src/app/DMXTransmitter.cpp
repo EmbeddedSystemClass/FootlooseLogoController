@@ -92,7 +92,7 @@ void DMXTransmitter::Run()
         {
             m_lastSendTime = Ticks::TicksToMs(Ticks::GetTicks());
             m_state        = StateBreak;
-            setTaskStateFromISR(TaskStateRunning);
+            //            setTaskStateFromISR(TaskStateRunning);
             m_uartPin.setNormalFunction();
             m_uartPin = 0;
             Delay(1);
@@ -122,11 +122,11 @@ void DMXTransmitter::uartCallback(HALUart::CallBack type, void* parameter)
     {
     case HALUart::Send:
         This->m_state = StateIdle;
-        This->setTaskStateFromISR(TaskStateWaiting);
+        //        This->setTaskStateFromISR(TaskStateWaiting);
         break;
     case HALUart::Error:
         This->m_state = StateIdle;
-        This->setTaskStateFromISR(TaskStateError);
+        //        This->setTaskStateFromISR(TaskStateError);
         break;
     default:
         // dont care
