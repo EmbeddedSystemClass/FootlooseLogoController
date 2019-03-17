@@ -30,9 +30,10 @@ public:
 
     struct DMXQueueItem
     {
-        uint16_t startAddress;
-        uint8_t  channelCount;
-        uint8_t  channeldata[10];
+        uint16_t             startAddress;
+        uint8_t              channelCount;
+        static const uint8_t channelDataLength = 10;
+        uint8_t              channeldata[channelDataLength];
     };
 
     DMXTransmitter(TaskHandle_t taskToNotify, uint8_t ID, GPIOpin& uartPin, DRVSerial& uart, uint8_t lastChannel);

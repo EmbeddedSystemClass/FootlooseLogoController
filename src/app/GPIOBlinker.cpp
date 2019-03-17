@@ -25,31 +25,50 @@ GPIOBlinker& GPIOBlinker::operator=(const bool pinVal)
 {
     // When assigned binary, stop using the timer
     m_pin = pinVal;
+    if (pinVal)
+    {
+        m_dutyCycle = 100;
+    }
+    else
+    {
+        m_dutyCycle = 0;
+    }
+    m_period = UINT16_MAX;
     Stop();
     return *this;
 }
 
 void GPIOBlinker::setPeriod(uint16_t ms)
 {
-    m_period = ms;
-    updateTimer();
+    if (m_period != ms)
+    {
+        m_period = ms;
+        updateTimer();
+    }
 }
 
 void GPIOBlinker::setFrequency(uint16_t hz)
 {
-    m_period = 1000 / hz;
-    updateTimer();
+    uint16_t newHz = 1000 / hz;
+    if (m_period != newHz)
+    {
+        m_period = newHz;
+        updateTimer();
+    }
 }
 
 void GPIOBlinker::setDutyCycle(uint8_t duty)
 {
-    m_dutyCycle = duty;
-    if (m_dutyCycle > 100)
+    if (m_dutyCycle != duty)
     {
-        m_dutyCycle = 100;
-        REPORTLOG("Dutycycle higher than 100 was set, limiting to 100%")
+        m_dutyCycle = duty;
+        if (m_dutyCycle > 100)
+        {
+            m_dutyCycle = 100;
+            REPORTLOG("Dutycycle higher than 100 was set, limiting to 100%")
+        }
+        updateTimer();
     }
-    updateTimer();
 }
 
 void GPIOBlinker::updateTimer()

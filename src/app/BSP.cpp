@@ -10,6 +10,8 @@
 #include "app/BinDecIO.h"
 #include "app/DMXReceiver.h"
 #include "app/DMXTransmitter.h"
+#include "app/Effects.h"
+#include "app/EffectsController.h"
 #include "app/GPIOBlinker.h"
 #include "app/TaskStateMonitor.h"
 #include "drv/DRVGPIO.h"
@@ -56,11 +58,11 @@ void BSP::Run()
     // Driver
 
     // clang-format off
-	DRVGPIO gpioA = DRVGPIO(GPIOA,
-							  //5432109876453210
-							  0b0000111111111111, //Owner
-							  0b0000001000000100, //Direction 1=out
-							  0b1111111111111111);//Polarity 1=active high
+    DRVGPIO gpioA = DRVGPIO(GPIOA,
+                            //5432109876453210
+                            0b0000111111111111,   // Owner
+                            0b0000001000000100,   // Direction 1=out
+                            0b1111111111111111);  // Polarity 1=active high
     // clang-format on
     GPIOpin uart2Tx = gpioA.getPin(2);
     GPIOpin uart2Rx = gpioA.getPin(3);
@@ -91,19 +93,24 @@ void BSP::Run()
 							  0b0000000000110000, //Direction 1=out
 							  0b1111111111111111);//Polarity 1=active high
     // clang-format on
-    GPIOpin dip8      = gpioB.getPin(0);
-    GPIOpin dip9      = gpioB.getPin(1);
-    GPIOpin ledPower  = gpioB.getPin(4);
-    GPIOpin ledStatus = gpioB.getPin(5);
+    GPIOpin dip8         = gpioB.getPin(0);
+    GPIOpin dip9         = gpioB.getPin(1);
+    GPIOpin ledPower     = gpioB.getPin(4);
+    GPIOpin ledStatusPin = gpioB.getPin(5);
+
+    GPIOBlinker ledStatus(ledStatusPin);
+
+    //    ledStatus.setFrequency(2);
+    //    ledStatus.setDutyCycle(10)
 
     ledPower = true;
 
     // clang-format off
-    DRVGPIO gpioC = DRVGPIO(GPIOC,
-                              //5432109876453210
-                              0b0010000000000000,//Owner
-							  0b0010000000000000,//Direction 1=out
-							  0b1101111111111111);//Polarity 1=active high
+	DRVGPIO gpioC = DRVGPIO(GPIOC,
+						  //5432109876453210
+						  0b0010000000000000,//Owner
+						  0b0010000000000000,//Direction 1=out
+						  0b1101111111111111);//Polarity 1=active high
     // clang-format on
 
     // Uart drivers
@@ -112,13 +119,13 @@ void BSP::Run()
 
     REPORTLOG("Initialization of DRV complete");
 
-    // APP
+    //    APP
 
-    // task monitor
+    //        task monitor
     TaskStateMonitor taskMonitor("Monitor UI", ledStatus);
     taskMonitor.Start();
 
-    // DMX dipswitch decoder
+    // DMX dip switch decoder
     BinDecIO dmxAddress;
     dmxAddress.addBin(BinDecIO::PinValuePair(dip0, 0));
     dmxAddress.addBin(BinDecIO::PinValuePair(dip1, 1));
@@ -133,7 +140,7 @@ void BSP::Run()
     cpp_freertos::Queue receivingQueue(10, 4);
 
     // Queue for dmx sending
-    cpp_freertos::Queue transmittingQueue(5, sizeof(DMXTransmitter::DMXQueueItem));
+    cpp_freertos::Queue transmittingQueue(10, sizeof(DMXTransmitter::DMXQueueItem));
 
     // Receiver
     DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, dmxBreakCaptureTimer, &dmxAddress, &receivingQueue, 4);
@@ -143,18 +150,58 @@ void BSP::Run()
     DMXTransmitter transmitter(taskMonitor.GetHandle(), 2, uart1Tx, dmxTxUartDRV, 100, &transmittingQueue);
     transmitter.Start();
 
-    DMXTransmitter::DMXQueueItem sendItem;
-    sendItem.channelCount   = 3;
-    sendItem.startAddress   = 1;
-    sendItem.channeldata[0] = 1;
-    sendItem.channeldata[1] = 2;
-    sendItem.channeldata[2] = 3;
+    // sender
+
+    // effects controller
+    EffectsController controller("Controller", taskMonitor.GetHandle(), 2, receivingQueue, transmittingQueue, 20);
+
+    // adding fixtures
+    //    RGBFixture logoF(100, 0);
+    //    RGBFixture logoO1(103, 1);
+    //    RGBFixture logoO2(106, 2);
+    //    RGBFixture logoT(109, 3);
+    //    RGBFixture logoL(112, 4);
+    //    RGBFixture logoO3(115, 5);
+    //    RGBFixture logoO4(118, 6);
+    //    RGBFixture logoS(121, 7);
+    //    RGBFixture logoE(124, 8);
+
+    RGBFixture logoF(1, 0);
+    RGBFixture logoO1(4, 1);
+    RGBFixture logoO2(7, 2);
+    RGBFixture logoT(10, 3);
+    RGBFixture logoL(13, 4);
+    RGBFixture logoO3(16, 5);
+    RGBFixture logoO4(19, 6);
+    RGBFixture logoS(22, 7);
+    RGBFixture logoE(27, 8);
+
+    controller.addFixture(logoF);
+    controller.addFixture(logoO1);
+    controller.addFixture(logoO2);
+    controller.addFixture(logoT);
+    controller.addFixture(logoL);
+    controller.addFixture(logoO3);
+    controller.addFixture(logoO4);
+    controller.addFixture(logoS);
+    controller.addFixture(logoE);
+
+    // adding effects
+    StaticColorEffect effectStaticColor;
+    CycleColorEffect  effectCycleColor;
+
+    controller.addEffect(effectStaticColor, EffectsController::DmxRange(0, 10));
+    controller.addEffect(effectCycleColor, EffectsController::DmxRange(11, 20));
+
+    // starting controller
+    controller.Start();
+
+    //    receiver.insertTestDataInQueue();
+
     while (1)
     {
-        sendItem.channeldata[0]++;
-        //        dmxRxUart.send(data, 3);
+
         Delay(200);
-        transmittingQueue.Enqueue(&sendItem);
     }
 
     // Suspend this task as we do not want to free memory
