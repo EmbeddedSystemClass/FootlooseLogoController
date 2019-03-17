@@ -14,11 +14,12 @@
 #include "app/EffectsController.h"
 #include "app/GPIOBlinker.h"
 #include "app/TaskStateMonitor.h"
+#include "drv/CAT5932.h"
 #include "drv/DRVGPIO.h"
 #include "drv/DRVSerialUart.h"
-//#include "drv/DRVSerialUsb.h"
 #include "hal/HALTimerSTM32F1.h"
 #include "hal/HALUartSTM32F1.h"
+#include "hal/HALi2cSTM32.h"
 #include "os/OSError.h"
 #include "thread.hpp"
 
@@ -53,6 +54,8 @@ void BSP::Run()
     HALUartSTM32F1  dmxTxUart(USART1, 250000, HALUartSTM32F1::UartModeTx);
     HALTimerSTM32F1 dmxBreakCaptureTimer(TIM2, HALTimer::TimerInputCapture, (HALTimer::TimerChannel3 || HALTimer::TimerChannel4));
 
+    HALI2CSTM32 uiI2C(I2C1, HALI2C::Frequency100k);
+
     REPORTLOG("Initialization of HAL complete");
 
     // Driver
@@ -64,19 +67,19 @@ void BSP::Run()
                             0b0000001000000100,   // Direction 1=out
                             0b1111111111111111);  // Polarity 1=active high
     // clang-format on
-    GPIOpin uart2Tx = gpioA.getPin(2);
-    GPIOpin uart2Rx = gpioA.getPin(3);
-    GPIOpin dip0    = gpioA.getPin(0);
-    GPIOpin dip1    = gpioA.getPin(1);
-    GPIOpin dip2    = gpioA.getPin(4);
-    GPIOpin dip3    = gpioA.getPin(5);
-    GPIOpin dip4    = gpioA.getPin(6);
-    GPIOpin dip5    = gpioA.getPin(7);
-    GPIOpin dip6    = gpioA.getPin(8);
-    GPIOpin uart1Tx = gpioA.getPin(9);
-    GPIOpin uart1Rx = gpioA.getPin(10);
+    GPIOpinSTM32 uart2Tx = gpioA.getPin(2);
+    GPIOpinSTM32 uart2Rx = gpioA.getPin(3);
+    GPIOpinSTM32 dip0    = gpioA.getPin(0);
+    GPIOpinSTM32 dip1    = gpioA.getPin(1);
+    GPIOpinSTM32 dip2    = gpioA.getPin(4);
+    GPIOpinSTM32 dip3    = gpioA.getPin(5);
+    GPIOpinSTM32 dip4    = gpioA.getPin(6);
+    GPIOpinSTM32 dip5    = gpioA.getPin(7);
+    GPIOpinSTM32 dip6    = gpioA.getPin(8);
+    GPIOpinSTM32 uart1Tx = gpioA.getPin(9);
+    GPIOpinSTM32 uart1Rx = gpioA.getPin(10);
 
-    GPIOpin dip7 = gpioA.getPin(11);
+    GPIOpinSTM32 dip7 = gpioA.getPin(11);
 
     // UART2 pins
     //    gpioA.setAlternateFunction(2, 1);
@@ -93,10 +96,10 @@ void BSP::Run()
 							  0b0000000000110000, //Direction 1=out
 							  0b1111111111111111);//Polarity 1=active high
     // clang-format on
-    GPIOpin dip8         = gpioB.getPin(0);
-    GPIOpin dip9         = gpioB.getPin(1);
-    GPIOpin ledPower     = gpioB.getPin(4);
-    GPIOpin ledStatusPin = gpioB.getPin(5);
+    GPIOpinSTM32 dip8         = gpioB.getPin(0);
+    GPIOpinSTM32 dip9         = gpioB.getPin(1);
+    GPIOpinSTM32 ledPower     = gpioB.getPin(4);
+    GPIOpinSTM32 ledStatusPin = gpioB.getPin(5);
 
     GPIOBlinker ledStatus(ledStatusPin);
 
@@ -116,6 +119,13 @@ void BSP::Run()
     // Uart drivers
     DRVSerialUart dmxRxUartDRV(dmxRxUart);
     DRVSerialUart dmxTxUartDRV(dmxTxUart);
+
+    CAT5932 ledDriver1(uiI2C, 0b01100000);
+    CAT5932 ledDriver2(uiI2C, 0b01100001);
+    ledDriver1.initDevice();
+    ledDriver2.initDevice();
+
+    GPIORemotePin uiLedPower = ledDriver2.getPin(15);
 
     REPORTLOG("Initialization of DRV complete");
 
@@ -200,7 +210,7 @@ void BSP::Run()
 
     while (1)
     {
-
+        uiLedPower.toggle();
         Delay(200);
     }
 

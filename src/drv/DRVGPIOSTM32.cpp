@@ -42,7 +42,7 @@ DRVGPIO::DRVGPIO(GPIO_TypeDef* gpio, uint32_t owner, uint32_t dir, uint32_t pola
     }
 }
 
-GPIOpin DRVGPIO::getPin(uint32_t pin)
+GPIOpinSTM32 DRVGPIO::getPin(uint32_t pin)
 {
     uint32_t selectedPin = (1 << pin);
     if ((m_owner & selectedPin) != selectedPin)
@@ -64,8 +64,8 @@ GPIOpin DRVGPIO::getPin(uint32_t pin)
         pinSettings.Mode = GPIO_MODE_INPUT;
     }
 
-    bool    polarity  = (m_polarity & (1 << pin));
-    GPIOpin returnPin = GPIOpin(m_gpio, pinSettings, polarity);
+    bool         polarity  = (m_polarity & (1 << pin));
+    GPIOpinSTM32 returnPin = GPIOpinSTM32(m_gpio, pinSettings, polarity);
     return returnPin;
 }
 
@@ -102,93 +102,3 @@ GPIOpin DRVGPIO::getPin(uint32_t pin)
 //    m_pin = (1 << pin) & GPIO_PIN_MASK;
 //    if (!m_pin) REPORTFATAL("PIN assigment failed")
 //}
-
-GPIOpin::GPIOpin(GPIO_TypeDef* port, GPIO_InitTypeDef initSettings, bool polarity)
-    : m_initialSettings(initSettings)
-    , m_port(port)
-    , m_polarity(polarity)
-    , m_state(GPIO_PIN_RESET)
-{
-}
-
-void GPIOpin::setAlternateFunction()
-{
-    GPIO_InitTypeDef pinSettings = m_initialSettings;
-
-    if (isOutput())
-    {
-        pinSettings.Mode = GPIO_MODE_AF_PP;
-    }
-    else
-    {
-        //        pinSettings.Mode = GPIO_MODE_AF_INPUT;
-        pinSettings.Mode = GPIO_MODE_INPUT;
-    }
-
-    HAL_GPIO_Init(m_port, &pinSettings);
-}
-
-void GPIOpin::setNormalFunction()
-{
-    GPIO_InitTypeDef pinSettings = m_initialSettings;
-
-    if (isOutput())
-    {
-        pinSettings.Mode = GPIO_MODE_OUTPUT_PP;
-    }
-    else
-    {
-        pinSettings.Mode = GPIO_MODE_INPUT;
-    }
-
-    HAL_GPIO_Init(m_port, &pinSettings);
-}
-
-GPIOpin& GPIOpin::operator=(const bool state)
-{
-    if (isOutput())
-    {
-        m_state = static_cast<GPIO_PinState>(applyPolarity(state));
-        HAL_GPIO_WritePin(m_port, m_initialSettings.Pin, m_state);
-    }
-    else
-    {
-        m_state = HAL_GPIO_ReadPin(m_port, m_initialSettings.Pin);
-    }
-    return *this;
-}
-
-GPIOpin::operator bool()
-{
-    m_state = HAL_GPIO_ReadPin(m_port, m_initialSettings.Pin);
-    return applyPolarity(m_state == GPIO_PIN_SET);
-}
-
-void GPIOpin::toggle()
-{
-    if (isOutput())
-    {
-        HAL_GPIO_TogglePin(m_port, m_initialSettings.Pin);
-    }
-}
-
-bool GPIOpin::applyPolarity(bool state)
-{
-    bool retVal = state;
-    if (!m_polarity) retVal = !retVal;
-
-    return retVal;
-}
-
-bool GPIOpin::isOutput()
-{
-    bool retVal = false;
-
-    if (m_initialSettings.Mode == GPIO_MODE_OUTPUT_PP || m_initialSettings.Mode == GPIO_MODE_OUTPUT_OD || m_initialSettings.Mode == GPIO_MODE_AF_PP ||
-        m_initialSettings.Mode == GPIO_MODE_AF_OD)
-    {
-        retVal = true;
-    }
-
-    return retVal;
-}

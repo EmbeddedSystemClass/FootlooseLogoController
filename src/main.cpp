@@ -64,6 +64,9 @@ extern "C"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+I2C_HandleTypeDef hi2c1;
+DMA_HandleTypeDef hdma_i2c1_tx;
+
 TIM_HandleTypeDef htim2;
 
 UART_HandleTypeDef huart1;
@@ -82,6 +85,7 @@ void        SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_I2C1_Init(void);
 void        StartDefaultTask(void const* argument);
 
 /* USER CODE BEGIN PFP */
@@ -229,6 +233,65 @@ void SystemClock_Config(void)
     HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);
 }
 
+/**
+ * @brief I2C1 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_I2C1_Init(void)
+{
+
+    /* USER CODE BEGIN I2C1_Init 0 */
+
+    /* USER CODE END I2C1_Init 0 */
+
+    /* USER CODE BEGIN I2C1_Init 1 */
+
+    /* USER CODE END I2C1_Init 1 */
+    hi2c1.Instance              = I2C1;
+    hi2c1.Init.Timing           = 0x2000090E;
+    hi2c1.Init.OwnAddress1      = 0;
+    hi2c1.Init.AddressingMode   = I2C_ADDRESSINGMODE_7BIT;
+    hi2c1.Init.DualAddressMode  = I2C_DUALADDRESS_DISABLE;
+    hi2c1.Init.OwnAddress2      = 0;
+    hi2c1.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+    hi2c1.Init.GeneralCallMode  = I2C_GENERALCALL_DISABLE;
+    hi2c1.Init.NoStretchMode    = I2C_NOSTRETCH_DISABLE;
+    if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    /** Configure Analogue filter
+     */
+    if (HAL_I2CEx_ConfigAnalogFilter(&hi2c1, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    /** Configure Digital filter
+     */
+    if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 0) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    /* USER CODE BEGIN I2C1_Init 2 */
+
+    /* USER CODE END I2C1_Init 2 */
+}
+
+/**
+ * Enable DMA controller clock
+ */
+static void MX_DMA_Init(void)
+{
+    /* DMA controller clock enable */
+    __HAL_RCC_DMA1_CLK_ENABLE();
+
+    /* DMA interrupt init */
+    /* DMA1_Channel6_IRQn interrupt configuration */
+    HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 5, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+}
+
 /* USART1 init function */
 static void MX_USART1_UART_Init(void)
 {
@@ -291,14 +354,16 @@ void StartDefaultTask(void const* argument)
 {
     /* init code for USB_DEVICE */
     //   MX_USB_DEVICE_Init();
-
+    //    HAL_I2C_Init(&hi2c1);
     /* USER CODE BEGIN 5 */
+    //    uint8_t data[8] = {0b10110, 0b01010101, 0b01010101, 0b01010101, 0b01010101};
     /* Infinite loop */
     for (;;)
     {
-        char* text = "Hallo!";
-        osDelay(100);
-        //        CDC_Transmit_FS((uint8_t*)text, 7);
+        //        HAL_I2C_Master_Transmit_IT(&hi2c1, 0b11000000, (uint8_t*)&data, 8);
+        //        osDelay(1);
+        //        HAL_I2C_Master_Transmit_IT(&hi2c1, 0b11000010, (uint8_t*)&data, 8);
+        osDelay(500);
     }
     /* USER CODE END 5 */
 }
