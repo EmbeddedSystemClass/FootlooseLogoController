@@ -15,6 +15,7 @@
 #include "app/GPIOBlinker.h"
 #include "app/TaskStateMonitor.h"
 #include "drv/CAT5932.h"
+#include "drv/DRV7Segment.h"
 #include "drv/DRVGPIO.h"
 #include "drv/DRVSerialUart.h"
 #include "hal/HALTimerSTM32F1.h"
@@ -125,7 +126,33 @@ void BSP::Run()
     ledDriver1.initDevice();
     ledDriver2.initDevice();
 
-    GPIORemotePin uiLedPower = ledDriver2.getPin(15);
+    GPIORemotePin uiLedStatus = ledDriver2.getPin(14);
+    GPIORemotePin uiLedPower  = ledDriver2.getPin(15);
+
+    GPIORemotePin uiSeg1A   = ledDriver1.getPin(1);
+    GPIORemotePin uiSeg1B   = ledDriver1.getPin(0);
+    GPIORemotePin uiSeg1C   = ledDriver2.getPin(6);
+    GPIORemotePin uiSeg1D   = ledDriver2.getPin(5);
+    GPIORemotePin uiSeg1E   = ledDriver2.getPin(4);
+    GPIORemotePin uiSeg1F   = ledDriver1.getPin(2);
+    GPIORemotePin uiSeg1G   = ledDriver1.getPin(3);
+    GPIORemotePin uiSeg1Dot = ledDriver2.getPin(7);
+    GPIORemotePin uiSeg2A   = ledDriver1.getPin(5);
+    GPIORemotePin uiSeg2B   = ledDriver1.getPin(4);
+    GPIORemotePin uiSeg2C   = ledDriver1.getPin(1);
+    GPIORemotePin uiSeg2D   = ledDriver1.getPin(2);
+    GPIORemotePin uiSeg2E   = ledDriver1.getPin(0);
+    GPIORemotePin uiSeg2F   = ledDriver1.getPin(6);
+    GPIORemotePin uiSeg2G   = ledDriver1.getPin(7);
+    GPIORemotePin uiSeg2Dot = ledDriver1.getPin(3);
+    GPIORemotePin uiSeg3A   = ledDriver1.getPin(9);
+    GPIORemotePin uiSeg3B   = ledDriver1.getPin(8);
+    GPIORemotePin uiSeg3C   = ledDriver1.getPin(14);
+    GPIORemotePin uiSeg3D   = ledDriver1.getPin(13);
+    GPIORemotePin uiSeg3E   = ledDriver1.getPin(12);
+    GPIORemotePin uiSeg3F   = ledDriver1.getPin(10);
+    GPIORemotePin uiSeg3G   = ledDriver1.getPin(11);
+    GPIORemotePin uiSeg3Dot = ledDriver1.getPin(15);
 
     REPORTLOG("Initialization of DRV complete");
 
@@ -208,9 +235,24 @@ void BSP::Run()
 
     //    receiver.insertTestDataInQueue();
 
+    // UI
+    DRV7Segment uiSegment1(uiSeg1A, uiSeg1B, uiSeg1C, uiSeg1D, uiSeg1E, uiSeg1F, uiSeg1G, &uiSeg1Dot);
+    DRV7Segment uiSegment2(uiSeg2A, uiSeg2B, uiSeg2C, uiSeg2D, uiSeg2E, uiSeg2F, uiSeg2G, &uiSeg2Dot);
+    DRV7Segment uiSegment3(uiSeg3A, uiSeg3B, uiSeg3C, uiSeg3D, uiSeg3E, uiSeg3F, uiSeg3G, &uiSeg3Dot);
+
+    uint8_t cnt = 0;
     while (1)
     {
         uiLedPower.toggle();
+        uiLedStatus = !uiLedPower;
+        uiSegment1.setNumber(cnt);
+        uiSegment2.setNumber(cnt);
+        uiSegment3.setNumber(cnt);
+        ledDriver1.sendUpdate();
+        Delay(1);
+        ledDriver2.sendUpdate();
+        cnt++;
+        if (cnt > 9) cnt = 0;
         Delay(200);
     }
 

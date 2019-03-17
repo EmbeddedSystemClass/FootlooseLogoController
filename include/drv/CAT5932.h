@@ -38,6 +38,8 @@ public:
 
     virtual bool isOutput(uint32_t ID);
 
+    void sendUpdate();
+
 private:
     enum Registers
     {
@@ -58,8 +60,6 @@ private:
     uint8_t     m_registerBuffer[REG_MAX];
     uint8_t     m_I2COutputData[REG_MAX + 1];
     OutputState m_onState;
-
-    void sendUpdate();
 
     OutputState getStateFromReg(uint8_t pin);
     bool        getOnStateFromReg(uint8_t pin);

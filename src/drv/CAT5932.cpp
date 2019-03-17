@@ -81,7 +81,7 @@ void CAT5932::setStateToReg(uint8_t pin, CAT5932::OutputState state)
     *reg &= bitmask;  // clear target bits
     *reg |= setBits;  // set intended bits
 
-    sendUpdate();
+    //    sendUpdate();
 }
 void CAT5932::setOnStateToReg(uint8_t pin, bool state)
 {

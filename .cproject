@@ -94,6 +94,7 @@
 									<listOptionValue builtIn="false" value="../cubemx/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"/>
 									<listOptionValue builtIn="false" value="../cubemx/Drivers/STM32F3xx_HAL_Driver/Inc"/>
 									<listOptionValue builtIn="false" value="../cubemx/Drivers/CMSIS/Device/ST/STM32F3xx/Include"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FootlooseLogoController/third party}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.256613666" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="true" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="DEBUG"/>
@@ -190,6 +191,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cubemx/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS"/>
 						<entry excluding="main.c" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cubemx/Src"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="cubemx/startup"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="include/third party"/>
 						<entry excluding="drv/DRVSerialUsb.cpp|assert.c|system.c|stm32f1xx_it.c|stm32f1xx_hal_msp.c|ethernet/src/util.c|ethernet/src/device.c|ethernet/src/stm32f10x_it.c|ethernet/src/dns.c|ethernet/src/system_stm32f10x.c|ethernet/src/mcu_init.c|ethernet/src/main.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
@@ -293,6 +295,7 @@
 									<listOptionValue builtIn="false" value="../cubemx/Drivers/CMSIS/Device/ST/STM32F1xx/Include"/>
 									<listOptionValue builtIn="false" value="../cubemx/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../include/os"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FootlooseLogoController/third party}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.1374262480" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="true" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32F10X_MD"/>
