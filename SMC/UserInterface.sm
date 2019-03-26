@@ -1,0 +1,45 @@
+%{ //
+//
+%}
+
+%class UserInterface
+%header UserInterface.h
+%fsmclass UserInterfaceFSM
+%fsmfile UserInterfaceFSM
+%start UIMap::Reset 
+%map UIMap
+%%
+
+Reset
+{
+    Ready AddressDisplay
+    {
+    //some action
+    }
+  
+}
+
+AddressDisplay
+{
+    BtnModePressed Menu
+    {
+       //BtnModePressedHandled
+    }
+    
+  
+}
+
+Menu
+{
+
+}
+
+
+Default
+{
+    Ready nil {}
+    BtnModePressed nil {}
+}
+
+%%
+

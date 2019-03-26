@@ -1,0 +1,40 @@
+digraph UserInterface {
+
+    node
+        [shape=Mrecord width=1.5];
+
+    subgraph cluster_UIMap {
+
+        label="UIMap";
+
+        //
+        // States (Nodes)
+        //
+
+        "UIMap::Reset"
+            [label="{Reset}"];
+
+        "UIMap::AddressDisplay"
+            [label="{AddressDisplay}"];
+
+        "UIMap::Menu"
+            [label="{Menu}"];
+
+        "%start"
+            [label="" shape=circle style=filled fillcolor=black width=0.25];
+
+    }
+
+    //
+    // Transitions (Edges)
+    //
+
+    "UIMap::Reset" -> "UIMap::AddressDisplay"
+        [label="Ready/\l"];
+
+    "UIMap::AddressDisplay" -> "UIMap::Menu"
+        [label="BtnModePressed/\l"];
+
+    "%start" -> "UIMap::Reset"
+
+}

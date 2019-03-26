@@ -121,6 +121,7 @@ uint8_t* CAT5932::getOutputReg(uint8_t pin)
     return retVal;
 }
 
+// TODO: autosend changes
 void CAT5932::sendUpdate()
 {
     m_I2COutputData[0] = REGLS0 | REG_AUTO_INCREMENT;

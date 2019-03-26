@@ -14,8 +14,10 @@
 #include "app/EffectsController.h"
 #include "app/GPIOBlinker.h"
 #include "app/TaskStateMonitor.h"
+#include "app/UserInterface.h"
 #include "drv/CAT5932.h"
 #include "drv/DRV7Segment.h"
+#include "drv/DRV7SegmentDisplay.h"
 #include "drv/DRVGPIO.h"
 #include "drv/DRVSerialUart.h"
 #include "hal/HALTimerSTM32F1.h"
@@ -240,20 +242,27 @@ void BSP::Run()
     DRV7Segment uiSegment2(uiSeg2A, uiSeg2B, uiSeg2C, uiSeg2D, uiSeg2E, uiSeg2F, uiSeg2G, &uiSeg2Dot);
     DRV7Segment uiSegment3(uiSeg3A, uiSeg3B, uiSeg3C, uiSeg3D, uiSeg3E, uiSeg3F, uiSeg3G, &uiSeg3Dot);
 
-    uint8_t cnt = 0;
+    DRV7SegmentDisplay uiDisplay;
+    uiDisplay.addSegment(&uiSegment1);
+    uiDisplay.addSegment(&uiSegment2);
+    uiDisplay.addSegment(&uiSegment3);
+
+    UserInterface ui;
+    ui.Start();
+
+    uint16_t cnt = 0;
     while (1)
     {
         uiLedPower.toggle();
         uiLedStatus = !uiLedPower;
-        uiSegment1.setNumber(cnt);
-        uiSegment2.setNumber(cnt);
-        uiSegment3.setNumber(cnt);
+
+        uiDisplay.setNumber(cnt);
+
         ledDriver1.sendUpdate();
-        Delay(1);
         ledDriver2.sendUpdate();
         cnt++;
-        if (cnt > 9) cnt = 0;
-        Delay(200);
+        if (cnt > 999) cnt = 0;
+        Delay(10);
     }
 
     // Suspend this task as we do not want to free memory
