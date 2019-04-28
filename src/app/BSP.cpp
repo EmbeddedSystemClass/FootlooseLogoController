@@ -247,21 +247,15 @@ void BSP::Run()
     uiDisplay.addSegment(&uiSegment2);
     uiDisplay.addSegment(&uiSegment3);
 
-    UserInterface ui;
+    UserInterface ui(uiDisplay, uiLedPower, uiLedStatus, dmxAddress);
     ui.Start();
 
-    uint16_t cnt = 0;
     while (1)
     {
-        uiLedPower.toggle();
-        uiLedStatus = !uiLedPower;
-
-        uiDisplay.setNumber(cnt);
 
         ledDriver1.sendUpdate();
         ledDriver2.sendUpdate();
-        cnt++;
-        if (cnt > 999) cnt = 0;
+
         Delay(10);
     }
 

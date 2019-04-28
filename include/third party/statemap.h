@@ -541,7 +541,7 @@ public:
         return;
     };
 
-#ifdef SMC_INCLUDE_DEBUG&& SMC_USES_IOSTREAMS
+#if defined(SMC_INCLUDE_DEBUG) && defined(SMC_USES_IOSTREAMS)
     // Returns the stream to which debug output is written.
     std::ostream& getDebugStream() { return (*_debug_stream); };
 

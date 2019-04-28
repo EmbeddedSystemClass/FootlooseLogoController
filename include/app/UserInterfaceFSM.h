@@ -16,8 +16,16 @@
 // Forward declarations.
 class UIMap;
 class UIMap_Reset;
+class UIMap_UITest;
 class UIMap_AddressDisplay;
-class UIMap_Menu;
+class UIMap_MenuMode;
+class UIMap_MenuSpeed;
+class UIMap_MenuExit;
+class UIMap_MenuModeDmx;
+class UIMap_MenuModeRainBow;
+class UIMap_MenuModeTest;
+class UIMap_MenuSpeedShow;
+class UIMap_MenuSpeedIncrease;
 class UIMap_Default;
 class UserInterfaceState;
 class UserInterfaceFSM;
@@ -36,7 +44,9 @@ public:
     virtual void Exit(UserInterfaceFSM&) {};
 
     virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void BtnOkPressed(UserInterfaceFSM& context);
     virtual void Ready(UserInterfaceFSM& context);
+    virtual void timerElapsed(UserInterfaceFSM& context);
 
 protected:
 
@@ -48,8 +58,16 @@ class UIMap
 public:
 
     static UIMap_Reset Reset;
+    static UIMap_UITest UITest;
     static UIMap_AddressDisplay AddressDisplay;
-    static UIMap_Menu Menu;
+    static UIMap_MenuMode MenuMode;
+    static UIMap_MenuSpeed MenuSpeed;
+    static UIMap_MenuExit MenuExit;
+    static UIMap_MenuModeDmx MenuModeDmx;
+    static UIMap_MenuModeRainBow MenuModeRainBow;
+    static UIMap_MenuModeTest MenuModeTest;
+    static UIMap_MenuSpeedShow MenuSpeedShow;
+    static UIMap_MenuSpeedIncrease MenuSpeedIncrease;
 };
 
 class UIMap_Default :
@@ -62,7 +80,7 @@ public:
     {};
 
     virtual void Ready(UserInterfaceFSM& context);
-    virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void Default(UserInterfaceFSM& context);
 };
 
 class UIMap_Reset :
@@ -76,6 +94,19 @@ public:
     virtual void Ready(UserInterfaceFSM& context);
 };
 
+class UIMap_UITest :
+    public UIMap_Default
+{
+public:
+    UIMap_UITest(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void Entry(UserInterfaceFSM&);
+    virtual void Exit(UserInterfaceFSM&);
+    virtual void timerElapsed(UserInterfaceFSM& context);
+};
+
 class UIMap_AddressDisplay :
     public UIMap_Default
 {
@@ -84,17 +115,106 @@ public:
     : UIMap_Default(name, stateId)
     {};
 
+    virtual void Entry(UserInterfaceFSM&);
+    virtual void Exit(UserInterfaceFSM&);
     virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void timerElapsed(UserInterfaceFSM& context);
 };
 
-class UIMap_Menu :
+class UIMap_MenuMode :
     public UIMap_Default
 {
 public:
-    UIMap_Menu(const char * const name, const int stateId)
+    UIMap_MenuMode(const char * const name, const int stateId)
     : UIMap_Default(name, stateId)
     {};
 
+    virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void BtnOkPressed(UserInterfaceFSM& context);
+};
+
+class UIMap_MenuSpeed :
+    public UIMap_Default
+{
+public:
+    UIMap_MenuSpeed(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void BtnOkPressed(UserInterfaceFSM& context);
+};
+
+class UIMap_MenuExit :
+    public UIMap_Default
+{
+public:
+    UIMap_MenuExit(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void BtnOkPressed(UserInterfaceFSM& context);
+};
+
+class UIMap_MenuModeDmx :
+    public UIMap_Default
+{
+public:
+    UIMap_MenuModeDmx(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void BtnOkPressed(UserInterfaceFSM& context);
+};
+
+class UIMap_MenuModeRainBow :
+    public UIMap_Default
+{
+public:
+    UIMap_MenuModeRainBow(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void BtnOkPressed(UserInterfaceFSM& context);
+};
+
+class UIMap_MenuModeTest :
+    public UIMap_Default
+{
+public:
+    UIMap_MenuModeTest(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void BtnOkPressed(UserInterfaceFSM& context);
+};
+
+class UIMap_MenuSpeedShow :
+    public UIMap_Default
+{
+public:
+    UIMap_MenuSpeedShow(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void Entry(UserInterfaceFSM&);
+    virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void BtnOkPressed(UserInterfaceFSM& context);
+};
+
+class UIMap_MenuSpeedIncrease :
+    public UIMap_Default
+{
+public:
+    UIMap_MenuSpeedIncrease(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void Default(UserInterfaceFSM& context);
 };
 
 class UserInterfaceFSM :
@@ -135,9 +255,19 @@ public:
         getState().BtnModePressed(*this);
     };
 
+    inline void BtnOkPressed()
+    {
+        getState().BtnOkPressed(*this);
+    };
+
     inline void Ready()
     {
         getState().Ready(*this);
+    };
+
+    inline void timerElapsed()
+    {
+        getState().timerElapsed(*this);
     };
 
 private:

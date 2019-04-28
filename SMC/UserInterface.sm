@@ -12,33 +12,106 @@
 
 Reset
 {
-    Ready AddressDisplay
-    {
-    //some action
-    }
+    Ready UITest {}
   
+}
+
+UITest
+Entry
+{
+// Enable all LEDs
+uiLedPower(1);
+uiLedStatus(1);
+uiDisplay(888);
+m_timer.setTimeout(500);
+}
+Exit
+{
+// Disable all LEDs
+uiLedPower(0);
+uiLedStatus(0);
+uiDisplay("   ");
+}
+{
+    timerElapsed AddressDisplay {}
 }
 
 AddressDisplay
+
+Entry
 {
-    BtnModePressed Menu
+uiDisplay(ctxt.m_dmxAddress);
+m_timer.setPeriod(50);
+}
+Exit
+{
+m_timer.Stop();
+}
+{
+    timerElapsed nil
     {
-       //BtnModePressedHandled
+       uiDisplay(ctxt.m_dmxAddress);
     }
-    
+    BtnModePressed MenuMode {}
   
 }
 
-Menu
+MenuMode
 {
+BtnOkPressed MenuMode {}
+BtnModePressed MenuSpeed {}
+}
 
+MenuSpeed
+{
+BtnOkPressed MenuSpeedShow {}
+BtnModePressed MenuExit {}
+}
+
+MenuExit
+{
+BtnOkPressed AddressDisplay {}
+BtnModePressed MenuMode {}
+}
+
+MenuModeDmx
+{
+BtnModePressed MenuModeRainBow {}
+BtnOkPressed AddressDisplay { setMode(UserInterface::OperationDmx); }
+}
+
+MenuModeRainBow
+{
+BtnModePressed MenuModeTest {}
+BtnOkPressed AddressDisplay { setMode(UserInterface::OperationRainbow); }
+}
+
+MenuModeTest
+{
+BtnModePressed MenuModeDmx {}
+BtnOkPressed AddressDisplay { setMode(UserInterface::OperationTest); }
+}
+
+MenuSpeedShow
+Entry
+{
+uiDisplay(ctxt.getSpeed());
+}
+{
+BtnModePressed MenuSpeedIncrease { incSpeed(); }
+BtnOkPressed AddressDisplay { }
+}
+
+MenuSpeedIncrease
+{
+Default MenuSpeedShow {}
 }
 
 
 Default
 {
     Ready nil {}
-    BtnModePressed nil {}
+    Default nil {}
 }
 
 %%

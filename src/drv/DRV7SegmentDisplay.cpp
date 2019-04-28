@@ -20,8 +20,8 @@ void DRV7SegmentDisplay::addSegment(DRV7Segment* segment) { m_segments.push_back
 
 void DRV7SegmentDisplay::setNumber(uint16_t val)
 {
-    char buffer[10];
-    sprintf(buffer, "%d", val);
+    char buffer[10] = {0};
+    snprintf(buffer, 5, "%d", val);
     setString(buffer);
 }
 
