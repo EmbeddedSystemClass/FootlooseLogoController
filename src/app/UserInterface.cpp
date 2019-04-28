@@ -12,7 +12,7 @@ using namespace std;
 using namespace statemap;
 
 UserInterface::UserInterface(DRV7SegmentDisplay& display, GPIOpin& power, GPIOpin& status, BinDecIO& dmxAddress)
-    : cpp_freertos::Thread("UI", 500, 2)
+    : cpp_freertos::Thread("UI", 250, 2)
     , m_fsm(*this)
     , m_display(display)
     , m_uiLedPower(power)

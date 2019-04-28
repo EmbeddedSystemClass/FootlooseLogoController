@@ -20,15 +20,15 @@ void DRV7SegmentDisplay::addSegment(DRV7Segment* segment) { m_segments.push_back
 
 void DRV7SegmentDisplay::setNumber(uint16_t val)
 {
-    char buffer[10] = {0};
-    snprintf(buffer, 5, "%d", val);
-    setString(buffer);
+    char const* pchar = std::to_string(val).c_str();
+    setString(pchar);
 }
 
 void DRV7SegmentDisplay::setString(const char* str)
 {
     uint8_t stringLength = strlen(str);
 
+    clearDisplay();
     // currently no support for scrolling display
     if (stringLength > 0)
     {
@@ -39,9 +39,9 @@ void DRV7SegmentDisplay::setString(const char* str)
             if (nextChar > stringLength) break;
         }
     }
-    else
-    {
-        // clear display
-        for (auto const& value : m_segments) value->setChar(' ');
-    }
+}
+
+void DRV7SegmentDisplay::clearDisplay()
+{
+    for (auto const& value : m_segments) value->setChar(' ');
 }

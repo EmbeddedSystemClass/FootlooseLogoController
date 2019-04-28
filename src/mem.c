@@ -9,3 +9,9 @@
 void *malloc(size_t xBytes) { return pvPortMalloc(xBytes); }
 
 void free(void *pvBuffer) { vPortFree(pvBuffer); }
+
+void vApplicationMallocFailedHook(void)
+{
+    while (1)
+        ;
+}

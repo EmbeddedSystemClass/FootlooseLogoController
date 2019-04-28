@@ -27,7 +27,7 @@
 #include "thread.hpp"
 
 BSP::BSP(const char* name)
-    : Thread(name, 1000, 1)
+    : Thread(name, 1500, 1)
 {
 }
 
@@ -66,23 +66,18 @@ void BSP::Run()
     // clang-format off
     DRVGPIO gpioA = DRVGPIO(GPIOA,
                             //5432109876453210
-                            0b0000111111111111,   // Owner
+                            0b1001111111111111,   // Owner
                             0b0000001000000100,   // Direction 1=out
-                            0b1111111111111111);  // Polarity 1=active high
+                            0b0110011011111111);  // Polarity 1=active high
     // clang-format on
     GPIOpinSTM32 uart2Tx = gpioA.getPin(2);
     GPIOpinSTM32 uart2Rx = gpioA.getPin(3);
-    GPIOpinSTM32 dip0    = gpioA.getPin(0);
-    GPIOpinSTM32 dip1    = gpioA.getPin(1);
-    GPIOpinSTM32 dip2    = gpioA.getPin(4);
-    GPIOpinSTM32 dip3    = gpioA.getPin(5);
-    GPIOpinSTM32 dip4    = gpioA.getPin(6);
-    GPIOpinSTM32 dip5    = gpioA.getPin(7);
-    GPIOpinSTM32 dip6    = gpioA.getPin(8);
+    GPIOpinSTM32 dip5    = gpioA.getPin(8);
+    GPIOpinSTM32 dip6    = gpioA.getPin(11);
+    GPIOpinSTM32 dip7    = gpioA.getPin(12);
+    GPIOpinSTM32 dip10   = gpioA.getPin(15);
     GPIOpinSTM32 uart1Tx = gpioA.getPin(9);
     GPIOpinSTM32 uart1Rx = gpioA.getPin(10);
-
-    GPIOpinSTM32 dip7 = gpioA.getPin(11);
 
     // UART2 pins
     //    gpioA.setAlternateFunction(2, 1);
@@ -95,12 +90,16 @@ void BSP::Run()
     // clang-format off
 	DRVGPIO gpioB = DRVGPIO(GPIOB,
 							  //5432109876543210
-							  0b0000000000110011, //Owner
+							  0b1111001100110011, //Owner
 							  0b0000000000110000, //Direction 1=out
-							  0b1111111111111111);//Polarity 1=active high
+							  0b0000110011111111);//Polarity 1=active high
     // clang-format on
-    GPIOpinSTM32 dip8         = gpioB.getPin(0);
-    GPIOpinSTM32 dip9         = gpioB.getPin(1);
+    GPIOpinSTM32 dip1         = gpioB.getPin(12);
+    GPIOpinSTM32 dip2         = gpioB.getPin(13);
+    GPIOpinSTM32 dip3         = gpioB.getPin(14);
+    GPIOpinSTM32 dip4         = gpioB.getPin(15);
+    GPIOpinSTM32 dip8         = gpioB.getPin(8);
+    GPIOpinSTM32 dip9         = gpioB.getPin(9);
     GPIOpinSTM32 ledPower     = gpioB.getPin(4);
     GPIOpinSTM32 ledStatusPin = gpioB.getPin(5);
 
@@ -166,14 +165,15 @@ void BSP::Run()
 
     // DMX dip switch decoder
     BinDecIO dmxAddress;
-    dmxAddress.addBin(BinDecIO::PinValuePair(dip0, 0));
-    dmxAddress.addBin(BinDecIO::PinValuePair(dip1, 1));
-    dmxAddress.addBin(BinDecIO::PinValuePair(dip2, 2));
-    dmxAddress.addBin(BinDecIO::PinValuePair(dip3, 3));
-    dmxAddress.addBin(BinDecIO::PinValuePair(dip4, 4));
-    dmxAddress.addBin(BinDecIO::PinValuePair(dip5, 5));
-    dmxAddress.addBin(BinDecIO::PinValuePair(dip6, 6));
-    dmxAddress.addBin(BinDecIO::PinValuePair(dip7, 7));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip1, 0));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip2, 1));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip3, 2));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip4, 3));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip5, 4));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip6, 5));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip7, 6));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip8, 7));
+    dmxAddress.addBin(BinDecIO::PinValuePair(dip9, 8));
 
     // Queue for received DMX channels
     cpp_freertos::Queue receivingQueue(10, 4);
