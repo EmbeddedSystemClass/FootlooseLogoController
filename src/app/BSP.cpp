@@ -67,24 +67,22 @@ void BSP::Run()
     DRVGPIO gpioA = DRVGPIO(GPIOA,
                             //5432109876453210
                             0b1001111111111111,   // Owner
-                            0b0000001000000100,   // Direction 1=out
+                            0b0000001000000000,   // Direction 1=out
                             0b0110011011111111);  // Polarity 1=active high
     // clang-format on
-    GPIOpinSTM32 uart2Tx = gpioA.getPin(2);
-    GPIOpinSTM32 uart2Rx = gpioA.getPin(3);
-    GPIOpinSTM32 dip5    = gpioA.getPin(8);
-    GPIOpinSTM32 dip6    = gpioA.getPin(11);
-    GPIOpinSTM32 dip7    = gpioA.getPin(12);
-    GPIOpinSTM32 dip10   = gpioA.getPin(15);
-    GPIOpinSTM32 uart1Tx = gpioA.getPin(9);
-    GPIOpinSTM32 uart1Rx = gpioA.getPin(10);
+    GPIOpinSTM32 uiBtnMode = gpioA.getPin(1);
+    GPIOpinSTM32 uiBtnOk   = gpioA.getPin(2);
+    GPIOpinSTM32 uart2Rx   = gpioA.getPin(3);
+    GPIOpinSTM32 dip5      = gpioA.getPin(8);
+    GPIOpinSTM32 dip6      = gpioA.getPin(11);
+    GPIOpinSTM32 dip7      = gpioA.getPin(12);
+    GPIOpinSTM32 dip10     = gpioA.getPin(15);
+    GPIOpinSTM32 uart1Tx   = gpioA.getPin(9);
+    GPIOpinSTM32 uart1Rx   = gpioA.getPin(10);
 
     // UART2 pins
-    //    gpioA.setAlternateFunction(2, 1);
-    //    gpioA.setAlternateFunction(3, 0);
     uart1Tx.setAlternateFunction();
     uart1Rx.setAlternateFunction();
-    uart2Tx.setAlternateFunction();
     uart2Rx.setAlternateFunction();
 
     // clang-format off
@@ -104,9 +102,6 @@ void BSP::Run()
     GPIOpinSTM32 ledStatusPin = gpioB.getPin(5);
 
     GPIOBlinker ledStatus(ledStatusPin);
-
-    //    ledStatus.setFrequency(2);
-    //    ledStatus.setDutyCycle(10)
 
     ledPower = true;
 
@@ -140,12 +135,12 @@ void BSP::Run()
     GPIORemotePin uiSeg1Dot = ledDriver2.getPin(7);
     GPIORemotePin uiSeg2A   = ledDriver1.getPin(5);
     GPIORemotePin uiSeg2B   = ledDriver1.getPin(4);
-    GPIORemotePin uiSeg2C   = ledDriver1.getPin(1);
-    GPIORemotePin uiSeg2D   = ledDriver1.getPin(2);
-    GPIORemotePin uiSeg2E   = ledDriver1.getPin(0);
+    GPIORemotePin uiSeg2C   = ledDriver2.getPin(2);
+    GPIORemotePin uiSeg2D   = ledDriver2.getPin(1);
+    GPIORemotePin uiSeg2E   = ledDriver2.getPin(0);
     GPIORemotePin uiSeg2F   = ledDriver1.getPin(6);
     GPIORemotePin uiSeg2G   = ledDriver1.getPin(7);
-    GPIORemotePin uiSeg2Dot = ledDriver1.getPin(3);
+    GPIORemotePin uiSeg2Dot = ledDriver2.getPin(3);
     GPIORemotePin uiSeg3A   = ledDriver1.getPin(9);
     GPIORemotePin uiSeg3B   = ledDriver1.getPin(8);
     GPIORemotePin uiSeg3C   = ledDriver1.getPin(14);
@@ -164,7 +159,7 @@ void BSP::Run()
     taskMonitor.Start();
 
     // DMX dip switch decoder
-    BinDecIO dmxAddress;
+    BinDecIO dmxAddress(1);
     dmxAddress.addBin(BinDecIO::PinValuePair(dip1, 0));
     dmxAddress.addBin(BinDecIO::PinValuePair(dip2, 1));
     dmxAddress.addBin(BinDecIO::PinValuePair(dip3, 2));
@@ -235,8 +230,6 @@ void BSP::Run()
     // starting controller
     controller.Start();
 
-    //    receiver.insertTestDataInQueue();
-
     // UI
     DRV7Segment uiSegment1(uiSeg1A, uiSeg1B, uiSeg1C, uiSeg1D, uiSeg1E, uiSeg1F, uiSeg1G, &uiSeg1Dot);
     DRV7Segment uiSegment2(uiSeg2A, uiSeg2B, uiSeg2C, uiSeg2D, uiSeg2E, uiSeg2F, uiSeg2G, &uiSeg2Dot);
@@ -252,11 +245,13 @@ void BSP::Run()
 
     while (1)
     {
-
+        uiLedStatus = uiBtnMode;
+        uiLedPower  = uiBtnOk;
         ledDriver1.sendUpdate();
+        Delay(5);
         ledDriver2.sendUpdate();
 
-        Delay(10);
+        Delay(5);
     }
 
     // Suspend this task as we do not want to free memory

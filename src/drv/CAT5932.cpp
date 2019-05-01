@@ -129,5 +129,10 @@ void CAT5932::sendUpdate()
     m_I2COutputData[2] = m_registerBuffer[REGLS1];
     m_I2COutputData[3] = m_registerBuffer[REGLS2];
     m_I2COutputData[4] = m_registerBuffer[REGLS3];
+
+    //    m_I2COutputData[1] = 0b10101010;
+    //    m_I2COutputData[2] = 0b10101010;
+    //    m_I2COutputData[3] = 0b10101010;
+    //    m_I2COutputData[4] = 0b10101010;
     writeToDevice(m_I2COutputData, 5);
 }

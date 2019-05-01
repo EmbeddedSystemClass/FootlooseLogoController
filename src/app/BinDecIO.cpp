@@ -8,8 +8,9 @@
 
 #include "stdint.h"
 
-BinDecIO::BinDecIO()
+BinDecIO::BinDecIO(uint32_t offset)
     : m_pinList()
+    , m_offset(offset)
 {
 }
 
@@ -25,5 +26,5 @@ BinDecIO::operator uint32_t()
         retVal += (bitToShift << i.second);
     }
 
-    return retVal;
+    return retVal + m_offset;
 }
