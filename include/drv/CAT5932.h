@@ -9,8 +9,9 @@
 #include "DRVGPIORemote.h"
 #include "HAL/HALi2c.h"
 #include "I2CDevice.h"
+#include "thread.hpp"
 
-class CAT5932 : private I2CDevice, public GPIORemotePinHandler
+class CAT5932 : private I2CDevice, public GPIORemotePinHandler, public cpp_freertos::Thread
 {
 public:
     enum OutputState
@@ -22,7 +23,7 @@ public:
     };
     const uint8_t OUTPUT_STATE_MASK = 0b11;
 
-    CAT5932(HALI2C& i2cHal, uint8_t deviceAddress);
+    CAT5932(const char* name, HALI2C& i2cHal, uint8_t deviceAddress);
 
     bool initDevice();
 
@@ -38,7 +39,7 @@ public:
 
     virtual bool isOutput(uint32_t ID);
 
-    void sendUpdate();
+    void Run();
 
 private:
     enum Registers
@@ -60,7 +61,9 @@ private:
     uint8_t     m_registerBuffer[REG_MAX];
     uint8_t     m_I2COutputData[REG_MAX + 1];
     OutputState m_onState;
+    bool        m_registerUpdated;
 
+    void        sendUpdate();
     OutputState getStateFromReg(uint8_t pin);
     bool        getOnStateFromReg(uint8_t pin);
     void        setStateToReg(uint8_t pin, OutputState state);

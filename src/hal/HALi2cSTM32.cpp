@@ -13,12 +13,15 @@
 #include "string.h"
 
 extern I2C_HandleTypeDef hi2c1;
+HALI2CSTM32*             HALI2CSTM32::m_this[2] = {0};
 
 HALI2CSTM32::HALI2CSTM32(I2C_TypeDef* interface, Frequency speed)
+    : BinarySemaphore(true)
 {
     if (interface == I2C1)
     {
-        m_handle = &hi2c1;
+        m_handle  = &hi2c1;
+        m_this[0] = this;
     }
     else
     {
@@ -75,5 +78,19 @@ HALI2CSTM32::HALI2CSTM32(I2C_TypeDef* interface, Frequency speed)
 
 void HALI2CSTM32::write(uint8_t slaveAddress, uint8_t* data, uint8_t dataLength)
 {
+    Take();
     HAL_I2C_Master_Transmit_IT(m_handle, slaveAddress << 1, data, dataLength);
 }
+
+void HALI2CSTM32::callBack(I2C_HandleTypeDef* i2c, CallbackEvent type)
+{
+    HALI2CSTM32* This = NULL;
+    // finding instance
+    if (i2c == &hi2c1)
+    {
+        This = m_this[0];
+    }
+    This->GiveFromISR(NULL);
+}
+
+void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef* hi2c) { HALI2CSTM32::callBack(hi2c, HALI2CSTM32::HAL_I2C_Complete); }

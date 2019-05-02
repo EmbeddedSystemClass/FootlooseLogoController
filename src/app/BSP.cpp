@@ -117,10 +117,12 @@ void BSP::Run()
     DRVSerialUart dmxRxUartDRV(dmxRxUart);
     DRVSerialUart dmxTxUartDRV(dmxTxUart);
 
-    CAT5932 ledDriver1(uiI2C, 0b01100000);
-    CAT5932 ledDriver2(uiI2C, 0b01100001);
+    CAT5932 ledDriver1("Driver1", uiI2C, 0b01100000);
+    CAT5932 ledDriver2("Driver2", uiI2C, 0b01100001);
     ledDriver1.initDevice();
     ledDriver2.initDevice();
+    ledDriver1.Start();
+    ledDriver2.Start();
 
     GPIORemotePin uiLedStatus = ledDriver2.getPin(14);
     GPIORemotePin uiLedPower  = ledDriver2.getPin(15);
@@ -247,11 +249,8 @@ void BSP::Run()
     {
         uiLedStatus = uiBtnMode;
         uiLedPower  = uiBtnOk;
-        ledDriver1.sendUpdate();
-        Delay(5);
-        ledDriver2.sendUpdate();
 
-        Delay(5);
+        Delay(10);
     }
 
     // Suspend this task as we do not want to free memory

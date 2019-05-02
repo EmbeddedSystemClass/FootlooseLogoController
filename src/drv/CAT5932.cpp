@@ -13,9 +13,11 @@
 
 #include <cstring>
 
-CAT5932::CAT5932(HALI2C& i2cHal, uint8_t deviceAddress)
-    : I2CDevice(i2cHal, deviceAddress)
+CAT5932::CAT5932(const char* name, HALI2C& i2cHal, uint8_t deviceAddress)
+    : Thread(name, 300, 1)
+    , I2CDevice(i2cHal, deviceAddress)
     , m_onState(OutputOn)
+    , m_registerUpdated(false)
 {
     memset(m_registerBuffer, 0, REG_MAX);
 }
@@ -81,7 +83,7 @@ void CAT5932::setStateToReg(uint8_t pin, CAT5932::OutputState state)
     *reg &= bitmask;  // clear target bits
     *reg |= setBits;  // set intended bits
 
-    //    sendUpdate();
+    m_registerUpdated = true;
 }
 void CAT5932::setOnStateToReg(uint8_t pin, bool state)
 {
@@ -121,7 +123,6 @@ uint8_t* CAT5932::getOutputReg(uint8_t pin)
     return retVal;
 }
 
-// TODO: autosend changes
 void CAT5932::sendUpdate()
 {
     m_I2COutputData[0] = REGLS0 | REG_AUTO_INCREMENT;
@@ -130,9 +131,18 @@ void CAT5932::sendUpdate()
     m_I2COutputData[3] = m_registerBuffer[REGLS2];
     m_I2COutputData[4] = m_registerBuffer[REGLS3];
 
-    //    m_I2COutputData[1] = 0b10101010;
-    //    m_I2COutputData[2] = 0b10101010;
-    //    m_I2COutputData[3] = 0b10101010;
-    //    m_I2COutputData[4] = 0b10101010;
     writeToDevice(m_I2COutputData, 5);
+}
+
+void CAT5932::Run()
+{
+    while (1)
+    {
+        if (m_registerUpdated)
+        {
+            m_registerUpdated = false;
+            sendUpdate();
+        }
+        Delay(50);
+    }
 }
