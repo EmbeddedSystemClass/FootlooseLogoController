@@ -20,12 +20,14 @@ class UIMap_UITest;
 class UIMap_AddressDisplay;
 class UIMap_MenuMode;
 class UIMap_MenuSpeed;
+class UIMap_MenuDisplay;
 class UIMap_MenuExit;
 class UIMap_MenuModeDmx;
 class UIMap_MenuModeRainBow;
 class UIMap_MenuModeTest;
 class UIMap_MenuSpeedShow;
 class UIMap_MenuSpeedIncrease;
+class UIMap_MenuDisplayShow;
 class UIMap_Default;
 class UserInterfaceState;
 class UserInterfaceFSM;
@@ -62,12 +64,14 @@ public:
     static UIMap_AddressDisplay AddressDisplay;
     static UIMap_MenuMode MenuMode;
     static UIMap_MenuSpeed MenuSpeed;
+    static UIMap_MenuDisplay MenuDisplay;
     static UIMap_MenuExit MenuExit;
     static UIMap_MenuModeDmx MenuModeDmx;
     static UIMap_MenuModeRainBow MenuModeRainBow;
     static UIMap_MenuModeTest MenuModeTest;
     static UIMap_MenuSpeedShow MenuSpeedShow;
     static UIMap_MenuSpeedIncrease MenuSpeedIncrease;
+    static UIMap_MenuDisplayShow MenuDisplayShow;
 };
 
 class UIMap_Default :
@@ -129,6 +133,7 @@ public:
     : UIMap_Default(name, stateId)
     {};
 
+    virtual void Entry(UserInterfaceFSM&);
     virtual void BtnModePressed(UserInterfaceFSM& context);
     virtual void BtnOkPressed(UserInterfaceFSM& context);
 };
@@ -141,6 +146,20 @@ public:
     : UIMap_Default(name, stateId)
     {};
 
+    virtual void Entry(UserInterfaceFSM&);
+    virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void BtnOkPressed(UserInterfaceFSM& context);
+};
+
+class UIMap_MenuDisplay :
+    public UIMap_Default
+{
+public:
+    UIMap_MenuDisplay(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void Entry(UserInterfaceFSM&);
     virtual void BtnModePressed(UserInterfaceFSM& context);
     virtual void BtnOkPressed(UserInterfaceFSM& context);
 };
@@ -153,6 +172,7 @@ public:
     : UIMap_Default(name, stateId)
     {};
 
+    virtual void Entry(UserInterfaceFSM&);
     virtual void BtnModePressed(UserInterfaceFSM& context);
     virtual void BtnOkPressed(UserInterfaceFSM& context);
 };
@@ -165,6 +185,7 @@ public:
     : UIMap_Default(name, stateId)
     {};
 
+    virtual void Entry(UserInterfaceFSM&);
     virtual void BtnModePressed(UserInterfaceFSM& context);
     virtual void BtnOkPressed(UserInterfaceFSM& context);
 };
@@ -177,6 +198,7 @@ public:
     : UIMap_Default(name, stateId)
     {};
 
+    virtual void Entry(UserInterfaceFSM&);
     virtual void BtnModePressed(UserInterfaceFSM& context);
     virtual void BtnOkPressed(UserInterfaceFSM& context);
 };
@@ -189,6 +211,7 @@ public:
     : UIMap_Default(name, stateId)
     {};
 
+    virtual void Entry(UserInterfaceFSM&);
     virtual void BtnModePressed(UserInterfaceFSM& context);
     virtual void BtnOkPressed(UserInterfaceFSM& context);
 };
@@ -214,7 +237,21 @@ public:
     : UIMap_Default(name, stateId)
     {};
 
+    virtual void Entry(UserInterfaceFSM&);
     virtual void Default(UserInterfaceFSM& context);
+};
+
+class UIMap_MenuDisplayShow :
+    public UIMap_Default
+{
+public:
+    UIMap_MenuDisplayShow(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void Entry(UserInterfaceFSM&);
+    virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void BtnOkPressed(UserInterfaceFSM& context);
 };
 
 class UserInterfaceFSM :

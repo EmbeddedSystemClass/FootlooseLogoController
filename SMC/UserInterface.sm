@@ -57,36 +57,70 @@ m_timer.Stop();
 }
 
 MenuMode
+Entry
+{
+uiDisplay("mod");
+}
 {
 BtnOkPressed MenuMode {}
 BtnModePressed MenuSpeed {}
 }
 
 MenuSpeed
+Entry
+{
+uiDisplay("spd");
+}
 {
 BtnOkPressed MenuSpeedShow {}
+BtnModePressed MenuDisplay {}
+}
+
+MenuDisplay
+Entry
+{
+uiDisplay("dsp");
+}
+{
+BtnOkPressed MenuDisplayShow {}
 BtnModePressed MenuExit {}
 }
 
 MenuExit
+Entry
+{
+uiDisplay("ext");
+}
 {
 BtnOkPressed AddressDisplay {}
 BtnModePressed MenuMode {}
 }
 
 MenuModeDmx
+Entry
+{
+uiDisplay("dmx");
+}
 {
 BtnModePressed MenuModeRainBow {}
 BtnOkPressed AddressDisplay { setMode(UserInterface::OperationDmx); }
 }
 
 MenuModeRainBow
+Entry
+{
+uiDisplay("rai");
+}
 {
 BtnModePressed MenuModeTest {}
 BtnOkPressed AddressDisplay { setMode(UserInterface::OperationRainbow); }
 }
 
 MenuModeTest
+Entry
+{
+uiDisplay("tst");
+}
 {
 BtnModePressed MenuModeDmx {}
 BtnOkPressed AddressDisplay { setMode(UserInterface::OperationTest); }
@@ -98,14 +132,29 @@ Entry
 uiDisplay(ctxt.getSpeed());
 }
 {
-BtnModePressed MenuSpeedIncrease { incSpeed(); }
+BtnModePressed MenuSpeedIncrease {  }
 BtnOkPressed AddressDisplay { }
 }
 
 MenuSpeedIncrease
+Entry
+{
+incSpeed();
+}
 {
 Default MenuSpeedShow {}
 }
+
+MenuDisplayShow
+Entry
+{
+uiDisplay(ctxt.getDisplayBrightness());
+}
+{
+BtnModePressed nil { incDisplayBrightness(); uiDisplay(ctxt.getDisplayBrightness()); }
+BtnOkPressed AddressDisplay { }
+}
+
 
 
 Default

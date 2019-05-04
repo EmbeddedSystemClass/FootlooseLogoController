@@ -20,12 +20,14 @@ UIMap_UITest UIMap::UITest("UIMap::UITest", 1);
 UIMap_AddressDisplay UIMap::AddressDisplay("UIMap::AddressDisplay", 2);
 UIMap_MenuMode UIMap::MenuMode("UIMap::MenuMode", 3);
 UIMap_MenuSpeed UIMap::MenuSpeed("UIMap::MenuSpeed", 4);
-UIMap_MenuExit UIMap::MenuExit("UIMap::MenuExit", 5);
-UIMap_MenuModeDmx UIMap::MenuModeDmx("UIMap::MenuModeDmx", 6);
-UIMap_MenuModeRainBow UIMap::MenuModeRainBow("UIMap::MenuModeRainBow", 7);
-UIMap_MenuModeTest UIMap::MenuModeTest("UIMap::MenuModeTest", 8);
-UIMap_MenuSpeedShow UIMap::MenuSpeedShow("UIMap::MenuSpeedShow", 9);
-UIMap_MenuSpeedIncrease UIMap::MenuSpeedIncrease("UIMap::MenuSpeedIncrease", 10);
+UIMap_MenuDisplay UIMap::MenuDisplay("UIMap::MenuDisplay", 5);
+UIMap_MenuExit UIMap::MenuExit("UIMap::MenuExit", 6);
+UIMap_MenuModeDmx UIMap::MenuModeDmx("UIMap::MenuModeDmx", 7);
+UIMap_MenuModeRainBow UIMap::MenuModeRainBow("UIMap::MenuModeRainBow", 8);
+UIMap_MenuModeTest UIMap::MenuModeTest("UIMap::MenuModeTest", 9);
+UIMap_MenuSpeedShow UIMap::MenuSpeedShow("UIMap::MenuSpeedShow", 10);
+UIMap_MenuSpeedIncrease UIMap::MenuSpeedIncrease("UIMap::MenuSpeedIncrease", 11);
+UIMap_MenuDisplayShow UIMap::MenuDisplayShow("UIMap::MenuDisplayShow", 12);
 
 void UserInterfaceState::BtnModePressed(UserInterfaceFSM& context)
 {
@@ -142,6 +144,14 @@ void UIMap_AddressDisplay::timerElapsed(UserInterfaceFSM& context)
 
 }
 
+void UIMap_MenuMode::Entry(UserInterfaceFSM& context)
+
+{
+    UserInterface& ctxt = context.getOwner();
+
+    ctxt.uiDisplay("mod");
+}
+
 void UIMap_MenuMode::BtnModePressed(UserInterfaceFSM& context)
 {
 
@@ -160,11 +170,19 @@ void UIMap_MenuMode::BtnOkPressed(UserInterfaceFSM& context)
 
 }
 
+void UIMap_MenuSpeed::Entry(UserInterfaceFSM& context)
+
+{
+    UserInterface& ctxt = context.getOwner();
+
+    ctxt.uiDisplay("spd");
+}
+
 void UIMap_MenuSpeed::BtnModePressed(UserInterfaceFSM& context)
 {
 
     context.getState().Exit(context);
-    context.setState(UIMap::MenuExit);
+    context.setState(UIMap::MenuDisplay);
     context.getState().Entry(context);
 
 }
@@ -176,6 +194,40 @@ void UIMap_MenuSpeed::BtnOkPressed(UserInterfaceFSM& context)
     context.setState(UIMap::MenuSpeedShow);
     context.getState().Entry(context);
 
+}
+
+void UIMap_MenuDisplay::Entry(UserInterfaceFSM& context)
+
+{
+    UserInterface& ctxt = context.getOwner();
+
+    ctxt.uiDisplay("dsp");
+}
+
+void UIMap_MenuDisplay::BtnModePressed(UserInterfaceFSM& context)
+{
+
+    context.getState().Exit(context);
+    context.setState(UIMap::MenuExit);
+    context.getState().Entry(context);
+
+}
+
+void UIMap_MenuDisplay::BtnOkPressed(UserInterfaceFSM& context)
+{
+
+    context.getState().Exit(context);
+    context.setState(UIMap::MenuDisplayShow);
+    context.getState().Entry(context);
+
+}
+
+void UIMap_MenuExit::Entry(UserInterfaceFSM& context)
+
+{
+    UserInterface& ctxt = context.getOwner();
+
+    ctxt.uiDisplay("ext");
 }
 
 void UIMap_MenuExit::BtnModePressed(UserInterfaceFSM& context)
@@ -194,6 +246,14 @@ void UIMap_MenuExit::BtnOkPressed(UserInterfaceFSM& context)
     context.setState(UIMap::AddressDisplay);
     context.getState().Entry(context);
 
+}
+
+void UIMap_MenuModeDmx::Entry(UserInterfaceFSM& context)
+
+{
+    UserInterface& ctxt = context.getOwner();
+
+    ctxt.uiDisplay("dmx");
 }
 
 void UIMap_MenuModeDmx::BtnModePressed(UserInterfaceFSM& context)
@@ -217,6 +277,14 @@ void UIMap_MenuModeDmx::BtnOkPressed(UserInterfaceFSM& context)
 
 }
 
+void UIMap_MenuModeRainBow::Entry(UserInterfaceFSM& context)
+
+{
+    UserInterface& ctxt = context.getOwner();
+
+    ctxt.uiDisplay("rai");
+}
+
 void UIMap_MenuModeRainBow::BtnModePressed(UserInterfaceFSM& context)
 {
 
@@ -236,6 +304,14 @@ void UIMap_MenuModeRainBow::BtnOkPressed(UserInterfaceFSM& context)
     context.setState(UIMap::AddressDisplay);
     context.getState().Entry(context);
 
+}
+
+void UIMap_MenuModeTest::Entry(UserInterfaceFSM& context)
+
+{
+    UserInterface& ctxt = context.getOwner();
+
+    ctxt.uiDisplay("tst");
 }
 
 void UIMap_MenuModeTest::BtnModePressed(UserInterfaceFSM& context)
@@ -269,11 +345,8 @@ void UIMap_MenuSpeedShow::Entry(UserInterfaceFSM& context)
 
 void UIMap_MenuSpeedShow::BtnModePressed(UserInterfaceFSM& context)
 {
-    UserInterface& ctxt = context.getOwner();
 
     context.getState().Exit(context);
-    context.clearState();
-    ctxt.incSpeed();
     context.setState(UIMap::MenuSpeedIncrease);
     context.getState().Entry(context);
 
@@ -288,11 +361,49 @@ void UIMap_MenuSpeedShow::BtnOkPressed(UserInterfaceFSM& context)
 
 }
 
+void UIMap_MenuSpeedIncrease::Entry(UserInterfaceFSM& context)
+
+{
+    UserInterface& ctxt = context.getOwner();
+
+    ctxt.incSpeed();
+}
+
 void UIMap_MenuSpeedIncrease::Default(UserInterfaceFSM& context)
 {
 
     context.getState().Exit(context);
     context.setState(UIMap::MenuSpeedShow);
+    context.getState().Entry(context);
+
+}
+
+void UIMap_MenuDisplayShow::Entry(UserInterfaceFSM& context)
+
+{
+    UserInterface& ctxt = context.getOwner();
+
+    ctxt.uiDisplay(ctxt.getDisplayBrightness());
+}
+
+void UIMap_MenuDisplayShow::BtnModePressed(UserInterfaceFSM& context)
+{
+    UserInterface& ctxt = context.getOwner();
+
+    UserInterfaceState& endState = context.getState();
+
+    context.clearState();
+    ctxt.incDisplayBrightness();
+    ctxt.uiDisplay(ctxt.getDisplayBrightness());
+    context.setState(endState);
+
+}
+
+void UIMap_MenuDisplayShow::BtnOkPressed(UserInterfaceFSM& context)
+{
+
+    context.getState().Exit(context);
+    context.setState(UIMap::AddressDisplay);
     context.getState().Entry(context);
 
 }

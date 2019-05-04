@@ -29,6 +29,8 @@ public:
 
     void setOnState(OutputState state);
 
+    void setBrightness(uint8_t brightness);
+
     GPIORemotePin getPin(uint8_t pin);
 
     virtual bool read(uint32_t ID);

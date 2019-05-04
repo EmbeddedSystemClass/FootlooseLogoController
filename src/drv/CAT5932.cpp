@@ -27,7 +27,14 @@ bool CAT5932::initDevice() {}
 void CAT5932::setOnState(CAT5932::OutputState state)
 {
     m_onState = state;
-    // TODO: refresh all IO
+    for (uint8_t i = 0; i < 15; i++)
+    {
+        if (getStateFromReg(i) != OutputOff)
+        {
+            setStateToReg(i, state);
+        }
+    }
+    m_registerUpdated = true;
 }
 
 GPIORemotePin CAT5932::getPin(uint8_t pin)
@@ -54,6 +61,20 @@ bool CAT5932::isOutput(uint32_t ID)
 {
     (void)ID;
     return true;
+}
+
+void CAT5932::setBrightness(uint8_t brightness)
+{
+    m_registerBuffer[REGPWM0] = brightness;
+    m_registerBuffer[REGPSC0] = 0;
+
+    m_I2COutputData[0] = REGPSC0 | REG_AUTO_INCREMENT;
+    m_I2COutputData[1] = m_registerBuffer[REGPSC0];
+    m_I2COutputData[2] = m_registerBuffer[REGPWM0];
+
+    writeToDevice(m_I2COutputData, 3);
+
+    setOnState(OutputOnBlink1);
 }
 
 CAT5932::OutputState CAT5932::getStateFromReg(uint8_t pin)
