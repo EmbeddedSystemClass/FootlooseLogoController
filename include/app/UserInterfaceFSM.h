@@ -28,6 +28,7 @@ class UIMap_MenuModeTest;
 class UIMap_MenuSpeedShow;
 class UIMap_MenuSpeedIncrease;
 class UIMap_MenuDisplayShow;
+class UIMap_MenuDisplayIncrease;
 class UIMap_Default;
 class UserInterfaceState;
 class UserInterfaceFSM;
@@ -48,6 +49,7 @@ public:
     virtual void BtnModePressed(UserInterfaceFSM& context);
     virtual void BtnOkPressed(UserInterfaceFSM& context);
     virtual void Ready(UserInterfaceFSM& context);
+    virtual void Tick(UserInterfaceFSM& context);
     virtual void timerElapsed(UserInterfaceFSM& context);
 
 protected:
@@ -72,6 +74,7 @@ public:
     static UIMap_MenuSpeedShow MenuSpeedShow;
     static UIMap_MenuSpeedIncrease MenuSpeedIncrease;
     static UIMap_MenuDisplayShow MenuDisplayShow;
+    static UIMap_MenuDisplayIncrease MenuDisplayIncrease;
 };
 
 class UIMap_Default :
@@ -84,6 +87,7 @@ public:
     {};
 
     virtual void Ready(UserInterfaceFSM& context);
+    virtual void Tick(UserInterfaceFSM& context);
     virtual void Default(UserInterfaceFSM& context);
 };
 
@@ -254,6 +258,18 @@ public:
     virtual void BtnOkPressed(UserInterfaceFSM& context);
 };
 
+class UIMap_MenuDisplayIncrease :
+    public UIMap_Default
+{
+public:
+    UIMap_MenuDisplayIncrease(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void Entry(UserInterfaceFSM&);
+    virtual void Tick(UserInterfaceFSM& context);
+};
+
 class UserInterfaceFSM :
     public statemap::FSMContext
 {
@@ -300,6 +316,11 @@ public:
     inline void Ready()
     {
         getState().Ready(*this);
+    };
+
+    inline void Tick()
+    {
+        getState().Tick(*this);
     };
 
     inline void timerElapsed()

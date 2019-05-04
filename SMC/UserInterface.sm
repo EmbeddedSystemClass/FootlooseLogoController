@@ -62,7 +62,7 @@ Entry
 uiDisplay("mod");
 }
 {
-BtnOkPressed MenuMode {}
+BtnOkPressed MenuModeDmx {}
 BtnModePressed MenuSpeed {}
 }
 
@@ -151,8 +151,17 @@ Entry
 uiDisplay(ctxt.getDisplayBrightness());
 }
 {
-BtnModePressed nil { incDisplayBrightness(); uiDisplay(ctxt.getDisplayBrightness()); }
+BtnModePressed MenuDisplayIncrease { }
 BtnOkPressed AddressDisplay { }
+}
+
+MenuDisplayIncrease
+Entry
+{
+ incDisplayBrightness(); 
+}
+{
+Tick MenuDisplayShow { }
 }
 
 
@@ -160,6 +169,7 @@ BtnOkPressed AddressDisplay { }
 Default
 {
     Ready nil {}
+    Tick nil {}
     Default nil {}
 }
 

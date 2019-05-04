@@ -28,6 +28,7 @@ UIMap_MenuModeTest UIMap::MenuModeTest("UIMap::MenuModeTest", 9);
 UIMap_MenuSpeedShow UIMap::MenuSpeedShow("UIMap::MenuSpeedShow", 10);
 UIMap_MenuSpeedIncrease UIMap::MenuSpeedIncrease("UIMap::MenuSpeedIncrease", 11);
 UIMap_MenuDisplayShow UIMap::MenuDisplayShow("UIMap::MenuDisplayShow", 12);
+UIMap_MenuDisplayIncrease UIMap::MenuDisplayIncrease("UIMap::MenuDisplayIncrease", 13);
 
 void UserInterfaceState::BtnModePressed(UserInterfaceFSM& context)
 {
@@ -44,6 +45,11 @@ void UserInterfaceState::Ready(UserInterfaceFSM& context)
     Default(context);
 }
 
+void UserInterfaceState::Tick(UserInterfaceFSM& context)
+{
+    Default(context);
+}
+
 void UserInterfaceState::timerElapsed(UserInterfaceFSM& context)
 {
     Default(context);
@@ -56,6 +62,12 @@ void UserInterfaceState::Default(UserInterfaceFSM& context)
 }
 
 void UIMap_Default::Ready(UserInterfaceFSM& context)
+{
+
+
+}
+
+void UIMap_Default::Tick(UserInterfaceFSM& context)
 {
 
 
@@ -165,7 +177,7 @@ void UIMap_MenuMode::BtnOkPressed(UserInterfaceFSM& context)
 {
 
     context.getState().Exit(context);
-    context.setState(UIMap::MenuMode);
+    context.setState(UIMap::MenuModeDmx);
     context.getState().Entry(context);
 
 }
@@ -388,14 +400,10 @@ void UIMap_MenuDisplayShow::Entry(UserInterfaceFSM& context)
 
 void UIMap_MenuDisplayShow::BtnModePressed(UserInterfaceFSM& context)
 {
-    UserInterface& ctxt = context.getOwner();
 
-    UserInterfaceState& endState = context.getState();
-
-    context.clearState();
-    ctxt.incDisplayBrightness();
-    ctxt.uiDisplay(ctxt.getDisplayBrightness());
-    context.setState(endState);
+    context.getState().Exit(context);
+    context.setState(UIMap::MenuDisplayIncrease);
+    context.getState().Entry(context);
 
 }
 
@@ -404,6 +412,23 @@ void UIMap_MenuDisplayShow::BtnOkPressed(UserInterfaceFSM& context)
 
     context.getState().Exit(context);
     context.setState(UIMap::AddressDisplay);
+    context.getState().Entry(context);
+
+}
+
+void UIMap_MenuDisplayIncrease::Entry(UserInterfaceFSM& context)
+
+{
+    UserInterface& ctxt = context.getOwner();
+
+    ctxt.incDisplayBrightness();
+}
+
+void UIMap_MenuDisplayIncrease::Tick(UserInterfaceFSM& context)
+{
+
+    context.getState().Exit(context);
+    context.setState(UIMap::MenuDisplayShow);
     context.getState().Entry(context);
 
 }

@@ -47,6 +47,7 @@ void UserInterface::Run()
         m_lastBtnStateMode = m_btnMode;
         m_lastBtnStateOk   = m_btnOk;
 
+        m_fsm.Tick();
         Delay(100);
     }
 }
@@ -73,6 +74,6 @@ void    UserInterface::incDisplayBrightness()
 {
     m_displayBrightness++;
     if (m_displayBrightness > 10) m_displayBrightness = 0;
-    m_ledDriver1.setBrightness(m_displayBrightness * 25);
-    m_ledDriver2.setBrightness(m_displayBrightness * 25);
+    m_ledDriver1.setBrightness((m_displayBrightness * 25) + 5);
+    m_ledDriver2.setBrightness((m_displayBrightness * 25) + 5);
 }

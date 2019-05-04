@@ -13,6 +13,7 @@
 #include "app/Effects.h"
 #include "app/EffectsController.h"
 #include "app/GPIOBlinker.h"
+#include "app/GPIOOutputDuplicate.h"
 #include "app/TaskStateMonitor.h"
 #include "app/UserInterface.h"
 #include "drv/CAT5932.h"
@@ -27,7 +28,7 @@
 #include "thread.hpp"
 
 BSP::BSP(const char* name)
-    : Thread(name, 1500, 1)
+    : Thread(name, 2000, 1)
 {
 }
 
@@ -101,10 +102,6 @@ void BSP::Run()
     GPIOpinSTM32 ledPower     = gpioB.getPin(4);
     GPIOpinSTM32 ledStatusPin = gpioB.getPin(5);
 
-    GPIOBlinker ledStatus(ledStatusPin);
-
-    ledPower = true;
-
     // clang-format off
 	DRVGPIO gpioC = DRVGPIO(GPIOC,
 						  //5432109876453210
@@ -155,6 +152,16 @@ void BSP::Run()
     REPORTLOG("Initialization of DRV complete");
 
     //    APP
+    GPIOOutputDuplicate m_combinedStatus;
+    GPIOOutputDuplicate m_combinedPower;
+
+    m_combinedStatus.addOutput(&ledStatusPin);
+    m_combinedStatus.addOutput(&uiLedStatus);
+    GPIOBlinker ledStatus(m_combinedStatus);
+
+    m_combinedPower.addOutput(&ledPower);
+    m_combinedPower.addOutput(&uiLedPower);
+    m_combinedPower = true;
 
     //        task monitor
     TaskStateMonitor taskMonitor("Monitor UI", ledStatus);
@@ -245,14 +252,10 @@ void BSP::Run()
     UserInterface ui(uiDisplay, uiLedPower, uiLedStatus, dmxAddress, uiBtnOk, uiBtnMode, ledDriver1, ledDriver2);
     ui.Start();
 
-    while (1)
+    while (true)
     {
-        uiLedStatus = uiBtnMode;
-        uiLedPower  = uiBtnOk;
-
-        Delay(10);
+        Delay(1000);
     }
-
     // Suspend this task as we do not want to free memory
     Suspend();
 
