@@ -248,9 +248,9 @@ void BSP::Run()
     uiDisplay.addSegment(&uiSegment2);
     uiDisplay.addSegment(&uiSegment3);
 
-    UserInterface ui(uiDisplay, uiLedPower, uiLedStatus, dmxAddress, uiBtnOk, uiBtnMode, ledDriver1, ledDriver2);
+    UserInterface ui(uiDisplay, uiLedPower, m_combinedStatus, dmxAddress, uiBtnOk, uiBtnMode, ledDriver1, ledDriver2);
     ui.Start();
-
+    //    m_combinedPower = true;
     while (true)
     {
         m_combinedPower = !m_combinedPower;

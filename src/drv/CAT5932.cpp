@@ -81,7 +81,7 @@ CAT5932::OutputState CAT5932::getStateFromReg(uint8_t pin)
 {
     OutputState retVal = OutputOff;
     uint8_t*    reg    = getOutputReg(pin);
-    retVal             = static_cast<OutputState>((*reg >> ((pin % 4) * 2)) && OUTPUT_STATE_MASK);
+    retVal             = static_cast<OutputState>((*reg >> ((pin % 4) * 2)) & OUTPUT_STATE_MASK);
     return retVal;
 }
 bool CAT5932::getOnStateFromReg(uint8_t pin)
@@ -98,13 +98,17 @@ bool CAT5932::getOnStateFromReg(uint8_t pin)
 void CAT5932::setStateToReg(uint8_t pin, CAT5932::OutputState state)
 {
     uint8_t* reg     = getOutputReg(pin);
+    uint8_t  regVal  = *reg;
     uint8_t  bitmask = ~(0x03 << ((pin % 4) * 2));
     uint8_t  setBits = (state << ((pin % 4) * 2));
 
     *reg &= bitmask;  // clear target bits
     *reg |= setBits;  // set intended bits
 
-    m_registerUpdated = true;
+    if (*reg != regVal)
+    {
+        m_registerUpdated = true;
+    }
 }
 void CAT5932::setOnStateToReg(uint8_t pin, bool state)
 {
