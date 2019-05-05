@@ -32,6 +32,7 @@ public:
 protected:
     std::list<GPIOpin*> m_gpioPins;
     bool                m_state;
+    bool                m_firstToggle;
 
     bool isOutput();
 };

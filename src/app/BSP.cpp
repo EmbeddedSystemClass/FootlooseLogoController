@@ -28,7 +28,7 @@
 #include "thread.hpp"
 
 BSP::BSP(const char* name)
-    : Thread(name, 2000, 1)
+    : Thread(name, 1500, 1)
 {
 }
 
@@ -161,7 +161,6 @@ void BSP::Run()
 
     m_combinedPower.addOutput(&ledPower);
     m_combinedPower.addOutput(&uiLedPower);
-    m_combinedPower = true;
 
     //        task monitor
     TaskStateMonitor taskMonitor("Monitor UI", ledStatus);
@@ -254,6 +253,7 @@ void BSP::Run()
 
     while (true)
     {
+        m_combinedPower = !m_combinedPower;
         Delay(1000);
     }
     // Suspend this task as we do not want to free memory

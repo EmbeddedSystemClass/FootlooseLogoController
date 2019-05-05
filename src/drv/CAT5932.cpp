@@ -14,7 +14,7 @@
 #include <cstring>
 
 CAT5932::CAT5932(const char* name, HALI2C& i2cHal, uint8_t deviceAddress)
-    : Thread(name, 300, 1)
+    : Thread(name, 100, 1)
     , I2CDevice(i2cHal, deviceAddress)
     , m_onState(OutputOn)
     , m_registerUpdated(false)

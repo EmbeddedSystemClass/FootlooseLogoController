@@ -14,12 +14,17 @@
 GPIOOutputDuplicate::GPIOOutputDuplicate()
     : GPIOpin(false)
     , m_state(false)
+    , m_firstToggle(true)
 {
 }
 
 GPIOOutputDuplicate::~GPIOOutputDuplicate() {}
 
-void GPIOOutputDuplicate::addOutput(GPIOpin* pin) { m_gpioPins.push_front(pin); }
+void GPIOOutputDuplicate::addOutput(GPIOpin* pin)
+{
+    m_gpioPins.push_front(pin);
+    *pin = m_state;
+}
 
 GPIOpin& GPIOOutputDuplicate::operator=(const bool value)
 {
@@ -34,6 +39,13 @@ GPIOOutputDuplicate::operator bool() { return m_state; }
 
 void GPIOOutputDuplicate::toggle()
 {
+    m_state = !m_state;
+    // Firt time toggle, make sure outputs are set the same
+    if (m_firstToggle)
+    {
+        m_firstToggle = false;
+        *this         = m_state;
+    }
     for (auto const& i : m_gpioPins)
     {
         i->toggle();
