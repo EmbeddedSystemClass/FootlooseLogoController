@@ -15,8 +15,8 @@
 DRVGPIO::DRVGPIO(GPIO_TypeDef* gpio, uint32_t owner, uint32_t dir, uint32_t polarity)
     : m_gpio(gpio)
     , m_owner(owner)
-    , m_dir(dir)
     , m_polarity(polarity)
+    , m_dir(dir)
 {
     for (uint32_t pin = 1; pin != 0; pin = ((pin << 1) & GPIO_PIN_MASK))
     {

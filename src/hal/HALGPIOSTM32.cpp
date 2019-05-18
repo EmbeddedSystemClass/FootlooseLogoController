@@ -19,6 +19,8 @@ GPIOpinSTM32::GPIOpinSTM32(GPIO_TypeDef* port, GPIO_InitTypeDef initSettings, bo
 {
 }
 
+GPIOpinSTM32::~GPIOpinSTM32() {}
+
 void GPIOpinSTM32::setAlternateFunction()
 {
     GPIO_InitTypeDef pinSettings = m_initialSettings;

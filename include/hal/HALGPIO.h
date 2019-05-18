@@ -15,6 +15,7 @@ class GPIOpin
 {
 public:
     GPIOpin(bool polarity);
+    virtual ~GPIOpin();
     virtual GPIOpin& operator=(const bool)  = 0;
     virtual          operator bool()        = 0;
     virtual void     toggle()               = 0;

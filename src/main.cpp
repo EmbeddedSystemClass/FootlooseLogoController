@@ -83,10 +83,10 @@ osThreadId defaultTaskHandle;
 /* Private function prototypes -----------------------------------------------*/
 void        SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_USART2_UART_Init(void);
-static void MX_USART1_UART_Init(void);
-static void MX_I2C1_Init(void);
-void        StartDefaultTask(void const* argument);
+// static void MX_USART2_UART_Init(void);
+// static void MX_USART1_UART_Init(void);
+// static void MX_I2C1_Init(void);
+void StartDefaultTask(void const* argument);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -238,95 +238,95 @@ void SystemClock_Config(void)
  * @param None
  * @retval None
  */
-static void MX_I2C1_Init(void)
-{
-
-    /* USER CODE BEGIN I2C1_Init 0 */
-
-    /* USER CODE END I2C1_Init 0 */
-
-    /* USER CODE BEGIN I2C1_Init 1 */
-
-    /* USER CODE END I2C1_Init 1 */
-    hi2c1.Instance              = I2C1;
-    hi2c1.Init.Timing           = 0x2000090E;
-    hi2c1.Init.OwnAddress1      = 0;
-    hi2c1.Init.AddressingMode   = I2C_ADDRESSINGMODE_7BIT;
-    hi2c1.Init.DualAddressMode  = I2C_DUALADDRESS_DISABLE;
-    hi2c1.Init.OwnAddress2      = 0;
-    hi2c1.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
-    hi2c1.Init.GeneralCallMode  = I2C_GENERALCALL_DISABLE;
-    hi2c1.Init.NoStretchMode    = I2C_NOSTRETCH_DISABLE;
-    if (HAL_I2C_Init(&hi2c1) != HAL_OK)
-    {
-        Error_Handler();
-    }
-    /** Configure Analogue filter
-     */
-    if (HAL_I2CEx_ConfigAnalogFilter(&hi2c1, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
-    {
-        Error_Handler();
-    }
-    /** Configure Digital filter
-     */
-    if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 0) != HAL_OK)
-    {
-        Error_Handler();
-    }
-    /* USER CODE BEGIN I2C1_Init 2 */
-
-    /* USER CODE END I2C1_Init 2 */
-}
+// static void MX_I2C1_Init(void)
+//{
+//
+//    /* USER CODE BEGIN I2C1_Init 0 */
+//
+//    /* USER CODE END I2C1_Init 0 */
+//
+//    /* USER CODE BEGIN I2C1_Init 1 */
+//
+//    /* USER CODE END I2C1_Init 1 */
+//    hi2c1.Instance              = I2C1;
+//    hi2c1.Init.Timing           = 0x2000090E;
+//    hi2c1.Init.OwnAddress1      = 0;
+//    hi2c1.Init.AddressingMode   = I2C_ADDRESSINGMODE_7BIT;
+//    hi2c1.Init.DualAddressMode  = I2C_DUALADDRESS_DISABLE;
+//    hi2c1.Init.OwnAddress2      = 0;
+//    hi2c1.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+//    hi2c1.Init.GeneralCallMode  = I2C_GENERALCALL_DISABLE;
+//    hi2c1.Init.NoStretchMode    = I2C_NOSTRETCH_DISABLE;
+//    if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+//    {
+//        Error_Handler();
+//    }
+//    /** Configure Analogue filter
+//     */
+//    if (HAL_I2CEx_ConfigAnalogFilter(&hi2c1, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+//    {
+//        Error_Handler();
+//    }
+//    /** Configure Digital filter
+//     */
+//    if (HAL_I2CEx_ConfigDigitalFilter(&hi2c1, 0) != HAL_OK)
+//    {
+//        Error_Handler();
+//    }
+//    /* USER CODE BEGIN I2C1_Init 2 */
+//
+//    /* USER CODE END I2C1_Init 2 */
+//}
 
 /**
  * Enable DMA controller clock
  */
-static void MX_DMA_Init(void)
-{
-    /* DMA controller clock enable */
-    __HAL_RCC_DMA1_CLK_ENABLE();
-
-    /* DMA interrupt init */
-    /* DMA1_Channel6_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 5, 0);
-    HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
-}
+// static void MX_DMA_Init(void)
+//{
+//    /* DMA controller clock enable */
+//    __HAL_RCC_DMA1_CLK_ENABLE();
+//
+//    /* DMA interrupt init */
+//    /* DMA1_Channel6_IRQn interrupt configuration */
+//    HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 5, 0);
+//    HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+//}
 
 /* USART1 init function */
-static void MX_USART1_UART_Init(void)
-{
-
-    huart1.Instance          = USART1;
-    huart1.Init.BaudRate     = 115200;
-    huart1.Init.WordLength   = UART_WORDLENGTH_8B;
-    huart1.Init.StopBits     = UART_STOPBITS_1;
-    huart1.Init.Parity       = UART_PARITY_NONE;
-    huart1.Init.Mode         = UART_MODE_TX_RX;
-    huart1.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
-    huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-    if (HAL_UART_Init(&huart1) != HAL_OK)
-    {
-        _Error_Handler(__FILE__, __LINE__);
-    }
-}
+// static void MX_USART1_UART_Init(void)
+//{
+//
+//    huart1.Instance          = USART1;
+//    huart1.Init.BaudRate     = 115200;
+//    huart1.Init.WordLength   = UART_WORDLENGTH_8B;
+//    huart1.Init.StopBits     = UART_STOPBITS_1;
+//    huart1.Init.Parity       = UART_PARITY_NONE;
+//    huart1.Init.Mode         = UART_MODE_TX_RX;
+//    huart1.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
+//    huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+//    if (HAL_UART_Init(&huart1) != HAL_OK)
+//    {
+//        _Error_Handler(__FILE__, __LINE__);
+//    }
+//}
 
 /* USART2 init function */
-static void MX_USART2_UART_Init(void)
-{
-
-    huart2.Instance          = USART2;
-    huart2.Init.BaudRate     = 115200;
-    huart2.Init.WordLength   = UART_WORDLENGTH_8B;
-    huart2.Init.StopBits     = UART_STOPBITS_1;
-    huart2.Init.Parity       = UART_PARITY_NONE;
-    huart2.Init.Mode         = UART_MODE_TX_RX;
-    huart2.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
-    huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-    if (HAL_UART_Init(&huart2) != HAL_OK)
-    {
-        _Error_Handler(__FILE__, __LINE__);
-    }
-}
+// static void MX_USART2_UART_Init(void)
+//{
+//
+//    huart2.Instance          = USART2;
+//    huart2.Init.BaudRate     = 115200;
+//    huart2.Init.WordLength   = UART_WORDLENGTH_8B;
+//    huart2.Init.StopBits     = UART_STOPBITS_1;
+//    huart2.Init.Parity       = UART_PARITY_NONE;
+//    huart2.Init.Mode         = UART_MODE_TX_RX;
+//    huart2.Init.HwFlowCtl    = UART_HWCONTROL_NONE;
+//    huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+//    if (HAL_UART_Init(&huart2) != HAL_OK)
+//    {
+//        _Error_Handler(__FILE__, __LINE__);
+//    }
+//}
 
 /** Configure pins as
  * Analog
@@ -352,6 +352,7 @@ static void MX_GPIO_Init(void)
 /* StartDefaultTask function */
 void StartDefaultTask(void const* argument)
 {
+    (void)argument;
     /* init code for USB_DEVICE */
     //   MX_USB_DEVICE_Init();
     //    HAL_I2C_Init(&hi2c1);
@@ -397,6 +398,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
  */
 void _Error_Handler(char* file, int line)
 {
+    (void)file;
+    (void)line;
     /* USER CODE BEGIN Error_Handler_Debug */
     /* User can add his own implementation to report the HAL error return state
      */
@@ -418,6 +421,8 @@ void _Error_Handler(char* file, int line)
 void assert_failed(char* file, uint32_t line)
 {
     /* USER CODE BEGIN 6 */
+    (void)file;
+    (void)line;
     /* User can add his own implementation to report the file name and line
       number,
       ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line)

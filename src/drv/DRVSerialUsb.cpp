@@ -48,10 +48,20 @@ void DRVSerialUsb::sendByte(uint8_t data)
     }
 }
 
-uint32_t DRVSerialUsb::getBytesPending() {}
+uint32_t DRVSerialUsb::getBytesPending() { return 0; }
 
-uint32_t DRVSerialUsb::readLine(char* buf, uint32_t bufferSize) {}
+uint32_t DRVSerialUsb::readLine(char* buf, uint32_t bufferSize)
+{
+    (void)buf;
+    (void)bufferSize;
+    return 0;
+}
 
-uint32_t DRVSerialUsb::readBuffer(uint8_t* buf, uint32_t bufferSize) {}
+uint32_t DRVSerialUsb::readBuffer(uint8_t* buf, uint32_t bufferSize)
+{
+    (void)buf;
+    (void)bufferSize;
+    return 0;
+}
 
-uint32_t DRVSerialUsb::readByte() {}
+uint32_t DRVSerialUsb::readByte() { return 0; }

@@ -35,6 +35,10 @@ void OSError::report(ErrorSeverity sev, ErrorType type, std::string prefix, std:
 
 void OSError::handleError(ErrorSeverity sev, ErrorType type, std::string prefix, std::string str)
 {
+    (void)sev;
+    (void)type;
+    (void)prefix;
+    (void)str;
     //    std::string severityString = getStringFromSeverity(sev);
     //    std::string typeString     = getStringType(type);
     //    std::string output;

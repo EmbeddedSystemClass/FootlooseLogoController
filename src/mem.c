@@ -6,7 +6,7 @@
  */
 #include <stdlib.h>
 
-void *malloc(size_t xBytes) { return pvPortMalloc(xBytes); }
+void *malloc(size_t xBytes) { return (void *)pvPortMalloc(xBytes); }
 
 void free(void *pvBuffer) { vPortFree(pvBuffer); }
 

@@ -18,6 +18,7 @@ class GPIOpinSTM32 : public GPIOpin
 {
 public:
     GPIOpinSTM32(GPIO_TypeDef* port, GPIO_InitTypeDef initSettings, bool polarity);
+    virtual ~GPIOpinSTM32();
 
     virtual GPIOpinSTM32& operator=(const bool);
 

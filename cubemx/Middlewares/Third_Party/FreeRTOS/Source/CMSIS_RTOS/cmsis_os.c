@@ -1588,6 +1588,8 @@ osStatus osThreadList (uint8_t *buffer)
 {
 #if ( ( configUSE_TRACE_FACILITY == 1 ) && ( configUSE_STATS_FORMATTING_FUNCTIONS == 1 ) )
   vTaskList((char *)buffer);
+#else
+  (void)buffer;
 #endif
   return osOK;
 }
