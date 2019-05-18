@@ -1,0 +1,181 @@
+%{ //
+//
+%}
+
+%class UserInterface
+%header UserInterface.h
+%fsmclass UserInterfaceFSM
+%fsmfile UserInterfaceFSM
+%start UIMap::Reset 
+%map UIMap
+%%
+
+Reset
+{
+    Ready UITest {}  
+    DmxAddressChanged nil {}
+}
+
+UITest
+Entry
+{
+    // Enable all LEDs
+    uiLedPower(1);
+    uiLedStatus(1);
+    uiDisplay(888);
+    m_updateTimer.setTimeout(500);
+}
+Exit
+{
+    // Disable all LEDs
+    uiLedPower(0);
+    uiLedStatus(0);
+    uiDisplay("   ");
+}
+{
+    updateTimerElapsed AddressDisplay {}
+    DmxAddressChanged nil {}
+}
+
+AddressDisplay
+Entry
+{
+	uiLedPower(1);
+    uiDisplay(ctxt.m_dmxAddress);
+    m_updateTimer.setPeriod(50);
+    m_displaySleepTimer.setTimeout(20000);
+}
+Exit
+{
+    m_updateTimer.Stop();
+    m_displaySleepTimer.Stop();
+}
+{
+    updateTimerElapsed nil
+    {
+       uiDisplay(ctxt.m_dmxAddress);
+    }
+    displaySleepTimerElapsed DisplayOff {}
+    BtnModePressed MenuMode {}
+    DmxAddressChanged nil { m_displaySleepTimer.setTimeout(20000); }
+  
+}
+
+DisplayOff
+Entry
+{
+    uiDisplay("");
+    uiLedPower(0);
+}
+{
+    BtnOkPressed AddressDisplay {}
+    BtnModePressed AddressDisplay {}
+}
+
+TestDisplay
+Entry
+{
+	uiDisplay("tst");
+	setMode(UserInterface::OperationTest);
+}
+Exit
+{
+	restorePreviousMode();
+}
+{
+	SwModeDisabled AddressDisplay {}
+}
+
+MenuMode
+Entry
+{
+    uiDisplay("mod");
+}
+{
+    BtnOkPressed MenuModeDmx {}
+    BtnModePressed MenuDisplay {}
+}
+
+MenuDisplay
+Entry
+{
+    uiDisplay("dsp");
+}
+{
+    BtnOkPressed MenuDisplayShow {}
+    BtnModePressed MenuExit {}
+}
+
+MenuExit
+Entry
+{
+    uiDisplay("ext");
+}
+{
+    BtnOkPressed AddressDisplay {}
+    BtnModePressed MenuMode {}
+}
+
+MenuModeDmx
+Entry
+{
+    uiDisplay("dmx");
+}
+{
+    BtnModePressed MenuModeRainBow {}
+    BtnOkPressed AddressDisplay { setMode(UserInterface::OperationDmx); }
+}
+
+MenuModeRainBow
+Entry
+{
+uiDisplay("rai");
+}
+{
+    BtnModePressed MenuModeTest {}
+    BtnOkPressed AddressDisplay { setMode(UserInterface::OperationRainbow); }
+}
+
+MenuModeTest
+Entry
+{
+    uiDisplay("tst");
+}
+{
+    BtnModePressed MenuModeDmx {}
+    BtnOkPressed AddressDisplay { setMode(UserInterface::OperationTest); }
+}
+
+MenuDisplayShow
+Entry
+{
+    uiDisplay(ctxt.getDisplayBrightness());
+}
+{
+    BtnModePressed MenuDisplayIncrease { }
+    BtnOkPressed AddressDisplay { }
+}
+
+MenuDisplayIncrease
+Entry
+{
+    incDisplayBrightness(); 
+}
+{
+    Tick MenuDisplayShow { }
+}
+
+
+
+
+Default
+{
+    Ready nil {}
+    Tick nil {}
+    Default nil {}
+    SwModeEnabled TestDisplay {}
+    DmxAddressChanged AddressDisplay {}
+}
+
+%%
+

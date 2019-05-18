@@ -16,7 +16,7 @@ class BinDecIO
 public:
     typedef std::pair<GPIOpin&, uint8_t> PinValuePair;
 
-    BinDecIO();
+    BinDecIO(uint32_t offset);
 
     void addBin(PinValuePair bin);
 
@@ -24,4 +24,5 @@ public:
 
 private:
     std::list<PinValuePair> m_pinList;
+    uint32_t                m_offset;
 };

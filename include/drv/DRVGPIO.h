@@ -4,6 +4,7 @@
  *
  *************************************************/
 #pragma once
+#include "hal/HALGPIOSTM32.h"
 
 #include <string>
 #include "stdint.h"
@@ -13,33 +14,32 @@
 /**
  * PIN
  */
-class GPIOpin
-{
-public:
-    //    GPIOpin(GPIO_TypeDef*, uint8_t pin, bool output, bool polarity);
-    GPIOpin(GPIO_TypeDef* port, GPIO_InitTypeDef initSettings, bool polarity);
-
-    GPIOpin& operator=(const bool);
-
-    operator bool();
-
-    void toggle();
-
-    void setAlternateFunction();
-    void setNormalFunction();
-
-private:
-    GPIOpin();  // not allowed
-
-    bool applyPolarity(bool state);
-
-    bool isOutput();
-
-    const GPIO_InitTypeDef m_initialSettings;
-    GPIO_TypeDef*          m_port;
-    GPIO_PinState          m_state;
-    bool                   m_polarity;  //!< 1 means normal
-};
+// class DRVGPIOpin
+//{
+// public:
+//    GPIOpin(HALGPIO& m_hal, bool polarity);
+//
+//    virtual GPIOpin& operator=(const bool);
+//
+//    virtual operator bool();
+//
+//    virtual void toggle();
+//
+//    virtual void setAlternateFunction();
+//    virtual void setNormalFunction();
+//
+// private:
+//    GPIOpin();  // not allowed
+//
+//    bool applyPolarity(bool state);
+//
+//    bool isOutput();
+//
+//    const GPIO_InitTypeDef m_initialSettings;
+//    GPIO_TypeDef*          m_port;
+//    GPIO_PinState          m_state;
+//    bool                   m_polarity;  //!< 1 means normal
+//};
 
 /*
  * Serial driver interface
@@ -49,7 +49,7 @@ class DRVGPIO
 public:
     DRVGPIO(GPIO_TypeDef* gpio, uint32_t owner, uint32_t dir, uint32_t polarity);
 
-    GPIOpin getPin(uint32_t pin);
+    GPIOpinSTM32 getPin(uint32_t pin);
 
     void setAlternateFunction(uint32_t pin, bool output = 0);
 

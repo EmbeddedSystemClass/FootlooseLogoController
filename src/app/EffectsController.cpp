@@ -22,7 +22,7 @@ EffectBase::~EffectBase() {}
 
 EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify, uint8_t ID, cpp_freertos::Queue& inputQueue,
                                      cpp_freertos::Queue& outputQueue, uint32_t interval)
-    : cpp_freertos::Thread(Name, 800, 2)
+    : cpp_freertos::Thread(Name, 500, 2)
     , TaskState(taskToNotify, ID)
     , m_lastEffect(NULL)
     , m_inputQueue(inputQueue)
@@ -32,12 +32,13 @@ EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify
     , m_testModePin1(NULL)
     , m_testModePin2(NULL)
     , m_testEffectCounter(0)
+    , m_effectMode(EffectModeDmx)
 {
 }
 
 EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify, uint8_t ID, cpp_freertos::Queue& inputQueue,
                                      cpp_freertos::Queue& outputQueue, uint32_t interval, GPIOpin* testMode1, GPIOpin* testMode2)
-    : cpp_freertos::Thread(Name, 800, 2)
+    : cpp_freertos::Thread(Name, 500, 2)
     , TaskState(taskToNotify, ID)
     , m_lastEffect(NULL)
     , m_inputQueue(inputQueue)
@@ -47,6 +48,7 @@ EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify
     , m_testModePin1(testMode1)
     , m_testModePin2(testMode2)
     , m_testEffectCounter(0)
+    , m_effectMode(EffectModeDmx)
 {
 }
 
@@ -263,3 +265,7 @@ void EffectsController::applyTestEffect(bool selectEffect)
         it->setColor(color);
     }
 }
+
+void EffectsController::setMode(EffectMode mode) { m_effectMode = mode; }
+
+EffectsController::EffectMode EffectsController::getMode() { return m_effectMode; }

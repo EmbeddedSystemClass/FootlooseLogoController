@@ -36,6 +36,12 @@ public:
 
     uint8_t getBlue();
 
+    static Color RED() { return Color(255, 0, 0); }
+    static Color GREEN() { return Color(0, 255, 0); }
+    static Color BLUE() { return Color(0, 0, 255); }
+    static Color WHITE() { return Color(255, 255, 255); }
+    static Color BLACK() { return Color(0, 0, 0); }
+
     //    Color operator++(int)
     //    {
     //        Color result(*this);  // make a copy for result
