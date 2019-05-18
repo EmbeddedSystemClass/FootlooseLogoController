@@ -55,7 +55,8 @@ public:
 
     void Run();
 
-    void setMode(EffectMode mode);
+    void       setMode(EffectMode mode);
+    EffectMode getMode();
 
 protected:
 private:
@@ -78,6 +79,7 @@ private:
     GPIOpin*              m_testModePin1;
     GPIOpin*              m_testModePin2;
     uint32_t              m_testEffectCounter;
+    EffectMode            m_effectMode;
 
     EffectsController();  // not allowed
 

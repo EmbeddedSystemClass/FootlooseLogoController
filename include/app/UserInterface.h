@@ -27,19 +27,16 @@ public:
         OperationTest    = EffectsController::EffectModeTest
     };
     UserInterface(EffectsController& effectsController, DRV7SegmentDisplay& display, GPIOpin& power, GPIOpin& status, BinDecIO& dmxAddress,
-                  GPIOpin& btnOk, GPIOpin& btnMode, CAT5932& driver1, CAT5932& driver2);
+                  GPIOpin& btnOk, GPIOpin& btnMode, GPIOpin& swMode, CAT5932& driver1, CAT5932& driver2);
 
     virtual void Run();
 
-    void    uiLedPower(bool state);
-    void    uiLedStatus(bool state);
-    void    uiDisplay(uint16_t value);
-    void    uiDisplay(const char* str);
-    void    setMode(OperationModes mode);
-    void    setSpeed(uint8_t speed);
-    uint8_t getSpeed();
-    void    incSpeed();
-    void    decSpeed();
+    void uiLedPower(bool state);
+    void uiLedStatus(bool state);
+    void uiDisplay(uint16_t value);
+    void uiDisplay(const char* str);
+    void setMode(OperationModes mode);
+    void restorePreviousMode();
 
     uint8_t getDisplayBrightness();
     void    incDisplayBrightness();
@@ -59,10 +56,12 @@ private:
     DRV7SegmentDisplay& m_display;
     GPIOpin&            m_btnOk;
     GPIOpin&            m_btnMode;
+    GPIOpin&            m_swMode;
+    bool                m_lastBtnStateOk;
+    bool                m_lastBtnStateMode;
     uint8_t             m_displayBrightness;
     CAT5932&            m_ledDriver1;
     CAT5932&            m_ledDriver2;
-
-    bool m_lastBtnStateOk;
-    bool m_lastBtnStateMode;
+    uint16_t            m_lastDmxAddress;
+    OperationModes      m_previousMode;
 };

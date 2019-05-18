@@ -32,6 +32,7 @@ EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify
     , m_testModePin1(NULL)
     , m_testModePin2(NULL)
     , m_testEffectCounter(0)
+    , m_effectMode(EffectModeDmx)
 {
 }
 
@@ -47,6 +48,7 @@ EffectsController::EffectsController(const char* Name, TaskHandle_t taskToNotify
     , m_testModePin1(testMode1)
     , m_testModePin2(testMode2)
     , m_testEffectCounter(0)
+    , m_effectMode(EffectModeDmx)
 {
 }
 
@@ -264,4 +266,6 @@ void EffectsController::applyTestEffect(bool selectEffect)
     }
 }
 
-void EffectsController::setMode(EffectMode mode) {}
+void EffectsController::setMode(EffectMode mode) { m_effectMode = mode; }
+
+EffectsController::EffectMode EffectsController::getMode() { return m_effectMode; }

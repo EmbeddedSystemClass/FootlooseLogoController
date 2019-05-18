@@ -109,6 +109,7 @@ void BSP::Run()
 						  0b0010000000000000,//Direction 1=out
 						  0b1101111111111111);//Polarity 1=active high
     // clang-format on
+    (void)gpioC;
 
     // Uart drivers
     DRVSerialUart dmxRxUartDRV(dmxRxUart);
@@ -167,7 +168,7 @@ void BSP::Run()
     taskMonitor.Start();
 
     // DMX dip switch decoder
-    BinDecIO dmxAddress(1);
+    BinDecIO dmxAddress(0);
     dmxAddress.addBin(BinDecIO::PinValuePair(dip1, 0));
     dmxAddress.addBin(BinDecIO::PinValuePair(dip2, 1));
     dmxAddress.addBin(BinDecIO::PinValuePair(dip3, 2));
@@ -248,12 +249,10 @@ void BSP::Run()
     uiDisplay.addSegment(&uiSegment2);
     uiDisplay.addSegment(&uiSegment3);
 
-    UserInterface ui(controller, uiDisplay, uiLedPower, m_combinedStatus, dmxAddress, uiBtnOk, uiBtnMode, ledDriver1, ledDriver2);
+    UserInterface ui(controller, uiDisplay, m_combinedPower, m_combinedStatus, dmxAddress, uiBtnOk, uiBtnMode, dip10, ledDriver1, ledDriver2);
     ui.Start();
-    //    m_combinedPower = true;
     while (true)
     {
-        m_combinedPower = !m_combinedPower;
         Delay(1000);
     }
     // Suspend this task as we do not want to free memory

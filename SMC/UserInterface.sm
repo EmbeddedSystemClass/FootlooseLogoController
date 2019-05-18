@@ -13,6 +13,7 @@
 Reset
 {
     Ready UITest {}  
+    DmxAddressChanged nil {}
 }
 
 UITest
@@ -33,11 +34,13 @@ Exit
 }
 {
     updateTimerElapsed AddressDisplay {}
+    DmxAddressChanged nil {}
 }
 
 AddressDisplay
 Entry
 {
+	uiLedPower(1);
     uiDisplay(ctxt.m_dmxAddress);
     m_updateTimer.setPeriod(50);
     m_displaySleepTimer.setTimeout(20000);
@@ -54,16 +57,33 @@ Exit
     }
     displaySleepTimerElapsed DisplayOff {}
     BtnModePressed MenuMode {}
+    DmxAddressChanged nil { m_displaySleepTimer.setTimeout(20000); }
   
 }
+
 DisplayOff
 Entry
 {
     uiDisplay("");
+    uiLedPower(0);
 }
 {
     BtnOkPressed AddressDisplay {}
     BtnModePressed AddressDisplay {}
+}
+
+TestDisplay
+Entry
+{
+	uiDisplay("tst");
+	setMode(UserInterface::OperationTest);
+}
+Exit
+{
+	restorePreviousMode();
+}
+{
+	SwModeDisabled AddressDisplay {}
 }
 
 MenuMode
@@ -73,16 +93,6 @@ Entry
 }
 {
     BtnOkPressed MenuModeDmx {}
-    BtnModePressed MenuSpeed {}
-}
-
-MenuSpeed
-Entry
-{
-    uiDisplay("spd");
-}
-{
-    BtnOkPressed MenuSpeedShow {}
     BtnModePressed MenuDisplay {}
 }
 
@@ -136,25 +146,6 @@ Entry
     BtnOkPressed AddressDisplay { setMode(UserInterface::OperationTest); }
 }
 
-MenuSpeedShow
-Entry
-{
-    uiDisplay(ctxt.getSpeed());
-}
-{
-    BtnModePressed MenuSpeedIncrease {  }
-    BtnOkPressed AddressDisplay { }
-}
-
-MenuSpeedIncrease
-Entry
-{
-    incSpeed();
-}
-{
-    Default MenuSpeedShow {}
-}
-
 MenuDisplayShow
 Entry
 {
@@ -176,11 +167,14 @@ Entry
 
 
 
+
 Default
 {
     Ready nil {}
     Tick nil {}
     Default nil {}
+    SwModeEnabled TestDisplay {}
+    DmxAddressChanged AddressDisplay {}
 }
 
 %%
