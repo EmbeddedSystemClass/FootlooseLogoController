@@ -263,3 +263,5 @@ void EffectsController::applyTestEffect(bool selectEffect)
         it->setColor(color);
     }
 }
+
+void EffectsController::setMode(EffectMode mode) {}

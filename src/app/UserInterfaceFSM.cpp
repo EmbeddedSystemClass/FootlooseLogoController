@@ -18,17 +18,18 @@ using namespace statemap;
 UIMap_Reset UIMap::Reset("UIMap::Reset", 0);
 UIMap_UITest UIMap::UITest("UIMap::UITest", 1);
 UIMap_AddressDisplay UIMap::AddressDisplay("UIMap::AddressDisplay", 2);
-UIMap_MenuMode UIMap::MenuMode("UIMap::MenuMode", 3);
-UIMap_MenuSpeed UIMap::MenuSpeed("UIMap::MenuSpeed", 4);
-UIMap_MenuDisplay UIMap::MenuDisplay("UIMap::MenuDisplay", 5);
-UIMap_MenuExit UIMap::MenuExit("UIMap::MenuExit", 6);
-UIMap_MenuModeDmx UIMap::MenuModeDmx("UIMap::MenuModeDmx", 7);
-UIMap_MenuModeRainBow UIMap::MenuModeRainBow("UIMap::MenuModeRainBow", 8);
-UIMap_MenuModeTest UIMap::MenuModeTest("UIMap::MenuModeTest", 9);
-UIMap_MenuSpeedShow UIMap::MenuSpeedShow("UIMap::MenuSpeedShow", 10);
-UIMap_MenuSpeedIncrease UIMap::MenuSpeedIncrease("UIMap::MenuSpeedIncrease", 11);
-UIMap_MenuDisplayShow UIMap::MenuDisplayShow("UIMap::MenuDisplayShow", 12);
-UIMap_MenuDisplayIncrease UIMap::MenuDisplayIncrease("UIMap::MenuDisplayIncrease", 13);
+UIMap_DisplayOff UIMap::DisplayOff("UIMap::DisplayOff", 3);
+UIMap_MenuMode UIMap::MenuMode("UIMap::MenuMode", 4);
+UIMap_MenuSpeed UIMap::MenuSpeed("UIMap::MenuSpeed", 5);
+UIMap_MenuDisplay UIMap::MenuDisplay("UIMap::MenuDisplay", 6);
+UIMap_MenuExit UIMap::MenuExit("UIMap::MenuExit", 7);
+UIMap_MenuModeDmx UIMap::MenuModeDmx("UIMap::MenuModeDmx", 8);
+UIMap_MenuModeRainBow UIMap::MenuModeRainBow("UIMap::MenuModeRainBow", 9);
+UIMap_MenuModeTest UIMap::MenuModeTest("UIMap::MenuModeTest", 10);
+UIMap_MenuSpeedShow UIMap::MenuSpeedShow("UIMap::MenuSpeedShow", 11);
+UIMap_MenuSpeedIncrease UIMap::MenuSpeedIncrease("UIMap::MenuSpeedIncrease", 12);
+UIMap_MenuDisplayShow UIMap::MenuDisplayShow("UIMap::MenuDisplayShow", 13);
+UIMap_MenuDisplayIncrease UIMap::MenuDisplayIncrease("UIMap::MenuDisplayIncrease", 14);
 
 void UserInterfaceState::BtnModePressed(UserInterfaceFSM& context)
 {
@@ -50,7 +51,12 @@ void UserInterfaceState::Tick(UserInterfaceFSM& context)
     Default(context);
 }
 
-void UserInterfaceState::timerElapsed(UserInterfaceFSM& context)
+void UserInterfaceState::displaySleepTimerElapsed(UserInterfaceFSM& context)
+{
+    Default(context);
+}
+
+void UserInterfaceState::updateTimerElapsed(UserInterfaceFSM& context)
 {
     Default(context);
 }
@@ -96,7 +102,7 @@ void UIMap_UITest::Entry(UserInterfaceFSM& context)
     ctxt.uiLedPower(1);
     ctxt.uiLedStatus(1);
     ctxt.uiDisplay(888);
-    ctxt.m_timer.setTimeout(500);
+    ctxt.m_updateTimer.setTimeout(500);
 }
 
 void UIMap_UITest::Exit(UserInterfaceFSM& context)
@@ -109,7 +115,7 @@ void UIMap_UITest::Exit(UserInterfaceFSM& context)
     ctxt.uiDisplay("   ");
 }
 
-void UIMap_UITest::timerElapsed(UserInterfaceFSM& context)
+void UIMap_UITest::updateTimerElapsed(UserInterfaceFSM& context)
 {
 
     context.getState().Exit(context);
@@ -124,7 +130,8 @@ void UIMap_AddressDisplay::Entry(UserInterfaceFSM& context)
     UserInterface& ctxt = context.getOwner();
 
     ctxt.uiDisplay(ctxt.m_dmxAddress);
-    ctxt.m_timer.setPeriod(50);
+    ctxt.m_updateTimer.setPeriod(50);
+    ctxt.m_displaySleepTimer.setTimeout(20000);
 }
 
 void UIMap_AddressDisplay::Exit(UserInterfaceFSM& context)
@@ -132,7 +139,8 @@ void UIMap_AddressDisplay::Exit(UserInterfaceFSM& context)
 {
     UserInterface& ctxt = context.getOwner();
 
-    ctxt.m_timer.Stop();
+    ctxt.m_updateTimer.Stop();
+    ctxt.m_displaySleepTimer.Stop();
 }
 
 void UIMap_AddressDisplay::BtnModePressed(UserInterfaceFSM& context)
@@ -144,7 +152,16 @@ void UIMap_AddressDisplay::BtnModePressed(UserInterfaceFSM& context)
 
 }
 
-void UIMap_AddressDisplay::timerElapsed(UserInterfaceFSM& context)
+void UIMap_AddressDisplay::displaySleepTimerElapsed(UserInterfaceFSM& context)
+{
+
+    context.getState().Exit(context);
+    context.setState(UIMap::DisplayOff);
+    context.getState().Entry(context);
+
+}
+
+void UIMap_AddressDisplay::updateTimerElapsed(UserInterfaceFSM& context)
 {
     UserInterface& ctxt = context.getOwner();
 
@@ -153,6 +170,32 @@ void UIMap_AddressDisplay::timerElapsed(UserInterfaceFSM& context)
     context.clearState();
     ctxt.uiDisplay(ctxt.m_dmxAddress);
     context.setState(endState);
+
+}
+
+void UIMap_DisplayOff::Entry(UserInterfaceFSM& context)
+
+{
+    UserInterface& ctxt = context.getOwner();
+
+    ctxt.uiDisplay("");
+}
+
+void UIMap_DisplayOff::BtnModePressed(UserInterfaceFSM& context)
+{
+
+    context.getState().Exit(context);
+    context.setState(UIMap::AddressDisplay);
+    context.getState().Entry(context);
+
+}
+
+void UIMap_DisplayOff::BtnOkPressed(UserInterfaceFSM& context)
+{
+
+    context.getState().Exit(context);
+    context.setState(UIMap::AddressDisplay);
+    context.getState().Entry(context);
 
 }
 

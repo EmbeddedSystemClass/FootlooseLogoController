@@ -15,10 +15,13 @@ digraph UserInterface {
             [label="{Reset|Tick/\lDefault/\l}"];
 
         "UIMap::UITest"
-            [label="{UITest|Entry/\l&nbsp;&nbsp;&nbsp;uiLedPower;\l&nbsp;&nbsp;&nbsp;uiLedStatus;\l&nbsp;&nbsp;&nbsp;uiDisplay;\l&nbsp;&nbsp;&nbsp;m_timer.setTimeout;\lExit/\l&nbsp;&nbsp;&nbsp;uiLedPower;\l&nbsp;&nbsp;&nbsp;uiLedStatus;\l&nbsp;&nbsp;&nbsp;uiDisplay;\l|Ready/\lTick/\lDefault/\l}"];
+            [label="{UITest|Entry/\l&nbsp;&nbsp;&nbsp;uiLedPower;\l&nbsp;&nbsp;&nbsp;uiLedStatus;\l&nbsp;&nbsp;&nbsp;uiDisplay;\l&nbsp;&nbsp;&nbsp;m_updateTimer.setTimeout;\lExit/\l&nbsp;&nbsp;&nbsp;uiLedPower;\l&nbsp;&nbsp;&nbsp;uiLedStatus;\l&nbsp;&nbsp;&nbsp;uiDisplay;\l|Ready/\lTick/\lDefault/\l}"];
 
         "UIMap::AddressDisplay"
-            [label="{AddressDisplay|Entry/\l&nbsp;&nbsp;&nbsp;uiDisplay;\l&nbsp;&nbsp;&nbsp;m_timer.setPeriod;\lExit/\l&nbsp;&nbsp;&nbsp;m_timer.Stop;\l|timerElapsed/\l&nbsp;&nbsp;&nbsp;uiDisplay;\lReady/\lTick/\lDefault/\l}"];
+            [label="{AddressDisplay|Entry/\l&nbsp;&nbsp;&nbsp;uiDisplay;\l&nbsp;&nbsp;&nbsp;m_updateTimer.setPeriod;\l&nbsp;&nbsp;&nbsp;m_displaySleepTimer.setTimeout;\lExit/\l&nbsp;&nbsp;&nbsp;m_updateTimer.Stop;\l&nbsp;&nbsp;&nbsp;m_displaySleepTimer.Stop;\l|updateTimerElapsed/\l&nbsp;&nbsp;&nbsp;uiDisplay;\lReady/\lTick/\lDefault/\l}"];
+
+        "UIMap::DisplayOff"
+            [label="{DisplayOff|Entry/\l&nbsp;&nbsp;&nbsp;uiDisplay;\l|Ready/\lTick/\lDefault/\l}"];
 
         "UIMap::MenuMode"
             [label="{MenuMode|Entry/\l&nbsp;&nbsp;&nbsp;uiDisplay;\l|Ready/\lTick/\lDefault/\l}"];
@@ -56,80 +59,90 @@ digraph UserInterface {
         "%start"
             [label="" shape=circle style=filled fillcolor=black width=0.25];
 
-        //
-        // Transitions (Edges)
-        //
-
-        "UIMap::Reset" -> "UIMap::UITest"
-            [label="Ready/\l"];
-
-        "UIMap::UITest" -> "UIMap::AddressDisplay"
-            [label="timerElapsed/\l"];
-
-        "UIMap::AddressDisplay" -> "UIMap::MenuMode"
-            [label="BtnModePressed/\l"];
-
-        "UIMap::MenuMode" -> "UIMap::MenuModeDmx"
-            [label="BtnOkPressed/\l"];
-
-        "UIMap::MenuMode" -> "UIMap::MenuSpeed"
-            [label="BtnModePressed/\l"];
-
-        "UIMap::MenuSpeed" -> "UIMap::MenuSpeedShow"
-            [label="BtnOkPressed/\l"];
-
-        "UIMap::MenuSpeed" -> "UIMap::MenuDisplay"
-            [label="BtnModePressed/\l"];
-
-        "UIMap::MenuDisplay" -> "UIMap::MenuDisplayShow"
-            [label="BtnOkPressed/\l"];
-
-        "UIMap::MenuDisplay" -> "UIMap::MenuExit"
-            [label="BtnModePressed/\l"];
-
-        "UIMap::MenuExit" -> "UIMap::AddressDisplay"
-            [label="BtnOkPressed/\l"];
-
-        "UIMap::MenuExit" -> "UIMap::MenuMode"
-            [label="BtnModePressed/\l"];
-
-        "UIMap::MenuModeDmx" -> "UIMap::MenuModeRainBow"
-            [label="BtnModePressed/\l"];
-
-        "UIMap::MenuModeDmx" -> "UIMap::AddressDisplay"
-            [label="BtnOkPressed/\lsetMode;\l"];
-
-        "UIMap::MenuModeRainBow" -> "UIMap::MenuModeTest"
-            [label="BtnModePressed/\l"];
-
-        "UIMap::MenuModeRainBow" -> "UIMap::AddressDisplay"
-            [label="BtnOkPressed/\lsetMode;\l"];
-
-        "UIMap::MenuModeTest" -> "UIMap::MenuModeDmx"
-            [label="BtnModePressed/\l"];
-
-        "UIMap::MenuModeTest" -> "UIMap::AddressDisplay"
-            [label="BtnOkPressed/\lsetMode;\l"];
-
-        "UIMap::MenuSpeedShow" -> "UIMap::MenuSpeedIncrease"
-            [label="BtnModePressed/\l"];
-
-        "UIMap::MenuSpeedShow" -> "UIMap::AddressDisplay"
-            [label="BtnOkPressed/\l"];
-
-        "UIMap::MenuSpeedIncrease" -> "UIMap::MenuSpeedShow"
-            [label="Default/\l"];
-
-        "UIMap::MenuDisplayShow" -> "UIMap::MenuDisplayIncrease"
-            [label="BtnModePressed/\l"];
-
-        "UIMap::MenuDisplayShow" -> "UIMap::AddressDisplay"
-            [label="BtnOkPressed/\l"];
-
-        "UIMap::MenuDisplayIncrease" -> "UIMap::MenuDisplayShow"
-            [label="Tick/\l"];
-
-        "%start" -> "UIMap::Reset"
     }
+
+    //
+    // Transitions (Edges)
+    //
+
+    "UIMap::Reset" -> "UIMap::UITest"
+        [label="Ready/\l"];
+
+    "UIMap::UITest" -> "UIMap::AddressDisplay"
+        [label="updateTimerElapsed/\l"];
+
+    "UIMap::AddressDisplay" -> "UIMap::DisplayOff"
+        [label="displaySleepTimerElapsed/\l"];
+
+    "UIMap::AddressDisplay" -> "UIMap::MenuMode"
+        [label="BtnModePressed/\l"];
+
+    "UIMap::DisplayOff" -> "UIMap::AddressDisplay"
+        [label="BtnOkPressed/\l"];
+
+    "UIMap::DisplayOff" -> "UIMap::AddressDisplay"
+        [label="BtnModePressed/\l"];
+
+    "UIMap::MenuMode" -> "UIMap::MenuModeDmx"
+        [label="BtnOkPressed/\l"];
+
+    "UIMap::MenuMode" -> "UIMap::MenuSpeed"
+        [label="BtnModePressed/\l"];
+
+    "UIMap::MenuSpeed" -> "UIMap::MenuSpeedShow"
+        [label="BtnOkPressed/\l"];
+
+    "UIMap::MenuSpeed" -> "UIMap::MenuDisplay"
+        [label="BtnModePressed/\l"];
+
+    "UIMap::MenuDisplay" -> "UIMap::MenuDisplayShow"
+        [label="BtnOkPressed/\l"];
+
+    "UIMap::MenuDisplay" -> "UIMap::MenuExit"
+        [label="BtnModePressed/\l"];
+
+    "UIMap::MenuExit" -> "UIMap::AddressDisplay"
+        [label="BtnOkPressed/\l"];
+
+    "UIMap::MenuExit" -> "UIMap::MenuMode"
+        [label="BtnModePressed/\l"];
+
+    "UIMap::MenuModeDmx" -> "UIMap::MenuModeRainBow"
+        [label="BtnModePressed/\l"];
+
+    "UIMap::MenuModeDmx" -> "UIMap::AddressDisplay"
+        [label="BtnOkPressed/\lsetMode;\l"];
+
+    "UIMap::MenuModeRainBow" -> "UIMap::MenuModeTest"
+        [label="BtnModePressed/\l"];
+
+    "UIMap::MenuModeRainBow" -> "UIMap::AddressDisplay"
+        [label="BtnOkPressed/\lsetMode;\l"];
+
+    "UIMap::MenuModeTest" -> "UIMap::MenuModeDmx"
+        [label="BtnModePressed/\l"];
+
+    "UIMap::MenuModeTest" -> "UIMap::AddressDisplay"
+        [label="BtnOkPressed/\lsetMode;\l"];
+
+    "UIMap::MenuSpeedShow" -> "UIMap::MenuSpeedIncrease"
+        [label="BtnModePressed/\l"];
+
+    "UIMap::MenuSpeedShow" -> "UIMap::AddressDisplay"
+        [label="BtnOkPressed/\l"];
+
+    "UIMap::MenuSpeedIncrease" -> "UIMap::MenuSpeedShow"
+        [label="Default/\l"];
+
+    "UIMap::MenuDisplayShow" -> "UIMap::MenuDisplayIncrease"
+        [label="BtnModePressed/\l"];
+
+    "UIMap::MenuDisplayShow" -> "UIMap::AddressDisplay"
+        [label="BtnOkPressed/\l"];
+
+    "UIMap::MenuDisplayIncrease" -> "UIMap::MenuDisplayShow"
+        [label="Tick/\l"];
+
+    "%start" -> "UIMap::Reset"
 
 }

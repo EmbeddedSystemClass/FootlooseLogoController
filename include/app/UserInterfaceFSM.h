@@ -18,6 +18,7 @@ class UIMap;
 class UIMap_Reset;
 class UIMap_UITest;
 class UIMap_AddressDisplay;
+class UIMap_DisplayOff;
 class UIMap_MenuMode;
 class UIMap_MenuSpeed;
 class UIMap_MenuDisplay;
@@ -50,7 +51,8 @@ public:
     virtual void BtnOkPressed(UserInterfaceFSM& context);
     virtual void Ready(UserInterfaceFSM& context);
     virtual void Tick(UserInterfaceFSM& context);
-    virtual void timerElapsed(UserInterfaceFSM& context);
+    virtual void displaySleepTimerElapsed(UserInterfaceFSM& context);
+    virtual void updateTimerElapsed(UserInterfaceFSM& context);
 
 protected:
 
@@ -64,6 +66,7 @@ public:
     static UIMap_Reset Reset;
     static UIMap_UITest UITest;
     static UIMap_AddressDisplay AddressDisplay;
+    static UIMap_DisplayOff DisplayOff;
     static UIMap_MenuMode MenuMode;
     static UIMap_MenuSpeed MenuSpeed;
     static UIMap_MenuDisplay MenuDisplay;
@@ -112,7 +115,7 @@ public:
 
     virtual void Entry(UserInterfaceFSM&);
     virtual void Exit(UserInterfaceFSM&);
-    virtual void timerElapsed(UserInterfaceFSM& context);
+    virtual void updateTimerElapsed(UserInterfaceFSM& context);
 };
 
 class UIMap_AddressDisplay :
@@ -126,7 +129,21 @@ public:
     virtual void Entry(UserInterfaceFSM&);
     virtual void Exit(UserInterfaceFSM&);
     virtual void BtnModePressed(UserInterfaceFSM& context);
-    virtual void timerElapsed(UserInterfaceFSM& context);
+    virtual void displaySleepTimerElapsed(UserInterfaceFSM& context);
+    virtual void updateTimerElapsed(UserInterfaceFSM& context);
+};
+
+class UIMap_DisplayOff :
+    public UIMap_Default
+{
+public:
+    UIMap_DisplayOff(const char * const name, const int stateId)
+    : UIMap_Default(name, stateId)
+    {};
+
+    virtual void Entry(UserInterfaceFSM&);
+    virtual void BtnModePressed(UserInterfaceFSM& context);
+    virtual void BtnOkPressed(UserInterfaceFSM& context);
 };
 
 class UIMap_MenuMode :
@@ -323,9 +340,14 @@ public:
         getState().Tick(*this);
     };
 
-    inline void timerElapsed()
+    inline void displaySleepTimerElapsed()
     {
-        getState().timerElapsed(*this);
+        getState().displaySleepTimerElapsed(*this);
+    };
+
+    inline void updateTimerElapsed()
+    {
+        getState().updateTimerElapsed(*this);
     };
 
 private:

@@ -33,6 +33,13 @@ public:
 class EffectsController : public cpp_freertos::Thread, TaskState
 {
 public:
+    enum EffectMode
+    {
+        EffectModeDmx,
+        EffectModeRainbow,
+        EffectModeTest
+    };
+
     typedef std::pair<uint16_t, uint16_t>    DmxRange;
     typedef std::pair<EffectBase&, DmxRange> DmxEffect;
 
@@ -47,6 +54,8 @@ public:
     void addEffect(EffectBase& effect, DmxRange range);
 
     void Run();
+
+    void setMode(EffectMode mode);
 
 protected:
 private:

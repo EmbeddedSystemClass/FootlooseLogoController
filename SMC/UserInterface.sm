@@ -12,98 +12,108 @@
 
 Reset
 {
-    Ready UITest {}
-  
+    Ready UITest {}  
 }
 
 UITest
 Entry
 {
-// Enable all LEDs
-uiLedPower(1);
-uiLedStatus(1);
-uiDisplay(888);
-m_timer.setTimeout(500);
+    // Enable all LEDs
+    uiLedPower(1);
+    uiLedStatus(1);
+    uiDisplay(888);
+    m_updateTimer.setTimeout(500);
 }
 Exit
 {
-// Disable all LEDs
-uiLedPower(0);
-uiLedStatus(0);
-uiDisplay("   ");
+    // Disable all LEDs
+    uiLedPower(0);
+    uiLedStatus(0);
+    uiDisplay("   ");
 }
 {
-    timerElapsed AddressDisplay {}
+    updateTimerElapsed AddressDisplay {}
 }
 
 AddressDisplay
-
 Entry
 {
-uiDisplay(ctxt.m_dmxAddress);
-m_timer.setPeriod(50);
+    uiDisplay(ctxt.m_dmxAddress);
+    m_updateTimer.setPeriod(50);
+    m_displaySleepTimer.setTimeout(20000);
 }
 Exit
 {
-m_timer.Stop();
+    m_updateTimer.Stop();
+    m_displaySleepTimer.Stop();
 }
 {
-    timerElapsed nil
+    updateTimerElapsed nil
     {
        uiDisplay(ctxt.m_dmxAddress);
     }
+    displaySleepTimerElapsed DisplayOff {}
     BtnModePressed MenuMode {}
   
+}
+DisplayOff
+Entry
+{
+    uiDisplay("");
+}
+{
+    BtnOkPressed AddressDisplay {}
+    BtnModePressed AddressDisplay {}
 }
 
 MenuMode
 Entry
 {
-uiDisplay("mod");
+    uiDisplay("mod");
 }
 {
-BtnOkPressed MenuModeDmx {}
-BtnModePressed MenuSpeed {}
+    BtnOkPressed MenuModeDmx {}
+    BtnModePressed MenuSpeed {}
 }
 
 MenuSpeed
 Entry
 {
-uiDisplay("spd");
+    uiDisplay("spd");
 }
 {
-BtnOkPressed MenuSpeedShow {}
-BtnModePressed MenuDisplay {}
+    BtnOkPressed MenuSpeedShow {}
+    BtnModePressed MenuDisplay {}
 }
 
 MenuDisplay
 Entry
 {
-uiDisplay("dsp");
+    uiDisplay("dsp");
 }
 {
-BtnOkPressed MenuDisplayShow {}
-BtnModePressed MenuExit {}
+    BtnOkPressed MenuDisplayShow {}
+    BtnModePressed MenuExit {}
 }
 
 MenuExit
 Entry
 {
-uiDisplay("ext");
+    uiDisplay("ext");
 }
 {
-BtnOkPressed AddressDisplay {}
-BtnModePressed MenuMode {}
+    BtnOkPressed AddressDisplay {}
+    BtnModePressed MenuMode {}
 }
 
 MenuModeDmx
 Entry
 {
-uiDisplay("dmx");
+    uiDisplay("dmx");
 }
 {
-BtnModePressed MenuModeRainBow {}
-BtnOkPressed AddressDisplay { setMode(UserInterface::OperationDmx); }
+    BtnModePressed MenuModeRainBow {}
+    BtnOkPressed AddressDisplay { setMode(UserInterface::OperationDmx); }
 }
 
 MenuModeRainBow
@@ -112,56 +122,56 @@ Entry
 uiDisplay("rai");
 }
 {
-BtnModePressed MenuModeTest {}
-BtnOkPressed AddressDisplay { setMode(UserInterface::OperationRainbow); }
+    BtnModePressed MenuModeTest {}
+    BtnOkPressed AddressDisplay { setMode(UserInterface::OperationRainbow); }
 }
 
 MenuModeTest
 Entry
 {
-uiDisplay("tst");
+    uiDisplay("tst");
 }
 {
-BtnModePressed MenuModeDmx {}
-BtnOkPressed AddressDisplay { setMode(UserInterface::OperationTest); }
+    BtnModePressed MenuModeDmx {}
+    BtnOkPressed AddressDisplay { setMode(UserInterface::OperationTest); }
 }
 
 MenuSpeedShow
 Entry
 {
-uiDisplay(ctxt.getSpeed());
+    uiDisplay(ctxt.getSpeed());
 }
 {
-BtnModePressed MenuSpeedIncrease {  }
-BtnOkPressed AddressDisplay { }
+    BtnModePressed MenuSpeedIncrease {  }
+    BtnOkPressed AddressDisplay { }
 }
 
 MenuSpeedIncrease
 Entry
 {
-incSpeed();
+    incSpeed();
 }
 {
-Default MenuSpeedShow {}
+    Default MenuSpeedShow {}
 }
 
 MenuDisplayShow
 Entry
 {
-uiDisplay(ctxt.getDisplayBrightness());
+    uiDisplay(ctxt.getDisplayBrightness());
 }
 {
-BtnModePressed MenuDisplayIncrease { }
-BtnOkPressed AddressDisplay { }
+    BtnModePressed MenuDisplayIncrease { }
+    BtnOkPressed AddressDisplay { }
 }
 
 MenuDisplayIncrease
 Entry
 {
- incDisplayBrightness(); 
+    incDisplayBrightness(); 
 }
 {
-Tick MenuDisplayShow { }
+    Tick MenuDisplayShow { }
 }
 
 

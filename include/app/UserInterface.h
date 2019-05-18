@@ -7,6 +7,7 @@
 
 #include "UserInterfaceFSM.h"
 #include "app/BinDecIO.h"
+#include "app/EffectsController.h"
 #include "drv/CAT5932.h"
 #include "drv/DRV7SegmentDisplay.h"
 #include "hal/HALGPIO.h"
@@ -21,12 +22,12 @@ class UserInterface : public cpp_freertos::Thread
 public:
     enum OperationModes
     {
-        OperationDmx,
-        OperationRainbow,
-        OperationTest
+        OperationDmx     = EffectsController::EffectModeDmx,
+        OperationRainbow = EffectsController::EffectModeRainbow,
+        OperationTest    = EffectsController::EffectModeTest
     };
-    UserInterface(DRV7SegmentDisplay& display, GPIOpin& power, GPIOpin& status, BinDecIO& dmxAddress, GPIOpin& btnOk, GPIOpin& btnMode,
-                  CAT5932& driver1, CAT5932& driver2);
+    UserInterface(EffectsController& effectsController, DRV7SegmentDisplay& display, GPIOpin& power, GPIOpin& status, BinDecIO& dmxAddress,
+                  GPIOpin& btnOk, GPIOpin& btnMode, CAT5932& driver1, CAT5932& driver2);
 
     virtual void Run();
 
@@ -43,15 +44,18 @@ public:
     uint8_t getDisplayBrightness();
     void    incDisplayBrightness();
 
-    static void timerElapsed(bool running, void* ptr);
+    static void updateTimerElapsed(bool running, void* ptr);
+    static void displaySleepTimerElapsed(bool running, void* ptr);
 
-    OSTimer   m_timer;
+    OSTimer   m_updateTimer;
+    OSTimer   m_displaySleepTimer;
     GPIOpin&  m_uiLedPower;
     GPIOpin&  m_uiLedStatus;
     BinDecIO& m_dmxAddress;
 
 private:
     UserInterfaceFSM    m_fsm;
+    EffectsController&  m_effectsController;
     DRV7SegmentDisplay& m_display;
     GPIOpin&            m_btnOk;
     GPIOpin&            m_btnMode;
