@@ -146,9 +146,10 @@ int main(void)
 
     /* Create the thread(s) */
     /* definition and creation of defaultTask */
-    //	osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
-    //    defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
-
+#pragma GCC diagnostic ignored "-Wwrite-strings"
+    osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
+    defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+#pragma GCC diagnostic pop
     /* USER CODE BEGIN RTOS_THREADS */
     /* add threads, ... */
     BSP bsp("BSP");
