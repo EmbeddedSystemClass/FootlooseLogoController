@@ -18,7 +18,7 @@ HALTimerSTM32F1*         HALTimerSTM32F1::m_this[3] = {0, 0, 0};
 
 HALTimerSTM32F1::HALTimerSTM32F1(TIM_TypeDef* timer, HALTimer::TimerMode mode, uint32_t channel)
     : HALTimer(mode)
-    , m_channel(m_channel)
+    , m_channel(channel)
 {
     if (timer == TIM2)
     {
@@ -28,12 +28,14 @@ HALTimerSTM32F1::HALTimerSTM32F1(TIM_TypeDef* timer, HALTimer::TimerMode mode, u
     }
     else if (timer == TIM3)
     {
+        (void)htim3;
         //        m_handle  = &htim3;
         //        m_this[1] = this;
         __HAL_RCC_TIM3_CLK_ENABLE();
     }
     else if (timer == TIM4)
     {
+        (void)htim4;
         //        m_handle  = &htim4;
         //        m_this[2] = this;
         __HAL_RCC_TIM4_CLK_ENABLE();
@@ -144,7 +146,7 @@ void HALTimerSTM32F1::stop()
     }
 }
 
-void HALTimerSTM32F1::setInterval(uint32_t us) {}
+void HALTimerSTM32F1::setInterval(uint32_t us) { (void)us; }
 
 void HALTimerSTM32F1::callback(uint32_t timer)
 {

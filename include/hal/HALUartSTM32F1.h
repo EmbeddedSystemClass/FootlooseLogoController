@@ -40,6 +40,8 @@ public:
 
     HALUartSTM32F1(USART_TypeDef* uart, uint32_t baudRate, UartMode mode);
 
+    virtual ~HALUartSTM32F1();
+
     virtual void send(uint8_t* data, uint8_t length, uint32_t timeout = 0);
 
     virtual void receive(uint8_t* data, uint16_t bufferLength, uint32_t timeout = 0);
@@ -59,8 +61,8 @@ public:
 private:
     UART_HandleTypeDef*    m_handle;
     static HALUartSTM32F1* m_this[3];
-    void*                  m_callbackParameters;
     CallbackFunction       m_callbackFunction;
+    void*                  m_callbackParameters;
 
     static HALUart::CallBack getCallback(CallBackType);
 };

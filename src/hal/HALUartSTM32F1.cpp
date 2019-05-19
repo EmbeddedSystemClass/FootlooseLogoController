@@ -63,6 +63,8 @@ HALUartSTM32F1::HALUartSTM32F1(USART_TypeDef *uart, uint32_t baudRate, UartMode 
     //    __HAL_UART_ENABLE(m_handle);
 }
 
+HALUartSTM32F1::~HALUartSTM32F1() {}
+
 void HALUartSTM32F1::open() {}
 
 void HALUartSTM32F1::close() {}
@@ -93,7 +95,7 @@ void HALUartSTM32F1::receive(uint8_t *data, uint16_t bufferLength, uint32_t time
 
 void HALUartSTM32F1::sendByte(uint8_t) {}
 
-uint32_t HALUartSTM32F1::readByte() {}
+uint32_t HALUartSTM32F1::readByte() { return 0; }
 
 void HALUartSTM32F1::callBack(UART_HandleTypeDef *uart, CallBackType type)
 {
@@ -145,6 +147,7 @@ HALUart::CallBack HALUartSTM32F1::getCallback(CallBackType callback)
 
 void HALUartSTM32F1::registerCallback(CallbackFunction f, CallBack type, void *parameter)
 {
+    (void)type;
     m_callbackFunction   = f;
     m_callbackParameters = parameter;
 }

@@ -58,8 +58,6 @@
 									<listOptionValue builtIn="false" value="../cubemx/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS"/>
 									<listOptionValue builtIn="false" value="../cubemx/Middlewares/Third_Party/FreeRTOS/Source/include"/>
 									<listOptionValue builtIn="false" value="../cubemx/Inc"/>
-									<listOptionValue builtIn="false" value="../cubemx/Middlewares/ST/STM32_USB_Device_Library/Core/Inc"/>
-									<listOptionValue builtIn="false" value="../cubemx/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc"/>
 									<listOptionValue builtIn="false" value="../cubemx/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../include/os"/>
 									<listOptionValue builtIn="false" value="../include/hal"/>
@@ -79,7 +77,6 @@
 									<listOptionValue builtIn="false" value="CPP_FREERTOS_NO_EXCEPTIONS"/>
 									<listOptionValue builtIn="false" value="CPP_FREERTOS_NO_CPP_STRINGS"/>
 									<listOptionValue builtIn="false" value="STM32F303xC"/>
-									<listOptionValue builtIn="false" value="__STDC_HOSTED__=1"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input.906083098" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.assembler.input"/>
 							</tool>
@@ -89,14 +86,11 @@
 									<listOptionValue builtIn="false" value="../cubemx/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS"/>
 									<listOptionValue builtIn="false" value="../cubemx/Middlewares/Third_Party/FreeRTOS/Source/include"/>
 									<listOptionValue builtIn="false" value="../cubemx/Inc"/>
-									<listOptionValue builtIn="false" value="../cubemx/Middlewares/ST/STM32_USB_Device_Library/Core/Inc"/>
-									<listOptionValue builtIn="false" value="../cubemx/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc"/>
 									<listOptionValue builtIn="false" value="../cubemx/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../include/os"/>
 									<listOptionValue builtIn="false" value="../cubemx/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"/>
 									<listOptionValue builtIn="false" value="../cubemx/Drivers/STM32F3xx_HAL_Driver/Inc"/>
 									<listOptionValue builtIn="false" value="../cubemx/Drivers/CMSIS/Device/ST/STM32F3xx/Include"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FootlooseLogoController/third party}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/FootlooseLogoController/include/app}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs.256613666" name="Defined symbols (-D)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.defs" useByScannerDiscovery="true" valueType="definedSymbols">
@@ -108,7 +102,6 @@
 									<listOptionValue builtIn="false" value="CPP_FREERTOS_NO_EXCEPTIONS"/>
 									<listOptionValue builtIn="false" value="CPP_FREERTOS_NO_CPP_STRINGS"/>
 									<listOptionValue builtIn="false" value="STM32F303xC"/>
-									<listOptionValue builtIn="false" value="__STDC_HOSTED__=1"/>
 								</option>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input.1884440411" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.compiler.input"/>
 							</tool>
@@ -118,8 +111,6 @@
 									<listOptionValue builtIn="false" value="../cubemx/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS"/>
 									<listOptionValue builtIn="false" value="../cubemx/Middlewares/Third_Party/FreeRTOS/Source/include"/>
 									<listOptionValue builtIn="false" value="../cubemx/Inc"/>
-									<listOptionValue builtIn="false" value="../cubemx/Middlewares/ST/STM32_USB_Device_Library/Core/Inc"/>
-									<listOptionValue builtIn="false" value="../cubemx/Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc"/>
 									<listOptionValue builtIn="false" value="../cubemx/Drivers/CMSIS/Include"/>
 									<listOptionValue builtIn="false" value="../include/os"/>
 									<listOptionValue builtIn="false" value="../cubemx/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F"/>
@@ -141,9 +132,9 @@
 									<listOptionValue builtIn="false" value="CPP_FREERTOS_NO_EXCEPTIONS"/>
 									<listOptionValue builtIn="false" value="CPP_FREERTOS_NO_CPP_STRINGS"/>
 									<listOptionValue builtIn="false" value="STM32F303xC"/>
-									<listOptionValue builtIn="false" value="__STDC_HOSTED__=1"/>
 								</option>
-								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.include.systempaths.264484664" name="Include system paths (-isystem)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.include.systempaths" useByScannerDiscovery="true" valueType="includePath"/>
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.include.systempaths.264484664" name="Include system paths (-isystem)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.include.systempaths" useByScannerDiscovery="true"/>
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.otherwarnings.709718490" name="Other warning flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.otherwarnings" useByScannerDiscovery="true" value="-Wno-type-limits" valueType="string"/>
 								<inputType id="ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.input.1775620882" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.compiler.input"/>
 							</tool>
 							<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.c.linker.1095032515" name="Cross ARM GNU C Linker" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.c.linker">

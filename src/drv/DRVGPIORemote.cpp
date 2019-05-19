@@ -14,6 +14,7 @@ GPIORemotePin::GPIORemotePin(uint32_t ID, GPIORemotePinHandler& parent, bool pol
     , m_ID(ID)
 {
 }
+GPIORemotePin::~GPIORemotePin() {}
 
 GPIORemotePin& GPIORemotePin::operator=(const bool val)
 {
@@ -24,7 +25,7 @@ GPIORemotePin::operator bool() { return applyPolarity(m_parent.read(m_ID)); }
 
 void GPIORemotePin::toggle() { m_parent.toggle(m_ID); }
 
-bool GPIORemotePin::isOutput() { m_parent.isOutput(m_ID); }
+bool GPIORemotePin::isOutput() { return m_parent.isOutput(m_ID); }
 
 void GPIORemotePin::setAlternateFunction() {}
 void GPIORemotePin::setNormalFunction() {}

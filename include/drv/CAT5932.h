@@ -11,7 +11,7 @@
 #include "I2CDevice.h"
 #include "thread.hpp"
 
-class CAT5932 : private I2CDevice, public GPIORemotePinHandler, public cpp_freertos::Thread
+class CAT5932 : public cpp_freertos::Thread, private I2CDevice, public GPIORemotePinHandler
 {
 public:
     enum OutputState

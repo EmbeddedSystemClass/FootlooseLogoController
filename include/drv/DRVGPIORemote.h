@@ -12,6 +12,7 @@
 class GPIORemotePinHandler
 {
 public:
+    virtual ~GPIORemotePinHandler() {}
     virtual bool read(uint32_t ID)            = 0;
     virtual void write(uint32_t ID, bool val) = 0;
     virtual void toggle(uint32_t ID)          = 0;
@@ -22,6 +23,7 @@ class GPIORemotePin : public GPIOpin
 {
 public:
     GPIORemotePin(uint32_t ID, GPIORemotePinHandler& parent, bool polarity);
+    virtual ~GPIORemotePin();
 
     virtual GPIORemotePin& operator=(const bool);
     virtual                operator bool();

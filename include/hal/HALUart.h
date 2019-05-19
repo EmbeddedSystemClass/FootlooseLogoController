@@ -32,8 +32,8 @@ public:
 
     typedef void (*CallbackFunction)(CallBack, void* parameter);
 
-    //    HALUart();
-    //    virtual ~HALUart();
+    HALUart() {}
+    virtual ~HALUart() {}
 
     virtual void send(uint8_t* data, uint8_t length, uint32_t timeout = 0) = 0;
 

@@ -33,6 +33,7 @@ GPIOpin& GPIOOutputDuplicate::operator=(const bool value)
     {
         *i = value;
     }
+    return *this;
 }
 
 GPIOOutputDuplicate::operator bool() { return m_state; }

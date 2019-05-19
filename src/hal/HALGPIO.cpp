@@ -12,6 +12,8 @@ GPIOpin::GPIOpin(bool polarity)
 {
 }
 
+GPIOpin::~GPIOpin() {}
+
 bool GPIOpin::applyPolarity(bool state)
 {
     bool retVal = state;

@@ -77,24 +77,24 @@ void UserInterfaceState::updateTimerElapsed(UserInterfaceFSM& context)
 void UserInterfaceState::Default(UserInterfaceFSM& context)
 {
     assert(false);
-
+    (void)context;
 }
 
 void UIMap_Default::Ready(UserInterfaceFSM& context)
 {
-
+	(void)context;
 
 }
 
 void UIMap_Default::Tick(UserInterfaceFSM& context)
 {
-
+	(void)context;
 
 }
 
 void UIMap_Default::Default(UserInterfaceFSM& context)
 {
-
+	(void)context;
 
 }
 
@@ -118,7 +118,7 @@ void UIMap_Default::DmxAddressChanged(UserInterfaceFSM& context)
 
 void UIMap_Reset::DmxAddressChanged(UserInterfaceFSM& context)
 {
-
+	(void)context;
 
 }
 
@@ -154,7 +154,7 @@ void UIMap_UITest::Exit(UserInterfaceFSM& context)
 
 void UIMap_UITest::DmxAddressChanged(UserInterfaceFSM& context)
 {
-
+	(void)context;
 
 }
 

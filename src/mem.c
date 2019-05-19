@@ -6,9 +6,13 @@
  */
 #include <stdlib.h>
 
-void *malloc(size_t xBytes) { return pvPortMalloc(xBytes); }
+#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
+
+void *malloc(size_t xBytes) { return (void *)pvPortMalloc(xBytes); }
 
 void free(void *pvBuffer) { vPortFree(pvBuffer); }
+
+#pragma GCC diagnostic pop
 
 void vApplicationMallocFailedHook(void)
 {

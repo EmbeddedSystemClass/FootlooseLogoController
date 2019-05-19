@@ -22,7 +22,7 @@ CAT5932::CAT5932(const char* name, HALI2C& i2cHal, uint8_t deviceAddress)
     memset(m_registerBuffer, 0, REG_MAX);
 }
 
-bool CAT5932::initDevice() {}
+bool CAT5932::initDevice() { return true; }
 
 void CAT5932::setOnState(CAT5932::OutputState state)
 {

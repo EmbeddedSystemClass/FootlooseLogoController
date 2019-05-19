@@ -173,7 +173,7 @@ EffectsController::DmxEffect* EffectsController::getApplicableEffect(uint8_t dmx
     return NULL;
 }
 
-bool EffectsController::isEffectOverlapping() {}
+bool EffectsController::isEffectOverlapping() { return false; }
 
 bool EffectsController::listCompareDmxRange(const DmxEffect a, const DmxEffect b)
 {

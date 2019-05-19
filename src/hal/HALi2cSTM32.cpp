@@ -84,6 +84,7 @@ void HALI2CSTM32::write(uint8_t slaveAddress, uint8_t* data, uint8_t dataLength)
 
 void HALI2CSTM32::callBack(I2C_HandleTypeDef* i2c, CallbackEvent type)
 {
+    (void)type;
     HALI2CSTM32* This = NULL;
     // finding instance
     if (i2c == &hi2c1)
