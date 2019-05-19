@@ -181,7 +181,7 @@ static int inHandlerMode (void)
 * @retval status code that indicates the execution status of the function.
 * @note   MUST REMAIN UNCHANGED: \b osKernelInitialize shall be consistent in every CMSIS-RTOS.
 */
-osStatus osKernelInitialize (void);
+//osStatus osKernelInitialize (void);
 
 /**
 * @brief  Start the RTOS Kernel with executing the specified thread.
@@ -574,7 +574,7 @@ int32_t osSignalSet (osThreadId thread_id, int32_t signal)
 * @retval  previous signal flags of the specified thread or 0x80000000 in case of incorrect parameters.
 * @note   MUST REMAIN UNCHANGED: \b osSignalClear shall be consistent in every CMSIS-RTOS.
 */
-int32_t osSignalClear (osThreadId thread_id, int32_t signal);
+//int32_t osSignalClear (osThreadId thread_id, int32_t signal);
 
 /**
 * @brief  Wait for one or more Signal Flags to become signaled for the current \b RUNNING thread.
@@ -652,6 +652,7 @@ osMutexId osMutexCreate (const osMutexDef_t *mutex_def)
 #elif ( configSUPPORT_STATIC_ALLOCATION == 1 )
   return xSemaphoreCreateMutexStatic( mutex_def->controlblock );
 #else  
+    (void)mutex_def;
     return xSemaphoreCreateMutex(); 
 #endif
 #else
@@ -796,6 +797,8 @@ osSemaphoreId osSemaphoreCreate (const osSemaphoreDef_t *semaphore_def, int32_t 
 #endif    
   }
 #else  // configSUPPORT_STATIC_ALLOCATION == 0  && configSUPPORT_DYNAMIC_ALLOCATION == 1
+  (void)semaphore_def;
+  (void)count;
   osSemaphoreId sema;
  
   if (count == 1) {
@@ -1700,6 +1703,7 @@ osMutexId osRecursiveMutexCreate (const osMutexDef_t *mutex_def)
   return xSemaphoreCreateRecursiveMutex();
 #endif
 #else
+  (void)mutex_def;
   return NULL;
 #endif	
 }
@@ -1720,6 +1724,7 @@ osStatus osRecursiveMutexRelease (osMutexId mutex_id)
   }
   return result;
 #else
+    (void)mutex_id;
 	return osErrorResource;
 #endif
 }
@@ -1760,6 +1765,8 @@ osStatus osRecursiveMutexWait (osMutexId mutex_id, uint32_t millisec)
   }
   return osOK;
 #else
+    (void)mutex_id;
+    (void)millisec;
 	return osErrorResource;
 #endif
 }
