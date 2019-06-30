@@ -60,5 +60,7 @@ protected:
 
     void callCallback(CallbackEvent event, TimerChannel channel, uint32_t value);
 
+    virtual uint32_t getTimerChannel(TimerChannel channel);
+
 private:
 };

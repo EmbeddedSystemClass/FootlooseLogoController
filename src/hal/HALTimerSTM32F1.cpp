@@ -95,18 +95,22 @@ HALTimerSTM32F1::HALTimerSTM32F1(TIM_TypeDef* timer, HALTimer::TimerMode mode, u
         REPORTFATAL("HAL init failed")
     }
 
-    __HAL_TIM_ENABLE_IT(m_handle, TIM_IT_TRIGGER);
-    __HAL_TIM_ENABLE_IT(m_handle, TIM_IT_CC3);
-    __HAL_TIM_ENABLE_IT(m_handle, TIM_IT_CC4);
-
     HAL_NVIC_SetPriority(TIM2_IRQn, 15, 15);
     HAL_NVIC_EnableIRQ(TIM2_IRQn);
-
     __HAL_TIM_ENABLE(m_handle);
+
+    //    __HAL_TIM_ENABLE_IT(m_handle, TIM_IT_TRIGGER);
+    //    __HAL_TIM_ENABLE_IT(m_handle, TIM_IT_CC3);
+    //    __HAL_TIM_ENABLE_IT(m_handle, TIM_IT_CC4);
+    //
+    //    __HAL_TIM_CLEAR_IT(m_handle, TIM_IT_TRIGGER);
+    //    __HAL_TIM_CLEAR_IT(m_handle, TIM_IT_CC4);
+    //    __HAL_TIM_CLEAR_IT(m_handle, TIM_IT_CC3);
 }
 
 void HALTimerSTM32F1::start()
 {
+
     switch (m_mode)
     {
     case TimerInputCapture:
@@ -115,7 +119,8 @@ void HALTimerSTM32F1::start()
         {
             if ((m_channel & channel) == channel)
             {
-                HAL_TIM_IC_Start_IT(m_handle, static_cast<TimerChannel>(channel));
+                //                HAL_TIM_IC_Start_IT(m_handle, static_cast<TimerChannel>(channel));
+                HAL_TIM_IC_Start_IT(m_handle, getTimerChannel(static_cast<TimerChannel>(channel)));
             }
         }
         break;
@@ -134,7 +139,7 @@ void HALTimerSTM32F1::stop()
         {
             if ((m_channel & channel) == channel)
             {
-                HAL_TIM_IC_Stop_IT(m_handle, static_cast<TimerChannel>(channel));
+                HAL_TIM_IC_Stop_IT(m_handle, getTimerChannel(static_cast<TimerChannel>(channel)));
             }
         }
 

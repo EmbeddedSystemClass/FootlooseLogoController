@@ -31,3 +31,5 @@ void HALTimer::callCallback(CallbackEvent event, TimerChannel channel, uint32_t 
         m_callback(event, channel, value, m_callbackParamerter);
     }
 }
+
+uint32_t HALTimer::getTimerChannel(TimerChannel channel) { return static_cast<uint32_t>(channel); }

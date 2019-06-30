@@ -2,6 +2,8 @@
   ******************************************************************************
   * @file    stm32f3xx_hal_pwr_ex.c
   * @author  MCD Application Team
+  * @version V1.4.0
+  * @date    16-December-2016
   * @brief   Extended PWR HAL module driver.
   *          This file provides firmware functions to manage the following
   *          functionalities of the Power Controller (PWR) peripheral:
@@ -135,7 +137,7 @@
 
 /**
   * @brief Configures the voltage threshold detected by the Power Voltage Detector(PVD).
-  * @param sConfigPVD pointer to an PWR_PVDTypeDef structure that contains the configuration
+  * @param sConfigPVD: pointer to an PWR_PVDTypeDef structure that contains the configuration
   *        information for the PVD.
   * @note Refer to the electrical characteristics of your device datasheet for
   *         more details about the voltage threshold corresponding to each
@@ -237,7 +239,7 @@ __weak void HAL_PWR_PVDCallback(void)
 
 /**
   * @brief  Enables the SDADC peripheral functionaliy
-  * @param  Analogx specifies the SDADC peripheral instance.
+  * @param  Analogx: specifies the SDADC peripheral instance.
   *   This parameter can be: PWR_SDADC_ANALOG1, PWR_SDADC_ANALOG2 or PWR_SDADC_ANALOG3.
   * @retval None
   */
@@ -254,7 +256,7 @@ void HAL_PWREx_EnableSDADC(uint32_t Analogx)
 
 /**
   * @brief  Disables the SDADC peripheral functionaliy
-  * @param  Analogx specifies the SDADC peripheral instance.
+  * @param  Analogx: specifies the SDADC peripheral instance.
   *   This parameter can be: PWR_SDADC_ANALOG1, PWR_SDADC_ANALOG2 or PWR_SDADC_ANALOG3.
   * @retval None
   */

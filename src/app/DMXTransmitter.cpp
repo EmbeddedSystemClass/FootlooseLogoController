@@ -71,7 +71,7 @@ void DMXTransmitter::Run()
                 DMXQueueItem item;
                 m_queue->Dequeue(&item, 10);
                 writeChannels(item.channeldata, item.startAddress, item.channelCount);
-                sendDMX = true;
+                // sendDMX = true;
             }
         }
 
@@ -97,7 +97,7 @@ void DMXTransmitter::Run()
             m_uartPin = 0;
             Delay(1);
             m_uartPin = 1;
-            m_uartPin.setAlternateFunction();
+            m_uartPin.setAlternateFunction(7);
             m_uart.writeBuffer(m_dmxBuffer, m_channelCount);
         }
 
@@ -107,11 +107,11 @@ void DMXTransmitter::Run()
 
 void DMXTransmitter::writeChannels(uint8_t* data, uint16_t startAddress, uint8_t channelCount)
 {
-    if ((startAddress + channelCount) < m_channelCount)
-    {
-        memcpy(&m_dmxBuffer[startAddress], data, channelCount);
-        m_dataWasUpdated = true;
-    }
+    //    if ((startAddress + channelCount) < m_channelCount)
+    //    {
+    //        memcpy(&m_dmxBuffer[startAddress], data, channelCount);
+    //        m_dataWasUpdated = true;
+    //    }
 }
 
 void DMXTransmitter::uartCallback(HALUart::CallBack type, void* parameter)

@@ -27,6 +27,7 @@ public:
     virtual void toggle();
 
     virtual void setAlternateFunction();
+    virtual void setAlternateFunction(uint8_t function);
     virtual void setNormalFunction();
 
 private:

@@ -38,6 +38,27 @@ void GPIOpinSTM32::setAlternateFunction()
     HAL_GPIO_Init(m_port, &pinSettings);
 }
 
+void GPIOpinSTM32::setAlternateFunction(uint8_t function)
+{
+    GPIO_InitTypeDef pinSettings = m_initialSettings;
+
+    if (isOutput())
+    {
+        pinSettings.Mode = GPIO_MODE_AF_PP;
+    }
+    else
+    {
+        //        pinSettings.Mode = GPIO_MODE_AF_INPUT;
+        //        pinSettings.Mode = GPIO_MODE_INPUT;
+        pinSettings.Mode = GPIO_MODE_AF_PP;
+    }
+    pinSettings.Pull      = GPIO_NOPULL;
+    pinSettings.Speed     = GPIO_SPEED_FREQ_HIGH;
+    pinSettings.Alternate = function;
+
+    HAL_GPIO_Init(m_port, &pinSettings);
+}
+
 void GPIOpinSTM32::setNormalFunction()
 {
     GPIO_InitTypeDef pinSettings = m_initialSettings;

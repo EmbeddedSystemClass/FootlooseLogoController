@@ -2,6 +2,8 @@
   ******************************************************************************
   * @file    stm32f3xx_hal_flash_ex.c
   * @author  MCD Application Team
+  * @version V1.4.0
+  * @date    16-December-2016
   * @brief   Extended FLASH HAL module driver.
   *    
   *          This file provides firmware functions to manage the following 
@@ -910,6 +912,7 @@ static uint32_t FLASH_OB_GetWRP(void)
   */
 static uint32_t FLASH_OB_GetRDP(void)
 {
+  uint32_t readstatus = OB_RDP_LEVEL_0;
   uint32_t tmp_reg = 0U;
   
   /* Read RDP level bits */
@@ -927,7 +930,7 @@ static uint32_t FLASH_OB_GetRDP(void)
   if (tmp_reg == FLASH_OBR_LEVEL1_PROT)
 #endif /* FLASH_OBR_LEVEL1_PROT */
   {
-    return OB_RDP_LEVEL_1;
+    readstatus = OB_RDP_LEVEL_1;
   }
 #if   defined(FLASH_OBR_RDPRT)
   else if (tmp_reg == FLASH_OBR_RDPRT_2)
@@ -935,12 +938,14 @@ static uint32_t FLASH_OB_GetRDP(void)
   else if (tmp_reg == FLASH_OBR_LEVEL2_PROT)
 #endif
   {
-    return OB_RDP_LEVEL_2;
+    readstatus = OB_RDP_LEVEL_2;
   }
   else 
   {
-    return OB_RDP_LEVEL_0;
+    readstatus = OB_RDP_LEVEL_0;
   }
+
+  return readstatus;
 }
 
 /**

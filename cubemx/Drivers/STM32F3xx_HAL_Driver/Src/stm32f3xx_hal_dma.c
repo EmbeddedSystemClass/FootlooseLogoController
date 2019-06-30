@@ -2,6 +2,8 @@
   ******************************************************************************
   * @file    stm32f3xx_hal_dma.c
   * @author  MCD Application Team
+  * @version V1.4.0
+  * @date    16-December-2016
   * @brief   DMA HAL module driver.
   *    
   *         This file provides firmware functions to manage the following 
@@ -146,7 +148,7 @@ static void DMA_CalcBaseAndBitshift(DMA_HandleTypeDef *hdma);
 /**
   * @brief  Initialize the DMA according to the specified
   *         parameters in the DMA_InitTypeDef and initialize the associated handle.
-  * @param  hdma Pointer to a DMA_HandleTypeDef structure that contains
+  * @param  hdma: Pointer to a DMA_HandleTypeDef structure that contains
   *               the configuration information for the specified DMA Channel.  
   * @retval HAL status
   */
@@ -194,6 +196,12 @@ HAL_StatusTypeDef HAL_DMA_Init(DMA_HandleTypeDef *hdma)
      by HAL_DMA_IRQHandler() and HAL_DMA_PollForTransfer() */
   DMA_CalcBaseAndBitshift(hdma);
   
+  /* Clean callbacks */
+  hdma->XferCpltCallback = NULL;
+  hdma->XferHalfCpltCallback = NULL;
+  hdma->XferErrorCallback = NULL;
+  hdma->XferAbortCallback = NULL;
+  
   /* Initialise the error code */
   hdma->ErrorCode = HAL_DMA_ERROR_NONE;
 
@@ -208,7 +216,7 @@ HAL_StatusTypeDef HAL_DMA_Init(DMA_HandleTypeDef *hdma)
   
 /**
   * @brief  DeInitialize the DMA peripheral 
-  * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+  * @param  hdma: pointer to a DMA_HandleTypeDef structure that contains
   *               the configuration information for the specified DMA Channel.  
   * @retval HAL status
   */
@@ -244,16 +252,10 @@ HAL_StatusTypeDef HAL_DMA_DeInit(DMA_HandleTypeDef *hdma)
   /* Clear all flags */
   hdma->DmaBaseAddress->IFCR = DMA_FLAG_GL1 << hdma->ChannelIndex;
 
-  /* Clean callbacks */
-  hdma->XferCpltCallback = NULL;
-  hdma->XferHalfCpltCallback = NULL;
-  hdma->XferErrorCallback = NULL;
-  hdma->XferAbortCallback = NULL;
-
-  /* Reset the error code */
+  /* Initialize the error code */
   hdma->ErrorCode = HAL_DMA_ERROR_NONE;
 
-  /* Reset the DMA state */
+  /* Initialize the DMA state */
   hdma->State = HAL_DMA_STATE_RESET;
 
   /* Release Lock */
@@ -289,9 +291,9 @@ HAL_StatusTypeDef HAL_DMA_DeInit(DMA_HandleTypeDef *hdma)
   * @brief  Start the DMA Transfer.
   * @param  hdma      : pointer to a DMA_HandleTypeDef structure that contains
   *                     the configuration information for the specified DMA Channel.  
-  * @param  SrcAddress The source memory Buffer address
-  * @param  DstAddress The destination memory Buffer address
-  * @param  DataLength The length of data to be transferred from source to destination
+  * @param  SrcAddress: The source memory Buffer address
+  * @param  DstAddress: The destination memory Buffer address
+  * @param  DataLength: The length of data to be transferred from source to destination
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_DMA_Start(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength)
@@ -334,11 +336,11 @@ HAL_StatusTypeDef HAL_DMA_Start(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, ui
 
 /**
   * @brief  Start the DMA Transfer with interrupt enabled.
-  * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+  * @param  hdma:       pointer to a DMA_HandleTypeDef structure that contains
   *                     the configuration information for the specified DMA Channel.  
-  * @param  SrcAddress The source memory Buffer address
-  * @param  DstAddress The destination memory Buffer address
-  * @param  DataLength The length of data to be transferred from source to destination
+  * @param  SrcAddress: The source memory Buffer address
+  * @param  DstAddress: The destination memory Buffer address
+  * @param  DataLength: The length of data to be transferred from source to destination
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_DMA_Start_IT(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength)
@@ -463,10 +465,10 @@ HAL_StatusTypeDef HAL_DMA_Abort_IT(DMA_HandleTypeDef *hdma)
 
 /**
   * @brief  Polling for transfer complete.
-  * @param  hdma    pointer to a DMA_HandleTypeDef structure that contains
+  * @param  hdma:    pointer to a DMA_HandleTypeDef structure that contains
   *                  the configuration information for the specified DMA Channel.
-  * @param  CompleteLevel Specifies the DMA level complete.  
-  * @param  Timeout       Timeout duration.
+  * @param  CompleteLevel: Specifies the DMA level complete.  
+  * @param  Timeout:       Timeout duration.
   * @retval HAL status
   */
 HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, uint32_t CompleteLevel, uint32_t Timeout)
@@ -566,7 +568,7 @@ HAL_StatusTypeDef HAL_DMA_PollForTransfer(DMA_HandleTypeDef *hdma, uint32_t Comp
 
 /**
   * @brief  Handle DMA interrupt request.
-  * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+  * @param  hdma: pointer to a DMA_HandleTypeDef structure that contains
   *               the configuration information for the specified DMA Channel.  
   * @retval None
   */
@@ -654,11 +656,11 @@ void HAL_DMA_IRQHandler(DMA_HandleTypeDef *hdma)
 
 /**
   * @brief  Register callbacks
-  * @param  hdma                 pointer to a DMA_HandleTypeDef structure that contains
+  * @param  hdma:                 pointer to a DMA_HandleTypeDef structure that contains
   *                               the configuration information for the specified DMA Stream.
-  * @param  CallbackID           User Callback identifer
+  * @param  CallbackID:           User Callback identifer
   *                               a HAL_DMA_CallbackIDTypeDef ENUM as parameter.
-  * @param  pCallback            pointer to private callback function which has pointer to 
+  * @param  pCallback:            pointer to private callback function which has pointer to 
   *                               a DMA_HandleTypeDef structure as parameter.
   * @retval HAL status
   */                          
@@ -707,9 +709,9 @@ HAL_StatusTypeDef HAL_DMA_RegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_Call
 
 /**
   * @brief  UnRegister callbacks
-  * @param  hdma                 pointer to a DMA_HandleTypeDef structure that contains
+  * @param  hdma:                 pointer to a DMA_HandleTypeDef structure that contains
   *                               the configuration information for the specified DMA Stream.
-  * @param  CallbackID           User Callback identifer
+  * @param  CallbackID:           User Callback identifer
   *                               a HAL_DMA_CallbackIDTypeDef ENUM as parameter.
   * @retval HAL status
   */              
@@ -785,7 +787,7 @@ HAL_StatusTypeDef HAL_DMA_UnRegisterCallback(DMA_HandleTypeDef *hdma, HAL_DMA_Ca
 
 /**
   * @brief  Returns the DMA state.
-  * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+  * @param  hdma: pointer to a DMA_HandleTypeDef structure that contains
   *               the configuration information for the specified DMA Channel.  
   * @retval HAL state
   */
@@ -796,7 +798,7 @@ HAL_DMA_StateTypeDef HAL_DMA_GetState(DMA_HandleTypeDef *hdma)
 
 /**
   * @brief  Return the DMA error code
-  * @param  hdma pointer to a DMA_HandleTypeDef structure that contains
+  * @param  hdma : pointer to a DMA_HandleTypeDef structure that contains
   *              the configuration information for the specified DMA Channel.
   * @retval DMA Error Code
   */
@@ -819,11 +821,11 @@ uint32_t HAL_DMA_GetError(DMA_HandleTypeDef *hdma)
 
 /**
   * @brief  Set the DMA Transfer parameters.
-  * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+  * @param  hdma:       pointer to a DMA_HandleTypeDef structure that contains
   *                     the configuration information for the specified DMA Channel.  
-  * @param  SrcAddress The source memory Buffer address
-  * @param  DstAddress The destination memory Buffer address
-  * @param  DataLength The length of data to be transferred from source to destination
+  * @param  SrcAddress: The source memory Buffer address
+  * @param  DstAddress: The destination memory Buffer address
+  * @param  DataLength: The length of data to be transferred from source to destination
   * @retval HAL status
   */
 static void DMA_SetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t DstAddress, uint32_t DataLength)
@@ -856,7 +858,7 @@ static void DMA_SetConfig(DMA_HandleTypeDef *hdma, uint32_t SrcAddress, uint32_t
 
 /**
   * @brief  Set the DMA base address and channel index depending on DMA instance
-  * @param  hdma       pointer to a DMA_HandleTypeDef structure that contains
+  * @param  hdma:       pointer to a DMA_HandleTypeDef structure that contains
   *                     the configuration information for the specified DMA Stream. 
   * @retval None
   */

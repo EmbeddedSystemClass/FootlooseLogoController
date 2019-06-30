@@ -34,7 +34,7 @@ HALUartSTM32F1::HALUartSTM32F1(USART_TypeDef *uart, uint32_t baudRate, UartMode 
         m_handle  = &huart2;
         m_this[1] = this;
         __HAL_RCC_USART2_CLK_ENABLE();
-        HAL_NVIC_SetPriority(USART2_IRQn, 15, 14);
+        HAL_NVIC_SetPriority(USART2_IRQn, 13, 14);
         HAL_NVIC_EnableIRQ(USART2_IRQn);
     }
     else if (uart == USART3)
@@ -52,15 +52,23 @@ HALUartSTM32F1::HALUartSTM32F1(USART_TypeDef *uart, uint32_t baudRate, UartMode 
     m_handle->Init.BaudRate     = baudRate;
     m_handle->Init.HwFlowCtl    = UART_HWCONTROL_NONE;
     m_handle->Init.Mode         = mode;
-    m_handle->Init.OverSampling = UART_OVERSAMPLING_16;
+    m_handle->Init.OverSampling = UART_OVERSAMPLING_8;
     m_handle->Init.Parity       = UART_PARITY_NONE;
     m_handle->Init.StopBits     = UART_STOPBITS_2;
     //    m_handle->Init.StopBits   = UART_STOPBITS_1;
     m_handle->Init.WordLength = UART_WORDLENGTH_8B;
+    // stm32f3, split to new file
+    m_handle->Init.OneBitSampling              = UART_ONE_BIT_SAMPLE_DISABLE;
+    m_handle->AdvancedInit.AdvFeatureInit      = UART_ADVFEATURE_RXOVERRUNDISABLE_INIT | UART_ADVFEATURE_DMADISABLEONERROR_INIT;
+    m_handle->AdvancedInit.OverrunDisable      = UART_ADVFEATURE_OVERRUN_DISABLE;
+    m_handle->AdvancedInit.DMADisableonRxError = UART_ADVFEATURE_DMA_DISABLEONRXERROR;
 
-    HAL_UART_Init(m_handle);
+    if (HAL_UART_Init(m_handle) != HAL_OK)
+    {
+        REPORTFATAL("uart settings not ok")
+    }
 
-    //    __HAL_UART_ENABLE(m_handle);
+    __HAL_UART_ENABLE(m_handle);
 }
 
 HALUartSTM32F1::~HALUartSTM32F1() {}
@@ -83,6 +91,7 @@ void HALUartSTM32F1::send(uint8_t *data, uint8_t length, uint32_t timeout)
 
 void HALUartSTM32F1::receive(uint8_t *data, uint16_t bufferLength, uint32_t timeout)
 {
+    __HAL_UART_FLUSH_DRREGISTER(m_handle);
     if (timeout > 0)
     {
         HAL_UART_Receive(m_handle, data, bufferLength, timeout);

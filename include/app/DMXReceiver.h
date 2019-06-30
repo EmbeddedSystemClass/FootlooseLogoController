@@ -28,10 +28,10 @@ public:
         StateReceiving,
         StateReceived,
     };
-    DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, uint8_t channelCount);
-    DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, BinDecIO* dmxAddress, uint8_t channelCount);
-    DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, HALTimer& timer, BinDecIO* dmxAddress, cpp_freertos::Queue* queue,
-                uint8_t channelCount);
+    DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, GPIOpin& pin, HALTimer& timer, uint8_t channelCount);
+    DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, GPIOpin& pin, HALTimer& timer, BinDecIO* dmxAddress, uint8_t channelCount);
+    DMXReceiver(TaskHandle_t taskToNotify, uint8_t ID, DRVSerial& uart, GPIOpin& pin, HALTimer& timer, BinDecIO* dmxAddress,
+                cpp_freertos::Queue* queue, uint8_t channelCount);
 
     virtual void Run();
 
@@ -44,6 +44,7 @@ public:
 private:
     DRVSerial&           m_uart;
     HALTimer&            m_timer;
+    GPIOpin&             m_pin;
     BinDecIO*            m_address;
     cpp_freertos::Queue* m_queue;
     const uint8_t        m_channelCount;

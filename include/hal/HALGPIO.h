@@ -20,7 +20,8 @@ public:
     virtual          operator bool()        = 0;
     virtual void     toggle()               = 0;
     virtual void     setAlternateFunction() = 0;
-    virtual void     setNormalFunction()    = 0;
+    virtual void     setAlternateFunction(uint8_t function) { setAlternateFunction(); }
+    virtual void     setNormalFunction() = 0;
 
 protected:
     bool m_polarity;  //!< 1 means normal

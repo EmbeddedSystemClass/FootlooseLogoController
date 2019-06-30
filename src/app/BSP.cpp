@@ -21,7 +21,7 @@
 #include "drv/DRV7SegmentDisplay.h"
 #include "drv/DRVGPIO.h"
 #include "drv/DRVSerialUart.h"
-#include "hal/HALTimerSTM32F1.h"
+#include "hal/HALTimerSTM32F3.h"
 #include "hal/HALUartSTM32F1.h"
 #include "hal/HALi2cSTM32.h"
 #include "os/OSError.h"
@@ -54,9 +54,9 @@ void BSP::Run()
     REPORTLOG(datetime);
 
     // HAL
-    HALUartSTM32F1  dmxRxUart(USART2, 250000, HALUartSTM32F1::UartModeRx);
+    HALUartSTM32F1  dmxRxUart(USART2, 250000, HALUartSTM32F1::UartModeRxTx);
     HALUartSTM32F1  dmxTxUart(USART1, 250000, HALUartSTM32F1::UartModeTx);
-    HALTimerSTM32F1 dmxBreakCaptureTimer(TIM2, HALTimer::TimerInputCapture, (HALTimer::TimerChannel3 || HALTimer::TimerChannel4));
+    HALTimerSTM32F3 dmxBreakCaptureTimer(TIM2, HALTimer::TimerInputCapture, (HALTimer::TimerChannel3 | HALTimer::TimerChannel4));
 
     HALI2CSTM32 uiI2C(I2C1, HALI2C::Frequency100k);
 
@@ -68,7 +68,9 @@ void BSP::Run()
     DRVGPIO gpioA = DRVGPIO(GPIOA,
                             //5432109876453210
                             0b1001111111111111,   // Owner
-                            0b0000001000000000,   // Direction 1=out
+//                            0b0000001000000000,   // Direction 1=out
+                            0b0000001000000110,   // Direction 1=out
+//                            0b0110011011111111);  // Polarity 1=active high
                             0b0110011011111111);  // Polarity 1=active high
     // clang-format on
     GPIOpinSTM32 uiBtnMode = gpioA.getPin(1);
@@ -82,7 +84,7 @@ void BSP::Run()
     GPIOpinSTM32 uart1Rx   = gpioA.getPin(10);
 
     // UART2 pins
-    uart1Tx.setAlternateFunction();
+    //    uart1Tx.setAlternateFunction();
     uart1Rx.setAlternateFunction();
     uart2Rx.setAlternateFunction();
 
@@ -115,53 +117,53 @@ void BSP::Run()
     DRVSerialUart dmxRxUartDRV(dmxRxUart);
     DRVSerialUart dmxTxUartDRV(dmxTxUart);
 
-    CAT5932 ledDriver1("Driver1", uiI2C, 0b01100000);
-    CAT5932 ledDriver2("Driver2", uiI2C, 0b01100001);
-    ledDriver1.initDevice();
-    ledDriver2.initDevice();
-    ledDriver1.Start();
-    ledDriver2.Start();
+    //    CAT5932 ledDriver1("Driver1", uiI2C, 0b01100000);
+    //    CAT5932 ledDriver2("Driver2", uiI2C, 0b01100001);
+    //    ledDriver1.initDevice();
+    //    ledDriver2.initDevice();
+    //    ledDriver1.Start();
+    //    ledDriver2.Start();
 
-    GPIORemotePin uiLedStatus = ledDriver2.getPin(14);
-    GPIORemotePin uiLedPower  = ledDriver2.getPin(15);
-
-    GPIORemotePin uiSeg1A   = ledDriver1.getPin(1);
-    GPIORemotePin uiSeg1B   = ledDriver1.getPin(0);
-    GPIORemotePin uiSeg1C   = ledDriver2.getPin(6);
-    GPIORemotePin uiSeg1D   = ledDriver2.getPin(5);
-    GPIORemotePin uiSeg1E   = ledDriver2.getPin(4);
-    GPIORemotePin uiSeg1F   = ledDriver1.getPin(2);
-    GPIORemotePin uiSeg1G   = ledDriver1.getPin(3);
-    GPIORemotePin uiSeg1Dot = ledDriver2.getPin(7);
-    GPIORemotePin uiSeg2A   = ledDriver1.getPin(5);
-    GPIORemotePin uiSeg2B   = ledDriver1.getPin(4);
-    GPIORemotePin uiSeg2C   = ledDriver2.getPin(2);
-    GPIORemotePin uiSeg2D   = ledDriver2.getPin(1);
-    GPIORemotePin uiSeg2E   = ledDriver2.getPin(0);
-    GPIORemotePin uiSeg2F   = ledDriver1.getPin(6);
-    GPIORemotePin uiSeg2G   = ledDriver1.getPin(7);
-    GPIORemotePin uiSeg2Dot = ledDriver2.getPin(3);
-    GPIORemotePin uiSeg3A   = ledDriver1.getPin(9);
-    GPIORemotePin uiSeg3B   = ledDriver1.getPin(8);
-    GPIORemotePin uiSeg3C   = ledDriver1.getPin(14);
-    GPIORemotePin uiSeg3D   = ledDriver1.getPin(13);
-    GPIORemotePin uiSeg3E   = ledDriver1.getPin(12);
-    GPIORemotePin uiSeg3F   = ledDriver1.getPin(10);
-    GPIORemotePin uiSeg3G   = ledDriver1.getPin(11);
-    GPIORemotePin uiSeg3Dot = ledDriver1.getPin(15);
+    //    GPIORemotePin uiLedStatus = ledDriver2.getPin(14);
+    //    GPIORemotePin uiLedPower  = ledDriver2.getPin(15);
+    //
+    //    GPIORemotePin uiSeg1A   = ledDriver1.getPin(1);
+    //    GPIORemotePin uiSeg1B   = ledDriver1.getPin(0);
+    //    GPIORemotePin uiSeg1C   = ledDriver2.getPin(6);
+    //    GPIORemotePin uiSeg1D   = ledDriver2.getPin(5);
+    //    GPIORemotePin uiSeg1E   = ledDriver2.getPin(4);
+    //    GPIORemotePin uiSeg1F   = ledDriver1.getPin(2);
+    //    GPIORemotePin uiSeg1G   = ledDriver1.getPin(3);
+    //    GPIORemotePin uiSeg1Dot = ledDriver2.getPin(7);
+    //    GPIORemotePin uiSeg2A   = ledDriver1.getPin(5);
+    //    GPIORemotePin uiSeg2B   = ledDriver1.getPin(4);
+    //    GPIORemotePin uiSeg2C   = ledDriver2.getPin(2);
+    //    GPIORemotePin uiSeg2D   = ledDriver2.getPin(1);
+    //    GPIORemotePin uiSeg2E   = ledDriver2.getPin(0);
+    //    GPIORemotePin uiSeg2F   = ledDriver1.getPin(6);
+    //    GPIORemotePin uiSeg2G   = ledDriver1.getPin(7);
+    //    GPIORemotePin uiSeg2Dot = ledDriver2.getPin(3);
+    //    GPIORemotePin uiSeg3A   = ledDriver1.getPin(9);
+    //    GPIORemotePin uiSeg3B   = ledDriver1.getPin(8);
+    //    GPIORemotePin uiSeg3C   = ledDriver1.getPin(14);
+    //    GPIORemotePin uiSeg3D   = ledDriver1.getPin(13);
+    //    GPIORemotePin uiSeg3E   = ledDriver1.getPin(12);
+    //    GPIORemotePin uiSeg3F   = ledDriver1.getPin(10);
+    //    GPIORemotePin uiSeg3G   = ledDriver1.getPin(11);
+    //    GPIORemotePin uiSeg3Dot = ledDriver1.getPin(15);
 
     REPORTLOG("Initialization of DRV complete");
 
     //    APP
-    GPIOOutputDuplicate m_combinedStatus;
-    GPIOOutputDuplicate m_combinedPower;
-
-    m_combinedStatus.addOutput(&ledStatusPin);
-    m_combinedStatus.addOutput(&uiLedStatus);
-    GPIOBlinker ledStatus(m_combinedStatus);
-
-    m_combinedPower.addOutput(&ledPower);
-    m_combinedPower.addOutput(&uiLedPower);
+    //    GPIOOutputDuplicate m_combinedStatus;
+    //    GPIOOutputDuplicate m_combinedPower;
+    //
+    //    m_combinedStatus.addOutput(&ledStatusPin);
+    //    m_combinedStatus.addOutput(&uiLedStatus);
+    GPIOBlinker ledStatus(ledStatusPin);
+    //
+    //    m_combinedPower.addOutput(&ledPower);
+    //    m_combinedPower.addOutput(&uiLedPower);
 
     //        task monitor
     TaskStateMonitor taskMonitor("Monitor UI", ledStatus);
@@ -186,12 +188,12 @@ void BSP::Run()
     cpp_freertos::Queue transmittingQueue(10, sizeof(DMXTransmitter::DMXQueueItem));
 
     // Receiver
-    DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, dmxBreakCaptureTimer, &dmxAddress, &receivingQueue, 4);
+    DMXReceiver receiver(taskMonitor.GetHandle(), 1, dmxRxUartDRV, uart2Rx, dmxBreakCaptureTimer, &dmxAddress, &receivingQueue, 4);
     receiver.Start();
 
     // Transmitter
     DMXTransmitter transmitter(taskMonitor.GetHandle(), 2, uart1Tx, dmxTxUartDRV, 100, &transmittingQueue);
-    transmitter.Start();
+    //    transmitter.Start();
 
     // sender
 
@@ -240,17 +242,26 @@ void BSP::Run()
     controller.Start();
 
     // UI
-    DRV7Segment uiSegment1(uiSeg1A, uiSeg1B, uiSeg1C, uiSeg1D, uiSeg1E, uiSeg1F, uiSeg1G, &uiSeg1Dot);
-    DRV7Segment uiSegment2(uiSeg2A, uiSeg2B, uiSeg2C, uiSeg2D, uiSeg2E, uiSeg2F, uiSeg2G, &uiSeg2Dot);
-    DRV7Segment uiSegment3(uiSeg3A, uiSeg3B, uiSeg3C, uiSeg3D, uiSeg3E, uiSeg3F, uiSeg3G, &uiSeg3Dot);
+    //    DRV7Segment uiSegment1(uiSeg1A, uiSeg1B, uiSeg1C, uiSeg1D, uiSeg1E, uiSeg1F, uiSeg1G, &uiSeg1Dot);
+    //    DRV7Segment uiSegment2(uiSeg2A, uiSeg2B, uiSeg2C, uiSeg2D, uiSeg2E, uiSeg2F, uiSeg2G, &uiSeg2Dot);
+    //    DRV7Segment uiSegment3(uiSeg3A, uiSeg3B, uiSeg3C, uiSeg3D, uiSeg3E, uiSeg3F, uiSeg3G, &uiSeg3Dot);
+    //
+    //    DRV7SegmentDisplay uiDisplay;
+    //    uiDisplay.addSegment(&uiSegment1);
+    //    uiDisplay.addSegment(&uiSegment2);
+    //    uiDisplay.addSegment(&uiSegment3);
 
-    DRV7SegmentDisplay uiDisplay;
-    uiDisplay.addSegment(&uiSegment1);
-    uiDisplay.addSegment(&uiSegment2);
-    uiDisplay.addSegment(&uiSegment3);
+    //    UserInterface ui(controller, uiDisplay, m_combinedPower, m_combinedStatus, dmxAddress, uiBtnOk, uiBtnMode, dip10, ledDriver1, ledDriver2);
+    //    ui.Start();
 
-    UserInterface ui(controller, uiDisplay, m_combinedPower, m_combinedStatus, dmxAddress, uiBtnOk, uiBtnMode, dip10, ledDriver1, ledDriver2);
-    ui.Start();
+    //    GPIO_InitTypeDef pinSettings = {0};
+    //    pinSettings.Mode             = GPIO_MODE_OUTPUT_PP;
+    //    pinSettings.Pin              = (1 << 9);
+    //    pinSettings.Pull             = GPIO_NOPULL;
+    //    pinSettings.Speed            = GPIO_SPEED_FREQ_HIGH;
+
+    //    HAL_GPIO_Init(GPIOA, &pinSettings);
+
     while (true)
     {
         Delay(1000);

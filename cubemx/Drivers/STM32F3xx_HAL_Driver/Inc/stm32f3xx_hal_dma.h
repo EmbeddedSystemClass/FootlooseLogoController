@@ -2,6 +2,8 @@
   ******************************************************************************
   * @file    stm32f3xx_hal_dma.h
   * @author  MCD Application Team
+  * @version V1.4.0
+  * @date    16-December-2016
   * @brief   Header file of DMA HAL module.
   ******************************************************************************
   * @attention
@@ -297,21 +299,21 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /** @brief  Reset DMA handle state
-  * @param  __HANDLE__ DMA handle.
+  * @param  __HANDLE__: DMA handle.
   * @retval None
   */
 #define __HAL_DMA_RESET_HANDLE_STATE(__HANDLE__) ((__HANDLE__)->State = HAL_DMA_STATE_RESET)
 
 /**
   * @brief  Enable the specified DMA Channel.
-  * @param  __HANDLE__ DMA handle
+  * @param  __HANDLE__: DMA handle
   * @retval None
   */
 #define __HAL_DMA_ENABLE(__HANDLE__)        ((__HANDLE__)->Instance->CCR |= DMA_CCR_EN)
 
 /**
   * @brief  Disable the specified DMA Channel.
-  * @param  __HANDLE__ DMA handle
+  * @param  __HANDLE__: DMA handle
   * @retval None
   */
 #define __HAL_DMA_DISABLE(__HANDLE__)       ((__HANDLE__)->Instance->CCR &= ~DMA_CCR_EN)
@@ -321,8 +323,8 @@ typedef struct __DMA_HandleTypeDef
 
 /**
   * @brief  Enables the specified DMA Channel interrupts.
-  * @param  __HANDLE__ DMA handle
-  * @param __INTERRUPT__ specifies the DMA interrupt sources to be enabled or disabled. 
+  * @param  __HANDLE__: DMA handle
+  * @param __INTERRUPT__: specifies the DMA interrupt sources to be enabled or disabled. 
   *          This parameter can be any combination of the following values:
   *            @arg DMA_IT_TC:  Transfer complete interrupt mask
   *            @arg DMA_IT_HT:  Half transfer complete interrupt mask
@@ -333,8 +335,8 @@ typedef struct __DMA_HandleTypeDef
 
 /**
   * @brief  Disables the specified DMA Channel interrupts.
-  * @param  __HANDLE__ DMA handle
-  * @param __INTERRUPT__ specifies the DMA interrupt sources to be enabled or disabled. 
+  * @param  __HANDLE__: DMA handle
+  * @param __INTERRUPT__: specifies the DMA interrupt sources to be enabled or disabled. 
   *          This parameter can be any combination of the following values:
   *            @arg DMA_IT_TC:  Transfer complete interrupt mask
   *            @arg DMA_IT_HT:  Half transfer complete interrupt mask
@@ -345,8 +347,8 @@ typedef struct __DMA_HandleTypeDef
 
 /**
   * @brief  Checks whether the specified DMA Channel interrupt is enabled or disabled.
-  * @param  __HANDLE__ DMA handle
-  * @param  __INTERRUPT__ specifies the DMA interrupt source to check.
+  * @param  __HANDLE__: DMA handle
+  * @param  __INTERRUPT__: specifies the DMA interrupt source to check.
   *          This parameter can be one of the following values:
   *            @arg DMA_IT_TC:  Transfer complete interrupt mask
   *            @arg DMA_IT_HT:  Half transfer complete interrupt mask
@@ -357,7 +359,7 @@ typedef struct __DMA_HandleTypeDef
 
 /**
   * @brief  Returns the number of remaining data units in the current DMAy Channelx transfer.
-  * @param  __HANDLE__ DMA handle
+  * @param  __HANDLE__: DMA handle
   *   
   * @retval The number of remaining data units in the current DMA Channel transfer.
   */
