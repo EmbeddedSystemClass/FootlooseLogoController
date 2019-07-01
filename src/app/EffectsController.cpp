@@ -144,7 +144,7 @@ void EffectsController::Run()
             if (createNewMessage)
             {
                 // send old message
-                m_outputQueue.Enqueue(&output);
+                m_outputQueue.Enqueue(&output, 10);
 
                 output.channelCount = fixture.getDmxChannelCount();
                 output.startAddress = fixture.getDmxStartAddress();
@@ -154,7 +154,8 @@ void EffectsController::Run()
             // send last message
             //   m_outputQueue.Enqueue(&output);
         }
-        m_outputQueue.Enqueue(&output);
+
+        m_outputQueue.Enqueue(&output, 10);
         Delay(m_interval);
     }
 }

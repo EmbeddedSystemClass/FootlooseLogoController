@@ -185,7 +185,7 @@ void DMXReceiver::timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerCh
         case HALTimer::TimerChannel4:
             if (This->m_startTime != 0)
             {
-                HAL_GPIO_WritePin(GPIOA, (1 << 1), GPIO_PIN_RESET);
+                //                HAL_GPIO_WritePin(GPIOA, (1 << 1), GPIO_PIN_RESET);
                 This->m_stopTime = value;
 
                 timeDiff = This->m_stopTime - This->m_startTime;
@@ -200,7 +200,7 @@ void DMXReceiver::timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerCh
                     This->m_state = StateReceiving;
                     This->m_uart.readBuffer(This->m_dmxBuffer, 513);
                     This->m_timer.stop();
-                    HAL_GPIO_TogglePin(GPIOA, (1 << 2));
+                    //                    HAL_GPIO_TogglePin(GPIOA, (1 << 2));
                 }
                 This->m_startTime = 0;
             }
@@ -210,7 +210,7 @@ void DMXReceiver::timerCallback(HALTimer::CallbackEvent event, HALTimer::TimerCh
         case HALTimer::TimerChannel3:
             static_cast<DMXReceiver*>(This)->m_startTime = value;
             //            HAL_GPIO_WritePin(GPIOA, (1 << 9), GPIO_PIN_SET);
-            HAL_GPIO_WritePin(GPIOA, (1 << 1), GPIO_PIN_SET);
+            //            HAL_GPIO_WritePin(GPIOA, (1 << 1), GPIO_PIN_SET);
 
             break;
         default:
