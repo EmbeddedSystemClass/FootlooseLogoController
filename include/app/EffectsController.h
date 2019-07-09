@@ -46,12 +46,10 @@ public:
     EffectsController(const char* Name, TaskHandle_t taskToNotify, uint8_t ID, cpp_freertos::Queue& inputQueue, cpp_freertos::Queue& outputQueue,
                       uint32_t interval);
 
-    EffectsController(const char* Name, TaskHandle_t taskToNotify, uint8_t ID, cpp_freertos::Queue& inputQueue, cpp_freertos::Queue& outputQueue,
-                      uint32_t interval, GPIOpin* testMode1, GPIOpin* testMode2);
-
     void addFixture(RGBFixture fixture);
 
     void addEffect(EffectBase& effect, DmxRange range);
+    void addEffect(EffectBase& effect, EffectMode mode);
 
     void Run();
 
@@ -71,13 +69,13 @@ private:
     std::list<RGBFixture> m_fixtures;
     std::list<DmxEffect>  m_effects;
     DmxEffect*            m_lastEffect;
+    DmxEffect*            m_testEffect;
+    DmxEffect*            m_rainbowEffect;
     cpp_freertos::Queue   m_inputQueue;
     cpp_freertos::Queue   m_outputQueue;
     uint32_t              m_interval;
     uint8_t               m_dmxSelector;
     Color                 m_suggestedColor;
-    GPIOpin*              m_testModePin1;
-    GPIOpin*              m_testModePin2;
     uint32_t              m_testEffectCounter;
     EffectMode            m_effectMode;
 
@@ -90,6 +88,4 @@ private:
     static bool listCompareDmxRange(const DmxEffect a, const DmxEffect b);
 
     static bool listCompareFixtureLocation(const RGBFixture a, const RGBFixture b);
-
-    void applyTestEffect(bool selectEffect);
 };

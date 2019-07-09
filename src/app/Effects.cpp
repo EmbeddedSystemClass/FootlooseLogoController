@@ -62,11 +62,12 @@ void CycleRGBPerFixtureEffect::apply(std::list<RGBFixture>& m_fixtures, uint32_t
 {
     (void)dmxOffset;
     (void)suggestedColor;
+    tick /= 100;
     uint8_t effectID = (tick / 3) % m_fixtures.size();
     uint8_t colorID  = tick % 3;
 
     // turn all off
-    for (auto& effect : m_fixtures) effect.setColor(Color(0, 0, 0));
+    for (auto& effect : m_fixtures) effect.setColor(Color::BLACK());
 
     auto fixture_front = m_fixtures.begin();
     std::advance(fixture_front, effectID);

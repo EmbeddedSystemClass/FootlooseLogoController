@@ -232,11 +232,13 @@ void BSP::Run()
     controller.addFixture(logoE);
 
     // adding effects
-    StaticColorEffect effectStaticColor;
-    CycleColorEffect  effectCycleColor;
+    StaticColorEffect        effectStaticColor;
+    CycleColorEffect         effectCycleColor;
+    CycleRGBPerFixtureEffect effectRGBcycle;
 
     controller.addEffect(effectStaticColor, EffectsController::DmxRange(0, 10));
     controller.addEffect(effectCycleColor, EffectsController::DmxRange(11, 20));
+    controller.addEffect(effectRGBcycle, EffectsController::EffectModeTest);
 
     // starting controller
     controller.Start();
