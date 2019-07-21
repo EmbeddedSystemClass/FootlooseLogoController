@@ -39,6 +39,7 @@ public:
     void restorePreviousMode();
 
     uint8_t getDisplayBrightness();
+    void    setDisplayBrightness(uint8_t brightness);
     void    incDisplayBrightness();
 
     static void updateTimerElapsed(bool running, void* ptr);

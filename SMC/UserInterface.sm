@@ -20,6 +20,7 @@ UITest
 Entry
 {
     // Enable all LEDs
+    setDisplayBrightness(1); 
     uiLedPower(1);
     uiLedStatus(1);
     uiDisplay(888);
@@ -89,7 +90,7 @@ Exit
 MenuMode
 Entry
 {
-    uiDisplay("mod");
+    uiDisplay("ope");
 }
 {
     BtnOkPressed MenuModeDmx {}
@@ -109,7 +110,7 @@ Entry
 MenuExit
 Entry
 {
-    uiDisplay("ext");
+    uiDisplay("bCk");
 }
 {
     BtnOkPressed AddressDisplay {}
@@ -119,10 +120,10 @@ Entry
 MenuModeDmx
 Entry
 {
-    uiDisplay("dmx");
+    uiDisplay("Add");
 }
 {
-    BtnModePressed MenuModeRainBow {}
+    BtnModePressed MenuModeTest {}
     BtnOkPressed AddressDisplay { setMode(UserInterface::OperationDmx); }
 }
 

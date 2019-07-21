@@ -103,7 +103,14 @@ void UserInterface::setMode(OperationModes mode)
 void UserInterface::restorePreviousMode() { m_effectsController.setMode(static_cast<EffectsController::EffectMode>(m_previousMode)); }
 
 uint8_t UserInterface::getDisplayBrightness() { return m_displayBrightness; }
-void    UserInterface::incDisplayBrightness()
+void    UserInterface::setDisplayBrightness(uint8_t brightness)
+{
+    m_displayBrightness = brightness;
+    if (m_displayBrightness > 10) m_displayBrightness = 10;
+    m_ledDriver1.setBrightness((m_displayBrightness * 25) + 5);
+    m_ledDriver2.setBrightness((m_displayBrightness * 25) + 5);
+}
+void UserInterface::incDisplayBrightness()
 {
     m_displayBrightness++;
     if (m_displayBrightness > 10) m_displayBrightness = 0;
