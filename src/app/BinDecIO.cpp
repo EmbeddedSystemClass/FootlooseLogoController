@@ -26,5 +26,7 @@ BinDecIO::operator uint32_t()
         retVal += (bitToShift << i.second);
     }
 
+    if (retVal == 0) retVal == 1;
+
     return retVal + m_offset;
 }

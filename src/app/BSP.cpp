@@ -219,7 +219,7 @@ void BSP::Run()
     RGBFixture logoO3(16, 5);
     RGBFixture logoO4(19, 6);
     RGBFixture logoS(22, 7);
-    RGBFixture logoE(27, 8);
+    RGBFixture logoE(25, 8);
 
     controller.addFixture(logoF);
     controller.addFixture(logoO1);
@@ -235,9 +235,18 @@ void BSP::Run()
     StaticColorEffect        effectStaticColor;
     CycleColorEffect         effectCycleColor;
     CycleRGBPerFixtureEffect effectRGBcycle;
+    StrobeEffect             effectStrobe;
+    RunningEffect            effectRunning;
+    RainbowEffect            effectRainbow;
+    RainbowSpreadEffect      effectSpreadRainbow;
 
-    controller.addEffect(effectStaticColor, EffectsController::DmxRange(0, 10));
-    controller.addEffect(effectCycleColor, EffectsController::DmxRange(11, 20));
+    controller.addEffect(effectStaticColor, EffectsController::DmxRange(0, 49));
+    //    controller.addEffect(effectCycleColor, EffectsController::DmxRange(11, 20));
+    controller.addEffect(effectStrobe, EffectsController::DmxRange(50, 99));
+    controller.addEffect(effectRunning, EffectsController::DmxRange(100, 149));
+    controller.addEffect(effectRainbow, EffectsController::DmxRange(150, 199));
+    controller.addEffect(effectSpreadRainbow, EffectsController::DmxRange(200, 255));
+    //    controller.addEffect(effectStaticColor, EffectsController::EffectModeTest);
     controller.addEffect(effectRGBcycle, EffectsController::EffectModeTest);
 
     // starting controller

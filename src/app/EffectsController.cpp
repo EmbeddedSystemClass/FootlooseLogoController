@@ -109,7 +109,7 @@ void EffectsController::Run()
                 m_lastEffect = currentEffect;
                 currentEffect->first.reset(currentTick);
             }
-
+            //            m_suggestedColor = Color::RED();
             currentEffect->first.apply(m_fixtures, currentTick, m_suggestedColor, (m_dmxSelector - currentEffect->second.first));
         }
 

@@ -113,7 +113,7 @@ void DMXReceiver::Run()
         if (m_dmxBuffer[0] == 0)
         {
             // first one should be 0
-            memcpy(m_selectedChannels.data(), &m_dmxBuffer[*m_address + 1], m_channelCount);
+            memcpy(m_selectedChannels.data(), &m_dmxBuffer[*m_address], m_channelCount);
             if (m_queue != NULL)
             {
                 if (!m_queue->IsFull())
